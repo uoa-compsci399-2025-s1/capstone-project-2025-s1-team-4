@@ -19,10 +19,5 @@ $ python3 -m venv venv
 $ source venv/bin/activate
 $ pip install -r requirements.txt
 ```
-
+s
 If new dependencies are required, please add them to the requirements.txt file.
-
-
-
-
-Hello this is Angelica
