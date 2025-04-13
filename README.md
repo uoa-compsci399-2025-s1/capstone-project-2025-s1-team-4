@@ -5,7 +5,7 @@
    ```bash
    npm install expo@latest
    ```
-2. Prebuild
+2. Prebuild (actually, try without prebuilding first)
 
    ```bash
     npx expo prebuild
