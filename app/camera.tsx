@@ -24,7 +24,7 @@ export default function App() {
 
   function handleBarcodeScanned({ data }: { data: string }) {
     setScannedData(data);
-    alert(`Scanned barcode data: ${data}`);
+    //alert(`Scanned barcode data: ${data}`);
   }
 
   return (
@@ -47,13 +47,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
+    backgroundColor: '#336699'
   },
   message: {
     textAlign: 'center',
     paddingBottom: 10,
   },
   camera: {
-    flex: 1,
+    width: '90%',
+    height: 300,
+    borderRadius: 16,
+    overflow: 'hidden',
+    alignSelf: 'center',
   },
   buttonContainer: {
     flex: 1,
@@ -76,7 +81,7 @@ const styles = StyleSheet.create({
     bottom: 40,
     left: 20,
     right: 20,
-    backgroundColor: 'white',
+    backgroundColor: '#99CCFF',
     padding: 12,
     borderRadius: 10,
     alignItems: 'center',

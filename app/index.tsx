@@ -8,6 +8,7 @@ export default function Index() {
     <Button
     title='Load Camera'
     onPress={() => router.navigate('/camera')}
+    color = '#99CCFF'
     ></Button>;
   </View>
   );
@@ -16,7 +17,7 @@ export default function Index() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#25292e',
+    backgroundColor: '#336699',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -26,6 +27,6 @@ const styles = StyleSheet.create({
   button: {
     fontSize: 20,
     textDecorationLine: 'underline',
-    color: '#fff',
+    color: '#99CCFF',
   },
 });
