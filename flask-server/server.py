@@ -6,7 +6,7 @@ import IMedicineRepo as repo
 app = Flask(__name__)
 
 # Data repository instance
-repo.repo_instance = MedicineRepo()
+#repo.repo_instance = MedicineRepo()
 
 
 # Set up database connection
@@ -14,7 +14,8 @@ from init_db import create_tables
 connection=sqlite3.connect('medicine.db')
 cursor=connection.cursor()
 create_tables(cursor) ## Function to check if tables already exist, if not then create
-conn.execute("PRAGMA foreign_keys = ON") # enables foreign keys
+connection.execute("PRAGMA foreign_keys = ON") # enables foreign keys
+connection.commit()
 
 
 # Register blueprints (api routes)

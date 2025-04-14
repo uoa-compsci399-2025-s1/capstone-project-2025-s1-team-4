@@ -22,14 +22,14 @@ def create_tables(cursor):
     CREATE TABLE IF NOT EXISTS cmi_sheet(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     link TEXT,
-    what TEXT
-    before TEXT
-    how TEXT
-    while TEXT
-    overdose TEXT
-    side_effects TEXT
-    after_using TEXT
-    product_description TEXT
-    supplier_details TEXT
-    date_of_prep TEXT
+    what TEXT,
+    before TEXT,
+    how TEXT,
+    while TEXT,
+    overdose TEXT,
+    side_effects TEXT,
+    after_using TEXT,
+    product_description TEXT,
+    supplier_details TEXT,
+    date_of_prep TEXT,
     data_sheet TEXT)""")
