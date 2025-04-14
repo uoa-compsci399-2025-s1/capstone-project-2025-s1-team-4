@@ -1,19 +1,19 @@
 ## Get started
 
-1. Install dependencies (in powershell/VSCode terminal)
-
-   ```bash
-   npm install expo@latest
+1. Install node.js (LTS version):
    ```
-2. Prebuild (actually, try without prebuilding first)
+   https://nodejs.org/en
+   ```
 
-   ```bash
-    npx expo prebuild
+2. Install dependencies (in powershell/VSCode terminal)
+
+   ```
+   npm install expo@latest
    ```
 
 3. Start the app
 
-   ```bash
+   ```
     npx expo start
    ```
 

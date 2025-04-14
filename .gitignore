@@ -1,0 +1,7 @@
+# Android:
+/android
+
+# Expo:
+node_modules
+expo-env.d.ts
+/.expo
