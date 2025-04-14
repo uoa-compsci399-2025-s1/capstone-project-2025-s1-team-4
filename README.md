@@ -1,13 +1,12 @@
 ## Get started
 
 1. Install node.js (LTS version):
-   ```
+   
    https://nodejs.org/en
-   ```
+   
 
 2. Install dependencies (in powershell/VSCode terminal)
 
-   ```
    ```
    npm install expo@latest
    ```
