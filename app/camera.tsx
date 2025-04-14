@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
   },
   camera: {
     width: '90%',
-    height: 300,
+    height: '50%',
     borderRadius: 16,
     overflow: 'hidden',
     alignSelf: 'center',
