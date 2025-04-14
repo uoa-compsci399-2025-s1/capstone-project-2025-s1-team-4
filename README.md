@@ -8,6 +8,7 @@
 2. Install dependencies (in powershell/VSCode terminal)
 
    ```
+   ```
    npm install expo@latest
    ```
 
@@ -17,7 +18,7 @@
     npx expo start
    ```
 
-4. Install Expo Go on Android, then (making sure your PC and phone are both using the same network) scan the QR code in Expo Go and scan some stuff!
+5. Install Expo Go on Android, then (making sure your PC and phone are both using the same network) scan the QR code in Expo Go and scan some stuff!
 
 In the output, you'll find options to open the app in a
 
