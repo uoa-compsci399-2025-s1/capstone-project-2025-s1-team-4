@@ -1,21 +1,6 @@
 import sqlite3
 
 def create_tables(cursor):
-    # Create medicine table
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS medicine (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    barcode TEXT UNIQUE NOT NULL)""")
-
-    # Create information table
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS information (
-    id INTEGER PRIMARY KEY,
-    name TEXT,
-    company TEXT,
-    dosage TEXT,
-    cmi_sheet INTEGER,
-    FOREIGN KEY (id) REFERENCES medicine(id) ON DELETE CASCADE)""")
 
     # Create CMI sheet table
     cursor.execute("""
@@ -33,3 +18,15 @@ def create_tables(cursor):
     supplier_details TEXT,
     date_of_prep TEXT,
     data_sheet TEXT)""")
+
+    # Create medicine table
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS medicine (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT,
+    company TEXT,
+    dosage TEXT,
+    cmi_sheet INTEGER,
+    barcode TEXT,
+    FOREIGN KEY (cmi_sheet) REFERENCES cmi_sheet(id)
+    """)
