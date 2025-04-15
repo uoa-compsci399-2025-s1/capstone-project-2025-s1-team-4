@@ -9,7 +9,16 @@ connection.commit()
 repo = MedicineRepo(cursor)
 
 print("=== Get all medicines ===")
-for med in repo.get_medicines():
+print(repo.get_medicines())
+
+print("\n=== Get medicine by ID (1) ===")
+print(repo.get_medicine_by_id(1))
+
+print("\n=== Get medicine by barcode (e.g., '123456789') ===")
+print(repo.get_medicine_by_barcode("456"))
+
+print("\n=== Search medicine by name (e.g., 'para') ===")
+for med in repo.search_medicine_by_name("ibu"):
     print(med)
 
 connection.close()
