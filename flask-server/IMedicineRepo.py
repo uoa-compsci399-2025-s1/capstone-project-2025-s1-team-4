@@ -12,7 +12,7 @@ class AbstractRepository(ABC):
     
     
     @abstractmethod
-    def get_medicine(self, id):
+    def get_medicine_by_id(self, id):
         """Gets medicine according to id"""
         raise NotImplementedError
 
@@ -22,5 +22,8 @@ class AbstractRepository(ABC):
         """Gets medicine by the barcode"""
         raise NotImplementedError
 
-    
+    @abstractmethod
+    def search_medicine_by_name(self, string):
+        """Returns medicines that match what user is typing in the search bar"""
+        raise NotImplementedError
     
