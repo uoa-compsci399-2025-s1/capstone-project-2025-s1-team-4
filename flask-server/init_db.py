@@ -28,5 +28,5 @@ def create_tables(cursor):
     dosage TEXT,
     cmi_sheet INTEGER,
     barcode TEXT,
-    FOREIGN KEY (cmi_sheet) REFERENCES cmi_sheet(id)
+    FOREIGN KEY (cmi_sheet) REFERENCES cmi_sheet(id))
     """)
