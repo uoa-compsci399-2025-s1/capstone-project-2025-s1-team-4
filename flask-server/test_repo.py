@@ -1,0 +1,24 @@
+import sqlite3
+from MedicineRepo import MedicineRepo
+
+connection=sqlite3.connect('medicine.db')
+cursor=connection.cursor()
+connection.execute("PRAGMA foreign_keys = ON") # enables foreign keys
+connection.commit()
+
+repo = MedicineRepo(cursor)
+
+print("=== Get all medicines ===")
+print(repo.get_medicines())
+
+print("\n=== Get medicine by ID (1) ===")
+print(repo.get_medicine_by_id(1))
+
+print("\n=== Get medicine by barcode (e.g., '123456789') ===")
+print(repo.get_medicine_by_barcode("456"))
+
+print("\n=== Search medicine by name (e.g., 'para') ===")
+for med in repo.search_medicine_by_name("ibu"):
+    print(med)
+
+connection.close()
