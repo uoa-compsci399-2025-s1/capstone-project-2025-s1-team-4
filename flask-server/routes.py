@@ -32,16 +32,32 @@ def get_medicine_from_barcode():
     barcode = request.args.get('barcode')
 
     if not barcode:
-        return jsonify({'error': 'Missing name parameter'}), 400
-    
+        return jsonify({'error': 'Missing barcode parameter'}), 400
+
     raw_data = repo.get_medicine_by_barcode(barcode)
 
     if raw_data is None:
-        return jsonify({'error': f'Medicine with barcode {barcode} not found.'}), 404
+        return jsonify({
+            'success': True,
+            'found': False,
+            'message': f'Medicine with barcode {barcode} not found.',
+            'medicine': None
+        }), 200
 
-    medicine = {'id': raw_data[0], 'name': raw_data[1], 'company': raw_data[2], 'dosage': raw_data[3], 
-            'cmi_sheet': raw_data[4], 'barcode': raw_data[5]}
-    return jsonify(medicine)
+    medicine = {
+        'id': raw_data[0],
+        'name': raw_data[1],
+        'company': raw_data[2],
+        'dosage': raw_data[3],
+        'cmi_sheet': raw_data[4],
+        'barcode': raw_data[5]
+    }
+
+    return jsonify({
+        'success': True,
+        'found': True,
+        'medicine': medicine
+    }), 200
 
 
 '''API to retrieve medicine information (JSON) - GetMedicine

@@ -27,8 +27,7 @@ export default function App() {
     setScannedData(data);
     //alert(`Scanned barcode data: ${data}`);
 
-    // fetch(`http://192.168.68.104:5000/medicine?barcode=${encodeURIComponent(data)}`)
-    fetch(`http://192.168.68.104:5000/all_medicines`)
+    fetch(`http://192.168.68.104:5000/medicine?barcode=${encodeURIComponent(data)}`)
     .then((response) => {
       if (!response.ok) {
         // Handle non-200 status code
@@ -41,8 +40,13 @@ export default function App() {
       return response.json();
     })
     .then((json) => {
-      console.log('Medicine Info:', json);
-      setMedicineInfo(json);
+      console.log('Medicine response:', json);
+      if (json.found) {
+        setMedicineInfo(json.medicine);
+      } else {
+        setMedicineInfo(null);
+        alert(json.message || 'Medicine not found');
+      }
     })
     .catch((error) => {
       console.error('Fetch error:', error);
@@ -63,12 +67,12 @@ export default function App() {
     )}
 
       {medicineInfo && (
-              <View style={styles.infoContainer}>
-                <Text style={styles.infoText}>Name: Paracetamol</Text>
-                <Text style={styles.infoText}>Company: HealthCorp</Text>
-                <Text style={styles.infoText}>Dosage: 500mg</Text>
-              </View>
-            )}
+        <View style={styles.infoContainer}>
+          <Text style={styles.infoText}>Name: {medicineInfo.name}</Text>
+          <Text style={styles.infoText}>Company: {medicineInfo.company}</Text>
+          <Text style={styles.infoText}>Dosage: {medicineInfo.dosage}</Text>
+        </View>
+      )}
     </View>
   );
 }
