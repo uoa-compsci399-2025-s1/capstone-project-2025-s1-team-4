@@ -4,8 +4,9 @@
 from IMedicineRepo import AbstractRepository
 
 class MedicineRepo(AbstractRepository):
-    def __init__(self, cursor):
-        self.cursor = cursor
+    def __init__(self, connection):
+        self.connection = connection
+        self.cursor = connection.cursor()
 
     # Get all medicines alphabetically for the browsing pages 
     def get_medicines(self):
