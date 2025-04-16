@@ -37,7 +37,7 @@ def get_medicine_from_barcode():
     raw_data = repo.get_medicine_by_barcode(barcode)
 
     if raw_data is None:
-        abort(404, description=f"Medicine with barcode {barcode} not found.")
+        return jsonify({'error': f'Medicine with barcode {barcode} not found.'}), 404
 
     medicine = {'id': raw_data[0], 'name': raw_data[1], 'company': raw_data[2], 'dosage': raw_data[3], 
             'cmi_sheet': raw_data[4], 'barcode': raw_data[5]}

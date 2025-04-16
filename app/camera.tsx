@@ -6,6 +6,7 @@ export default function App() {
   const [facing, setFacing] = useState<CameraType>('back');
   const [permission, requestPermission] = useCameraPermissions();
   const [scannedData, setScannedData] = useState<string | null>(null);
+  const [medicineInfo, setMedicineInfo] = useState<any>(null);
 
   if (!permission) {
     // Camera permissions are still loading.
@@ -25,6 +26,27 @@ export default function App() {
   function handleBarcodeScanned({ data }: { data: string }) {
     setScannedData(data);
     //alert(`Scanned barcode data: ${data}`);
+
+    // fetch(`http://192.168.68.104:5000/medicine?barcode=${encodeURIComponent(data)}`)
+    fetch(`http://192.168.68.104:5000/all_medicines`)
+    .then((response) => {
+      if (!response.ok) {
+        // Handle non-200 status code
+        if (response.status === 404) {
+          console.log('No medicine found for barcode');
+          setMedicineInfo(null); // Clear previous info or set appropriate message
+        }
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((json) => {
+      console.log('Medicine Info:', json);
+      setMedicineInfo(json);
+    })
+    .catch((error) => {
+      console.error('Fetch error:', error);
+    });
   }
 
   return (
@@ -39,6 +61,14 @@ export default function App() {
         <Button title="Reset Scanner" onPress={() => setScannedData(null)} />
       </View>
     )}
+
+      {medicineInfo && (
+              <View style={styles.infoContainer}>
+                <Text style={styles.infoText}>Name: Paracetamol</Text>
+                <Text style={styles.infoText}>Company: HealthCorp</Text>
+                <Text style={styles.infoText}>Dosage: 500mg</Text>
+              </View>
+            )}
     </View>
   );
 }
@@ -95,5 +125,20 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: '#333',
+  },
+  infoText: { fontSize: 16, marginBottom: 4 },
+  infoContainer: {
+    position: 'absolute',
+    top: 60, // distance from the top of the screen
+    left: 20,
+    right: 20,
+    padding: 10,
+    backgroundColor: '#f1f1f1',
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
   },
 });
