@@ -33,7 +33,7 @@ def get_medicine_information():
 def search_medicine():
     searched = request.args.get('name')
 
-    if not name:
+    if not 'name': # I think this should be 'name' rather than a variable? Or possibly searched?
         return jsonify({'error': 'Missing name parameter'}), 400
     
     # pass searched into search functin from repo here
