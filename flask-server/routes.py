@@ -4,6 +4,11 @@ from db_con import get_repo
 
 blueprint = Blueprint('routes_bp', __name__, url_prefix='/')
 
+# Home - Just for testing purposes will be removed once front end is done.
+@blueprint.route("/")
+def home():
+    return make_response("<h3>Server is running.</h3>", 200)
+
 '''
 API to recieve all medicines in the database
 '''
