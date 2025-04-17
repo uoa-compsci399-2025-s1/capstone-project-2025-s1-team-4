@@ -1,5 +1,11 @@
 ## Get started
 
+### Quick configuration before starting the app
+Create a **config.ts** file where you will initialize the url where the API's will be called. This should be your computers IP address:port number. Write it like so:
+
+export const API_BASE_URL = "http://IPADDRESS:PORT";
+
+
 1. Install node.js (LTS version):
    
    https://nodejs.org/en

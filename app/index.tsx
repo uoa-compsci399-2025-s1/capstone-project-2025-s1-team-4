@@ -2,6 +2,7 @@ import { Text, View, StyleSheet, Button, FlatList } from "react-native";
 import { Link, useRouter } from 'expo-router';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useEffect, useState } from 'react';
+import { API_BASE_URL } from '../config'; // adjust path accordingly
 
 // Define the medicine type
 type Medicine = {
@@ -17,7 +18,7 @@ export default function Index() {
 
   // Fetch medicines from backend
   useEffect(() => {
-    fetch('http://192.168.68.104:5000/all_medicines')
+    fetch(`${API_BASE_URL}/all_medicines`)
       .then(response => response.json())
       .then(data => {
         console.log('Fetched medicines:', data);

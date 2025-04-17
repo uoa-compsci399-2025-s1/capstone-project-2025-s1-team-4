@@ -1,6 +1,8 @@
 import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
 import { useState } from 'react';
 import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { API_BASE_URL } from '../config'; // adjust path accordingly
+
 
 export default function App() {
   const [facing, setFacing] = useState<CameraType>('back');
@@ -30,7 +32,7 @@ export default function App() {
     setScanning(true); // Mark scanning as in progress
     setScannedData(data); // Set the scanned data
   
-    fetch(`http://192.168.68.104:5000/medicine?barcode=${encodeURIComponent(data)}`)
+    fetch(`${API_BASE_URL}/medicine?barcode=${encodeURIComponent(data)}`)
       .then((response) => {
         if (!response.ok) {
           if (response.status === 404) {

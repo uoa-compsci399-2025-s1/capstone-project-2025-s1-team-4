@@ -34,3 +34,6 @@ __pycache__
 node_modules
 expo-env.d.ts
 /.expo
+
+# config file: Keep these local as they are unique to your machine (IP)
+config.ts
