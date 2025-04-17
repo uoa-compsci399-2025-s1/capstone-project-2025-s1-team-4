@@ -7,6 +7,7 @@ export default function App() {
   const [permission, requestPermission] = useCameraPermissions();
   const [scannedData, setScannedData] = useState<string | null>(null);
   const [medicineInfo, setMedicineInfo] = useState<any>(null);
+  const [scanning, setScanning] = useState(false);
 
   if (!permission) {
     // Camera permissions are still loading.
@@ -24,41 +25,47 @@ export default function App() {
   }
 
   function handleBarcodeScanned({ data }: { data: string }) {
-    setScannedData(data);
-    //alert(`Scanned barcode data: ${data}`);
-
+    if (scanning) return; // Prevent multiple scans
+  
+    setScanning(true); // Mark scanning as in progress
+    setScannedData(data); // Set the scanned data
+  
     fetch(`http://192.168.68.104:5000/medicine?barcode=${encodeURIComponent(data)}`)
-    .then((response) => {
-      if (!response.ok) {
-        // Handle non-200 status code
-        if (response.status === 404) {
-          console.log('No medicine found for barcode');
-          setMedicineInfo(null); // Clear previous info or set appropriate message
+      .then((response) => {
+        if (!response.ok) {
+          if (response.status === 404) {
+            console.log('No medicine found for barcode');
+            setMedicineInfo(null);
+          }
+          throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      return response.json();
-    })
-    .then((json) => {
-      console.log('Medicine response:', json);
-      if (json.found) {
-        setMedicineInfo(json.medicine);
-      } else {
-        setMedicineInfo(null);
-        alert(json.message || 'Medicine not found');
-      }
-    })
-    .catch((error) => {
-      console.error('Fetch error:', error);
-    });
+        return response.json();
+      })
+      .then((json) => {
+        console.log('Medicine response:', json);
+        if (json.found) {
+          setMedicineInfo(json.medicine);
+        } else {
+          setMedicineInfo(null);
+          alert(json.message || 'Medicine not found');
+        }
+      })
+      .catch((error) => {
+        console.error('Fetch error:', error);
+      })
+      .finally(() => {
+        setScanning(false); // Reset scanning flag after request
+      });
   }
 
   return (
     <View style={styles.container}>
-      <CameraView style={styles.camera} facing={facing} barcodeScannerSettings={{
-        barcodeTypes: ['ean13']}}
-      onBarcodeScanned={scannedData ? undefined : handleBarcodeScanned}>
-      </CameraView>
+      <CameraView
+        style={styles.camera}
+        facing={facing}
+        barcodeScannerSettings={{ barcodeTypes: ['ean13'] }}
+        onBarcodeScanned={scannedData || scanning ? undefined : handleBarcodeScanned}
+      />
       {scannedData && (
       <View style={styles.resultContainer}>
         <Text style={styles.resultText}>Scanned: {scannedData}</Text>
