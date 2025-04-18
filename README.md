@@ -1,10 +1,29 @@
 ## Get started
 
+## To allow the flask server to run:
+**Windows**
+```shell
+$ cd <project directory>
+$ py -3 -m venv venv
+$ venv\Scripts\activate
+$ pip install -r requirements.txt
+```
+
+**MacOS**
+```shell
+$ cd <project directory>
+$ python3 -m venv venv
+$ source venv/bin/activate
+$ pip install -r requirements.txt
+```
+
+If new dependencies are required, please add them to the requirements.txt file.
+
+## To get the application side (Expo) to run:
 ### Quick configuration before starting the app
 Create a **config.ts** file where you will initialize the url where the API's will be called. This should be your computers IP address:port number. Write it like so:
 
 export const API_BASE_URL = "http://IPADDRESS:PORT";
-
 
 1. Install node.js (LTS version):
    
