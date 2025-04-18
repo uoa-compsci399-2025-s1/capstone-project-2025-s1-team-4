@@ -1,23 +1,29 @@
-import { Router, useLocalSearchParams } from "expo-router";
-import { Text, View, StyleSheet } from 'react-native' 
+import { useLocalSearchParams } from 'expo-router';
+import { View, Text, StyleSheet } from 'react-native';
 
-export default function result() {
-    const bc = useLocalSearchParams();
-    const { barcode } = bc;
-    return <View style={styles.container}>
-        <Text style={styles.barcodeContainer}>
-            barcode: { barcode }
-        </Text>
+export default function DetailsScreen() {
+  const { barcode, name, company, dosage } = useLocalSearchParams();
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Medicine Details</Text>
+      <Text>Barcode: {barcode}</Text>
+      <Text>Name: {name}</Text>
+      <Text>Company: {company}</Text>
+      <Text>Dosage: {dosage}</Text>
     </View>
-};
+  );
+}
 
 const styles = StyleSheet.create({
-container: {
+  container: {
     flex: 1,
-    alignItems: 'center'
-},
-barcodeContainer: {
-    fontSize: 16,
-    fontWeight: 'bold'
-}
+    padding: 20,
+    justifyContent: 'center',
+  },
+  title: {
+    fontSize: 24,
+    marginBottom: 16,
+    fontWeight: 'bold',
+  },
 });
