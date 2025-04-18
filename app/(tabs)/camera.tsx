@@ -3,6 +3,8 @@ import { useState } from 'react';
 import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { API_BASE_URL } from '../../config'; // adjust path accordingly
+import { useFocusEffect } from '@react-navigation/native';
+import { useCallback } from 'react';
 
 
 export default function App() {
@@ -12,6 +14,16 @@ export default function App() {
   const [medicineInfo, setMedicineInfo] = useState<any>(null);
   const [scanning, setScanning] = useState(false);
   const router = useRouter();
+  const [message, setMessage] = useState<string | null>(null);
+
+  useFocusEffect(
+    useCallback(() => {
+      setScannedData(null);
+      setMedicineInfo(null);
+      setScanning(false);
+      setMessage(null);
+    }, [])
+  );
 
   if (!permission) {
     // Camera permissions are still loading.
@@ -52,8 +64,7 @@ export default function App() {
           setMedicineInfo(json.medicine);
         } else {
           setMedicineInfo(null);
-          setScannedData(null);
-          alert(json.message || 'Medicine not found');
+          setMessage('Medicine not found');
         }
       })
       .catch((error) => {
@@ -72,34 +83,48 @@ export default function App() {
         barcodeScannerSettings={{ barcodeTypes: ['ean13'] }}
         onBarcodeScanned={scannedData || scanning ? undefined : handleBarcodeScanned}
       />
-      {/* {scannedData && (
-      <View style={styles.resultContainer}>
-        <Text style={styles.resultText}>Scanned: {scannedData}</Text>
-        <Button title="Reset Scanner" onPress={() => setScannedData(null)} />
-      </View>
-    )} */}
-
-    {medicineInfo && (
-      <TouchableOpacity
-        style={styles.infoContainer}
-        onPress={() => {
-          setMedicineInfo(null);
-          setScannedData(null);
-          router.push({
-            pathname: '/scan_result',
-            params: {
-              barcode: scannedData,
-              name: medicineInfo.name,
-              company: medicineInfo.company,
-              dosage: medicineInfo.dosage,
-            },
-          })
-        }}
-      >
-        <Text style={[styles.resultText, { color: '#336699', marginTop: 10 }]}>{medicineInfo.name} {medicineInfo.dosage}</Text>
-        <Text style={[styles.resultText, { color: 'white', marginTop: 10 }]}>Tap for info</Text>
-      </TouchableOpacity>
-)}
+  
+      {medicineInfo ? (
+        <TouchableOpacity
+          style={styles.infoContainer}
+          onPress={() => {
+            setScannedData(null);
+            setMedicineInfo(null);
+            router.push({
+              pathname: '../scan_result',
+              params: {
+                barcode: scannedData,
+                name: medicineInfo.name,
+                company: medicineInfo.company,
+                dosage: medicineInfo.dosage,
+              },
+            });
+          }}
+        >
+          <Text style={[styles.resultText, { color: '#336699', marginTop: 10 }]}>
+            {medicineInfo.name} {medicineInfo.dosage}
+          </Text>
+          <Text style={[styles.resultText, { color: 'white', marginBottom: 5 }]}>
+            Tap for info
+          </Text>
+        </TouchableOpacity>
+      ) : message ? (
+        <TouchableOpacity
+          style={styles.infoContainer}
+          onPress={() => {
+            setScannedData(null);
+            setMedicineInfo(null);
+            setMessage(null);
+          }}
+        >
+          <Text style={[styles.resultText, { color: '#336699', marginTop: 10 }]}>
+            {message}
+          </Text>
+          <Text style={[styles.resultText, { color: 'white', marginBottom: 5 }]}>
+            Tap to try again
+          </Text>
+        </TouchableOpacity>
+      ) : null}
     </View>
   );
 }
