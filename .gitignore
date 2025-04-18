@@ -26,3 +26,14 @@ yarn-error.log*
 # Python virtual environemtn
 venv/
 __pycache__
+
+# Android:
+/android
+
+# Expo:
+node_modules
+expo-env.d.ts
+/.expo
+
+# config file: Keep these local as they are unique to your machine (IP)
+**/config.ts

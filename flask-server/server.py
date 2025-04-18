@@ -4,9 +4,11 @@ import IMedicineRepo as repo
 from MedicineRepo import MedicineRepo
 from db_con import get_db
 from init_db import create_tables
+from flask_cors import CORS
 
 
 app = Flask(__name__)
+CORS(app)
 
 
 # Set up database connection
@@ -35,7 +37,8 @@ app.register_blueprint(blueprint)
 
 
 if __name__ == "__main__":
-    app.run(debug=True) # True for development mode
+    # app.run(debug=True) # True for development mode
+    app.run(host='0.0.0.0', port=5000, debug=True)
 
     # initalise database if not existing
     # Create tables on startup
