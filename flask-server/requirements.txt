@@ -2,4 +2,4 @@ Flask
 flask_restx
 SQLAlchemy
 pytest
-abc
+flask_cors
