@@ -11,7 +11,8 @@ export default function TabLayout() {
             fontSize: 12,
             marginTop: 2
         },
-        tabBarActiveTintColor: '#99CCFF'
+        tabBarActiveTintColor: '#99CCFF',
+        tabBarInactiveTintColor: '#336699'
         }}>
             <Tabs.Screen
             name="index"
@@ -19,7 +20,7 @@ export default function TabLayout() {
                 title: 'Home',
                 headerShown: false,
                 tabBarIcon: ({color, size}) => (
-                    <Feather name='home' color={'#336699'} size={23} />
+                    <Feather name='home' color={color} size={23} />
                 ),
             }}
             />
@@ -29,7 +30,7 @@ export default function TabLayout() {
                 title: 'Scan',
                 headerShown: false,
                 tabBarIcon: ({color, size}) => (
-                    <MaterialCommunityIcons name='barcode-scan' color={'#336699'} size={23} />
+                    <MaterialCommunityIcons name='barcode-scan' color={color} size={23} />
                 ),
             }}
             />
@@ -39,7 +40,7 @@ export default function TabLayout() {
                 title: 'Results',
                 headerShown: false,
                 tabBarIcon: ({color, size}) => (
-                    <Feather name='list' color={'#336699'} size={23} />
+                    <Feather name='list' color={color} size={23} />
                 ),
             }}
             />
@@ -49,7 +50,7 @@ export default function TabLayout() {
                 title: 'Settings',
                 headerShown: false,
                 tabBarIcon: ({color, size}) => (
-                    <Feather name='settings' color={'#336699'} size={23} />
+                    <Feather name='settings' color={color} size={23} />
                 ),
             }}
             />

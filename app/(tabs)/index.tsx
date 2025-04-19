@@ -15,6 +15,7 @@ type Medicine = {
 export default function Index() {
   const router = useRouter();
   const [medicines, setMedicines] = useState<Medicine[]>([]);
+  const [dbConnected, setDbConnected] = useState<boolean | null>(null);
 
   // Fetch medicines from backend
   useEffect(() => {
@@ -23,9 +24,11 @@ export default function Index() {
       .then(data => {
         console.log('Fetched medicines:', data);
         setMedicines(data);
+        setDbConnected(true);
       })
       .catch(error => {
         console.error('Error fetching medicines:', error);
+        setDbConnected(false);
       });
   }, []);
 
@@ -37,10 +40,14 @@ export default function Index() {
         onPress={() => router.navigate('/camera')}
         color="#99CCFF"
       />
+      <View style={styles.dbContainer}>
+      {dbConnected === null && <Text style={{ color: '#fff'}}>Checking database...</Text>}
+      {dbConnected === true && <Text style={{ color: 'lightgreen' }}>Database connected</Text>}
+      {dbConnected === false && <Text style={{ color: 'salmon' }}>Database not connected</Text>}
+      </View>
+      
 
-      <Text style={styles.heading}>Available Medicines:</Text>
-
-      <FlatList
+      {/* <FlatList
         data={medicines}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }: { item: Medicine }) => (
@@ -50,7 +57,7 @@ export default function Index() {
             <Text style={styles.medicineText}>Dosage: {item.dosage}</Text>
           </View>
         )}
-      />
+      /> */}
     </View>
   );
 }
@@ -81,4 +88,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#333',
   },
+  dbContainer: {
+    paddingTop: 10
+  }
 });
