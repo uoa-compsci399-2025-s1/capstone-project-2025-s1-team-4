@@ -47,6 +47,9 @@ export default function App() {
         return response.json();
       })
       .then((json) => {
+        // pass the barcode to medicine_info page
+        router.push(`/medicine_info?barcode=${encodeURIComponent(data)}`)
+        
         console.log('Medicine response:', json);
         if (json.found) {
           setMedicineInfo(json.medicine);

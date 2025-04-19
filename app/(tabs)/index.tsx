@@ -39,6 +39,7 @@ export default function Index() {
       />
 
       <Text style={styles.heading}>Available Medicines:</Text>
+      <Link href="/medicine_info">CLICK HERE </Link>
 
       <FlatList
         data={medicines}
