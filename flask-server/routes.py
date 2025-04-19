@@ -91,9 +91,30 @@ def search_medicine():
     
     results = repo.search_medicine_by_name(searched)
     # If no results, then an empty list is returned
-    if results == []:
-        return make_response("<h3>No medicines found with that name.</h3>", 404)
+    if not results:
+    return jsonify({"found": False, "medicines": [], "message": "No medicines found with that name."}), 200
     
     format_results = [{'id': row[0], 'name': row[1], 'company': row[2], 'dosage': row[3], 
                   'cmi_sheet': row[4], 'barcode': row[5]} for row in results]
     return jsonify(format_results)
+
+
+    '''API to return medicines cmi sheet'''
+    @blueprint.route('/medicine/cmi_sheet', methods=['GET'])
+    def get_cmi_sheet():
+        repo = get_repo()
+        medicine_id = request.args.get('id')
+        barcode = request.args.get('barcode')
+
+        if not medicine_id and not barcode:
+            return jsonify({'error': 'Provide either medicine_id or barcode'}), 400
+        
+        if medicine_id:
+            data = repo.get_cmi_sheet_by_id(int(medicine_id))
+        else:
+            data = repo.get_cmi_sheet_by_barcode(barcode)
+
+        if not data:
+            return jsonify({'error': 'CMI Sheet not found'}), 400
+        
+        return jsonify({'cmi_sheet': data})

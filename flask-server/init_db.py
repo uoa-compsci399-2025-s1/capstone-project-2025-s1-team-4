@@ -27,6 +27,17 @@ def create_tables(cursor):
     company TEXT,
     dosage TEXT,
     cmi_sheet INTEGER,
-    barcode TEXT,
+    barcode TEXT UNIQUE,
     FOREIGN KEY (cmi_sheet) REFERENCES cmi_sheet(id))
+    """)
+
+    # Create ingredients table
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS ingredients(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    medicine_id INTEGER,
+    ingredient TEXT,
+    dosage TEXT,
+    FOREIGN KEY (medicine_id) REFERENCES medicine(id) ON DELETE CASCADE
+    )
     """)
