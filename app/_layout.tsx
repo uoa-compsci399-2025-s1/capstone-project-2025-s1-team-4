@@ -1,13 +1,11 @@
-import { Stack, Tabs } from "expo-router";
-import Ionicons from '@expo/vector-icons'
+import { Slot } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
 
 export default function RootLayout() {
   return (
-    <Stack>
-      <Stack.Screen name="index" options={{ title: 'Home'}} />
-      <Stack.Screen name="camera" options={{ title: 'Camera' }} />
-      <Stack.Screen name ="scan_result" options={{ title: 'Scan results'}} />
-      <Stack.Screen name = "(tabs)" options={{ headerShown: false}} />
-    </Stack>
+    <>
+      <StatusBar style="auto" />
+      <Slot />
+    </>
   );
 }
