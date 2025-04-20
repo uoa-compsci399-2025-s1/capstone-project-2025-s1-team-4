@@ -1,8 +1,8 @@
 import { Text, View, StyleSheet, Button, FlatList } from "react-native";
 import { Link, useRouter } from 'expo-router';
-import Ionicons from '@expo/vector-icons/Ionicons';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
-import { API_BASE_URL } from '../config'; // adjust path accordingly
+import { API_BASE_URL } from '../../config'; // adjust path accordingly
 
 // Define the medicine type
 type Medicine = {
@@ -31,14 +31,15 @@ export default function Index() {
 
   return (
     <View style={styles.container}>
-      <Ionicons name="camera" size={32} color="white" />
+      <MaterialCommunityIcons name="barcode-scan" size={135} color="white" />
       <Button
-        title="Load Camera"
+        title="Scan a barcode"
         onPress={() => router.navigate('/camera')}
         color="#99CCFF"
       />
 
       <Text style={styles.heading}>Available Medicines:</Text>
+      <Link href="/medicine_info">CLICK HERE </Link>
 
       <FlatList
         data={medicines}
