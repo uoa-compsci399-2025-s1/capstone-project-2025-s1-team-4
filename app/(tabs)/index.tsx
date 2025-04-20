@@ -1,8 +1,8 @@
 import { Text, View, StyleSheet, Button, FlatList } from "react-native";
 import { Link, useRouter } from 'expo-router';
-import Ionicons from '@expo/vector-icons/Ionicons';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
-import { API_BASE_URL } from '../config'; // adjust path accordingly
+import { API_BASE_URL } from '../../config'; // adjust path accordingly
 
 // Define the medicine type
 type Medicine = {
@@ -15,6 +15,7 @@ type Medicine = {
 export default function Index() {
   const router = useRouter();
   const [medicines, setMedicines] = useState<Medicine[]>([]);
+  const [dbConnected, setDbConnected] = useState<boolean | null>(null);
 
   // Fetch medicines from backend
   useEffect(() => {
@@ -23,23 +24,29 @@ export default function Index() {
       .then(data => {
         console.log('Fetched medicines:', data);
         setMedicines(data);
+        setDbConnected(true);
       })
       .catch(error => {
         console.error('Error fetching medicines:', error);
+        setDbConnected(false);
       });
   }, []);
 
   return (
     <View style={styles.container}>
-      <Ionicons name="camera" size={32} color="white" />
+      <MaterialCommunityIcons name="barcode-scan" size={135} color="white" />
       <Button
-        title="Load Camera"
+        title="Scan a barcode"
         onPress={() => router.navigate('/camera')}
         color="#99CCFF"
       />
+      <View style={styles.dbContainer}>
+        {dbConnected === null && <Text style={{ color: '#fff' }}>Checking database...</Text>}
+        {dbConnected === true && <Text style={{ color: 'lightgreen' }}>Database connected</Text>}
+        {dbConnected === false && <Text style={{ color: 'salmon' }}>Database not connected</Text>}
+      </View>
 
-      <Text style={styles.heading}>Available Medicines:</Text>
-
+      {/*
       <FlatList
         data={medicines}
         keyExtractor={(item) => item.id.toString()}
@@ -51,9 +58,11 @@ export default function Index() {
           </View>
         )}
       />
+      */}
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
@@ -81,4 +90,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#333',
   },
+  dbContainer: {
+    paddingTop: 10
+  }
 });
