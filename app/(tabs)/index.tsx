@@ -41,26 +41,28 @@ export default function Index() {
         color="#99CCFF"
       />
       <View style={styles.dbContainer}>
-      {dbConnected === null && <Text style={{ color: '#fff'}}>Checking database...</Text>}
-      {dbConnected === true && <Text style={{ color: 'lightgreen' }}>Database connected</Text>}
-      {dbConnected === false && <Text style={{ color: 'salmon' }}>Database not connected</Text>}
+        {dbConnected === null && <Text style={{ color: '#fff' }}>Checking database...</Text>}
+        {dbConnected === true && <Text style={{ color: 'lightgreen' }}>Database connected</Text>}
+        {dbConnected === false && <Text style={{ color: 'salmon' }}>Database not connected</Text>}
       </View>
-      
 
-      {/* <FlatList
+      {/*
+      <FlatList
         data={medicines}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }: { item: Medicine }) => (
           <View style={styles.medicineCard}>
             <Text style={styles.medicineText}>Name: {item.name}</Text>
             <Text style={styles.medicineText}>Company: {item.company}</Text>
-            {/* <Text style={styles.medicineText}>Dosage: {item.dosage}</Text>  */}
+            <Text style={styles.medicineText}>Dosage: {item.dosage}</Text>
           </View>
         )}
-      /> */}
+      />
+      */}
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {

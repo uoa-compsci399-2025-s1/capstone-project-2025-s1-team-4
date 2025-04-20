@@ -60,7 +60,7 @@ export default function App() {
       })
       .then((json) => {
         // pass the barcode to medicine_info page
-        router.push(`/medicine_info?barcode=${encodeURIComponent(data)}`)
+        router.push(`/medicine_info?barcode=${encodeURIComponent(data)}` as const);
         
         console.log('Medicine response:', json);
         if (json.found) {
