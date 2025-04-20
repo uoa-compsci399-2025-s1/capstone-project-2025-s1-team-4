@@ -35,9 +35,17 @@ def create_tables(cursor):
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS ingredients(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    medicine_id INTEGER,
-    ingredient TEXT,
-    dosage TEXT,
-    FOREIGN KEY (medicine_id) REFERENCES medicine(id) ON DELETE CASCADE
+    ingredient TEXT
     )
     """)
+
+    # Create medicine_ingredients table
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS medicine_ingredients (
+        medicine_id INTEGER,
+        ingredient_id INTEGER,
+        dosage TEXT,
+        PRIMARY KEY (medicine_id, ingredient_id),
+        FOREIGN KEY (medicine_id) REFERENCES medicine(id),
+        FOREIGN KEY (ingredient_id) REFERENCES ingredients(id)
+    )""")
