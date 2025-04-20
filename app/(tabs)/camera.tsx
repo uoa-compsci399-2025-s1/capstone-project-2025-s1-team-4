@@ -40,13 +40,13 @@ export default function App() {
     );
   }
 
-  function handleBarcodeScanned({ data }: { data: string }) {
+  async function handleBarcodeScanned({ data }: { data: string }) {
     if (scanning) return; // Prevent multiple scans
   
     setScanning(true); // Mark scanning as in progress
     setScannedData(data); // Set the scanned data
   
-    fetch(`${API_BASE_URL}/medicine?barcode=${encodeURIComponent(data)}`)
+    await fetch(`${API_BASE_URL}/medicine?barcode=${encodeURIComponent(data)}`)
       .then((response) => {
         if (!response.ok) {
           if (response.status === 404) {
