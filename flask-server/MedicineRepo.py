@@ -59,18 +59,60 @@ class MedicineRepo(AbstractRepository):
 
     # When someone clicks on a medicine and visits the detail page 
     def get_medicine_by_id(self, id):
-        self.cursor.execute("SELECT * FROM medicine WHERE id = ?", (id,))
-        return self.cursor.fetchone()
+        self.cursor.execute("""SELECT 
+            m.id,
+            m.product_name,
+            m.company,
+            m.cmi_sheet,
+            m.barcode,
+            i.name,
+            mi.dosage
+            FROM medicine m
+            JOIN medicine_ingredients mi ON m.id = mi.medicine_id
+            JOIN ingredients i ON i.id = mi.ingredient_id 
+            WHERE m.id = ?""", (id,))
+        rows = self.cursor.fetchall()
+
+        if not rows:
+            return None
+        return group_medicines_with_ingredients(rows)
 
     # Used when someone scans a barcode 
     def get_medicine_by_barcode(self, barcode): 
-        self.cursor.execute("SELECT * FROM medicine WHERE barcode = ?", (barcode,))
-        return self.cursor.fetchone()
+        self.cursor.execute("""SELECT 
+            m.id,
+            m.product_name,
+            m.company,
+            m.cmi_sheet,
+            m.barcode,
+            i.name,
+            mi.dosage
+            FROM medicine m
+            JOIN medicine_ingredients mi ON m.id = mi.medicine_id
+            JOIN ingredients i ON i.id = mi.ingredient_id 
+            WHERE m.barcode = ?""", (barcode,))
+        rows = self.cursor.fetchall()
+        if not rows:
+            return None
+        return group_medicines_with_ingredients(rows)
 
     # Used when someone like searching for a medicine 
     def search_medicine_by_name(self, string):
-        self.cursor.execute("SELECT * FROM medicine WHERE product_name LIKE ? ORDER BY product_name ASC", (f"%{string}%",))
-        return self.cursor.fetchall()
+        self.cursor.execute("""SELECT 
+            m.id,
+            m.product_name,
+            m.company,
+            m.cmi_sheet,
+            m.barcode,
+            i.name,
+            mi.dosage
+            FROM medicine m
+            JOIN medicine_ingredients mi ON m.id = mi.medicine_id
+            JOIN ingredients i ON i.id = mi.ingredient_id  WHERE m.product_name LIKE ? ORDER BY product_name ASC""", (f"%{string}%",))
+        rows = self.cursor.fetchall()
+        if not rows:
+            return None
+        return group_medicines_with_ingredients(rows)
 
     def get_cmi_sheet_by_medicine_id(self, id):
         self.cursor.execute("""

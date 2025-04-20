@@ -8,11 +8,11 @@ connection.commit()
 
 repo = MedicineRepo(connection)
 
-print("=== Get all medicines ===")
-print(repo.get_medicines()[2])
+# print("=== Get all medicines ===")
+# print(repo.get_medicines())
 
-# print("\n=== Get medicine by ID (1) ===")
-# print(repo.get_medicine_by_id(1))
+print("\n=== Get medicine by ID (1) ===")
+print(repo.get_medicine_by_id(3))
 
 # print("\n=== Get medicine by barcode (e.g., '123456789') ===")
 # print(repo.get_medicine_by_barcode("456"))
