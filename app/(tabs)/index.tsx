@@ -48,7 +48,7 @@ export default function Index() {
           <View style={styles.medicineCard}>
             <Text style={styles.medicineText}>Name: {item.name}</Text>
             <Text style={styles.medicineText}>Company: {item.company}</Text>
-            <Text style={styles.medicineText}>Dosage: {item.dosage}</Text>
+            {/* <Text style={styles.medicineText}>Dosage: {item.dosage}</Text>  */}
           </View>
         )}
       />
