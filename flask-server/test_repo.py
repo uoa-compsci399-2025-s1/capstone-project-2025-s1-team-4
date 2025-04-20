@@ -29,3 +29,5 @@ print(repo.get_medicine_by_id(3))
 #     print(ingredients)
 
 connection.close()
+
+
