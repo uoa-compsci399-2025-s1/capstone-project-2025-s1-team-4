@@ -17,8 +17,8 @@ def all_medicines():
     repo = get_repo()
     raw_data = repo.get_medicines()
     
-    medicines = [{'id': row[0], 'name': row[1], 'company': row[2], 'dosage': row[3], 
-                  'cmi_sheet': row[4], 'barcode': row[5]} for row in raw_data]
+    medicines = [{'id': row[0], 'name': row[1], 'company': row[2], 
+                  'cmi_sheet': row[3], 'barcode': row[4]} for row in raw_data]
     
     return jsonify(medicines)
 
@@ -48,9 +48,8 @@ def get_medicine_from_barcode():
         'id': raw_data[0],
         'name': raw_data[1],
         'company': raw_data[2],
-        'dosage': raw_data[3],
-        'cmi_sheet': raw_data[4],
-        'barcode': raw_data[5]
+        'cmi_sheet': raw_data[3],
+        'barcode': raw_data[4]
     }
 
     return jsonify({
@@ -72,8 +71,8 @@ def get_medicine_from_id(medicine_id):
     if raw_data is None:
         abort(404, description=f"Medicine with ID {medicine_id} not found.")
 
-    medicine = {'id': raw_data[0], 'name': raw_data[1], 'company': raw_data[2], 'dosage': raw_data[3], 
-            'cmi_sheet': raw_data[4], 'barcode': raw_data[5]}
+    medicine = {'id': raw_data[0], 'name': raw_data[1], 'company': raw_data[2], 
+            'cmi_sheet': raw_data[3], 'barcode': raw_data[4]}
 
     return jsonify(medicine)
 
@@ -92,10 +91,10 @@ def search_medicine():
     results = repo.search_medicine_by_name(searched)
     # If no results, then an empty list is returned
     if not results:
-    return jsonify({"found": False, "medicines": [], "message": "No medicines found with that name."}), 200
+        return jsonify({"found": False, "medicines": [], "message": "No medicines found with that name."}), 200
     
-    format_results = [{'id': row[0], 'name': row[1], 'company': row[2], 'dosage': row[3], 
-                  'cmi_sheet': row[4], 'barcode': row[5]} for row in results]
+    format_results = [{'id': row[0], 'name': row[1], 'company': row[2], 
+                  'cmi_sheet': row[3], 'barcode': row[4]} for row in results]
     return jsonify(format_results)
 
 
