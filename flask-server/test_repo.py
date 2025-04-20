@@ -6,7 +6,7 @@ cursor=connection.cursor()
 connection.execute("PRAGMA foreign_keys = ON") # enables foreign keys
 connection.commit()
 
-repo = MedicineRepo(cursor)
+repo = MedicineRepo(connection)
 
 print("=== Get all medicines ===")
 print(repo.get_medicines())
@@ -20,5 +20,12 @@ print(repo.get_medicine_by_barcode("456"))
 print("\n=== Search medicine by name (e.g., 'para') ===")
 for med in repo.search_medicine_by_name("ibu"):
     print(med)
+
+print("\n=== Get CMI by medicine id===")
+print(repo.get_cmi_sheet_by_medicine_id(1))
+
+print("\n=== Get medicine ingredients by medicine id===")
+for ingredients in repo.get_ingredients_by_medicine_id(3):
+    print(ingredients)
 
 connection.close()

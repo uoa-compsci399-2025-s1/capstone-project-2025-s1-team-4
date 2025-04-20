@@ -39,3 +39,4 @@ class AbstractRepository(ABC):
         """Can use the get_medicine_by_barcode to find id if we have barcode only"""
         raise NotImplementedError
     
+    
