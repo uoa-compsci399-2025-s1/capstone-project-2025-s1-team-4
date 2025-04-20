@@ -26,4 +26,16 @@ class AbstractRepository(ABC):
     def search_medicine_by_name(self, string):
         """Returns medicines that match what user is typing in the search bar"""
         raise NotImplementedError
+
+    @abstractmethod
+    def get_cmi_sheet_by_medicine_id(self, id):
+        """Returns cmi sheet by the medicine id"""
+        """Can use the get_medicine_by_barcode to find id if we have barcode only"""
+        raise NotImplementedError
+    
+    @abstractmethod
+    def get_ingredients_by_medicine_id(self, id):
+        """Return medicine ingredients by medicine_id"""
+        """Can use the get_medicine_by_barcode to find id if we have barcode only"""
+        raise NotImplementedError
     

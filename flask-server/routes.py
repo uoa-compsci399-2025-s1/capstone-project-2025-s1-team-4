@@ -110,7 +110,7 @@ def search_medicine():
             return jsonify({'error': 'Provide either medicine_id or barcode'}), 400
         
         if medicine_id:
-            data = repo.get_cmi_sheet_by_id(int(medicine_id))
+            data = repo.get_cmi_sheet_by_medicine_id(int(medicine_id))
         else:
             data = repo.get_cmi_sheet_by_barcode(barcode)
 

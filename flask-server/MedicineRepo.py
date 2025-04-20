@@ -27,3 +27,21 @@ class MedicineRepo(AbstractRepository):
     def search_medicine_by_name(self, string):
         self.cursor.execute("SELECT * FROM medicine WHERE name LIKE ? ORDER BY name ASC", (f"%{string}%",))
         return self.cursor.fetchall()
+
+    def get_cmi_sheet_by_medicine_id(self, id):
+        self.cursor.execute("""
+        SELECT c.* 
+        FROM cmi_sheet c 
+        JOIN medicine m ON m.cmi_sheet = c.id 
+        WHERE m.id = ?
+        """, (id,))
+        return self.cursor.fetchone()
+
+
+    def get_ingredients_by_medicine_id(self, id):
+        self.cursor.execute("""
+        SELECT *
+        FROM ingredients
+        WHERE medicine_id = ?""", (id,))
+        return self.cursor.fetchall()
+
