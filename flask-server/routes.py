@@ -1,6 +1,7 @@
 from flask import Flask, Blueprint, request, jsonify, abort, make_response
 import IMedicineRepo as repo
 from db_con import get_repo
+from service_routes import serialize_medicine_row
 
 blueprint = Blueprint('routes_bp', __name__, url_prefix='/')
 
@@ -17,10 +18,9 @@ def all_medicines():
     repo = get_repo()
     raw_data = repo.get_medicines()
     
-    medicines = [{'id': row[0], 'name': row[1], 'company': row[2], 
-                  'cmi_sheet': row[3], 'barcode': row[4]} for row in raw_data]
+    #medicines = [serialize_medicine_row(row) for row in raw_data]
     
-    return jsonify(medicines)
+    return raw_data
 
 
 ''' API to recieve medicine from barcode - BarcodeToMedicine
