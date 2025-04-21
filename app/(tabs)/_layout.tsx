@@ -15,33 +15,33 @@ export default function TabLayout() {
         tabBarInactiveTintColor: '#336699',
         tabBarLabelPosition: 'below-icon'
         }}>
-            <Tabs.Screen
+            <Tabs.Screen //Changes the header style
             name="index"
             options={{
                 title: 'Home',
-                headerShown: false,
+                headerShown: true,
                 tabBarIcon: ({color, size}) => (
                     <Feather name='home' color={color} size={23} />
                 ),
             }}
             />
             <Tabs.Screen
-            name="camera"
+            name="medicine"
             options={{
-                title: 'Scan',
+                title: 'Medicine',
                 headerShown: false,
                 tabBarIcon: ({color, size}) => (
-                    <MaterialCommunityIcons name='barcode-scan' color={color} size={23} />
+                    <MaterialCommunityIcons name="pill" color={color} size={23} />
                 ),
             }}
             />
             <Tabs.Screen
-            name="scan_result"
+            name="bookmarks"
             options={{
-                title: 'Results',
+                title: 'Bookmarks',
                 headerShown: false,
                 tabBarIcon: ({color, size}) => (
-                    <Feather name='list' color={color} size={23} />
+                    <MaterialCommunityIcons name="bookmark" color={color} size={23} />
                 ),
             }}
             />
