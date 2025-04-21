@@ -122,6 +122,15 @@ class MedicineRepo(AbstractRepository):
         WHERE m.id = ?
         """, (id,))
         return self.cursor.fetchone()
+    
+    def get_cmi_sheet_by_barcode(self, barcode):
+        self.cursor.execute("""
+        SELECT c.* 
+        FROM cmi_sheet c 
+        JOIN medicine m ON m.cmi_sheet = c.id 
+        WHERE m.barcode = ?
+        """, (barcode,))
+        return self.cursor.fetchone()
 
 
     def get_ingredients_by_medicine_id(self, medicine_id):
