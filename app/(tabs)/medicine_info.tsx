@@ -31,8 +31,6 @@ export default function MedicineInfo() {
     
   }, [barcodeStr, medicineId]);
 
-  
-
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.header}>CMI Sheet</Text>

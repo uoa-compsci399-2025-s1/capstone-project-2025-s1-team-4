@@ -27,9 +27,9 @@ export default function BookmarksScreen() {
   }, [bookmarks]);
 
   const filteredBookmarks = bookmarkedMedicines.filter((item) =>
-    item.name.toLowerCase().includes(searchQuery.toLowerCase())
+    item.product_name.toLowerCase().includes(searchQuery.toLowerCase())
   );
-
+  
   return (
     <View style={styles.container}>
       <View style={styles.searchWrapper}>
@@ -68,9 +68,11 @@ export default function BookmarksScreen() {
             <View style={styles.medicineCard}>
               <View style={styles.cardContent}>
                 <View style={{ flex: 1 }}>
-                  <Text style={styles.medicineName}>{item.name}</Text>
-                  <Text style={styles.medicineCompany}>{item.company}</Text>
-                  <Text style={styles.medicineDosage}>{item.dosage}</Text>
+                <Text style={styles.medicineName}>{item.product_name}</Text>
+                <Text style={styles.medicineCompany}>{item.company}</Text>
+                <Text style={styles.medicineDosage}>
+                  {item.ingredients?.[0]?.dosage || 'N/A'}
+                </Text>
                 </View>
 
                 <TouchableOpacity
