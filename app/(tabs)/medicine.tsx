@@ -1,16 +1,17 @@
 import { View, Text, StyleSheet, FlatList, TextInput, TouchableOpacity } from 'react-native';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { API_BASE_URL } from '../../config'; 
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useBookmarks } from '../../context/bookmarks_context';
 import { useFocusEffect } from '@react-navigation/native';
-import { useCallback } from 'react';
+import { useLocalSearchParams } from 'expo-router';
 
 export default function DetailsScreen() {
   const [medicines, setMedicines] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const { bookmarks, toggleBookmark } = useBookmarks(); 
   const searchRef = useRef<TextInput>(null);
+  const { focusSearch } = useLocalSearchParams();
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/all_medicines`)
@@ -27,11 +28,19 @@ export default function DetailsScreen() {
 
   useFocusEffect(
     useCallback(() => {
-      setTimeout(() => {
-        searchRef.current?.focus();
-      }, 100);
-    }, [])
-  );
+      let timeout: NodeJS.Timeout;
+  
+      if (focusSearch === 'true') {
+        timeout = setTimeout(() => {
+          searchRef.current?.focus();
+        }, 250); // slightly longer delay to ensure mount
+      }
+  
+      return () => {
+        if (timeout) clearTimeout(timeout);
+      };
+    }, [focusSearch])
+  );  
 
   const filteredMedicines = medicines.filter((med) =>
     med.product_name.toLowerCase().includes(searchQuery.toLowerCase())

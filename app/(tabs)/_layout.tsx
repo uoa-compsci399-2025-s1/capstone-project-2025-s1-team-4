@@ -1,5 +1,5 @@
 import { Tabs } from "expo-router";
-import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Feather, MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import { BookmarkProvider } from '../../context/bookmarks_context';
 
 export default function TabLayout() {
@@ -24,9 +24,13 @@ export default function TabLayout() {
           options={{
             title: 'Home',
             headerShown: false,
-            tabBarIcon: ({ color, size }) => (
-              <Feather name="home" color={color} size={23} />
-            ),
+            tabBarIcon: ({ color, size, focused }) => (
+              <MaterialCommunityIcons
+                name={focused ? 'home' : 'home-outline'}
+                color={color}
+                size={23}
+              />
+            )
           }}
         />
         <Tabs.Screen
@@ -34,8 +38,12 @@ export default function TabLayout() {
           options={{
             title: 'Medicine',
             headerShown: false,
-            tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons name="pill" color={color} size={23} />
+            tabBarIcon: ({ color, size, focused }) => (
+              <Ionicons
+                name={focused ? 'list-sharp' : 'list-outline'}
+                color={color}
+                size={23}
+              />
             ),
           }}
         />
@@ -44,9 +52,13 @@ export default function TabLayout() {
           options={{
             title: 'Bookmarks',
             headerShown: false,
-            tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons name="bookmark" color={color} size={23} />
-            ),
+            tabBarIcon: ({ color, size, focused }) => (
+              <MaterialCommunityIcons
+                name={focused ? 'bookmark' : 'bookmark-outline'}
+                color={color}
+                size={23}
+              />
+            )
           }}
         />
         <Tabs.Screen
@@ -54,9 +66,13 @@ export default function TabLayout() {
           options={{
             title: 'Settings',
             headerShown: false,
-            tabBarIcon: ({ color, size }) => (
-              <Feather name="settings" color={color} size={23} />
-            ),
+            tabBarIcon: ({ color, size, focused }) => (
+              <Ionicons
+                name={focused ? 'settings-sharp' : 'settings-outline'}
+                color={color}
+                size={23}
+              />
+            )
           }}
         />
       </Tabs>
