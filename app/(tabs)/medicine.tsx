@@ -30,7 +30,7 @@ export default function DetailsScreen() {
   
 
   const filteredMedicines = medicines.filter((item) =>
-    item.name.toLowerCase().includes(searchQuery.toLowerCase())
+    item.product_name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
