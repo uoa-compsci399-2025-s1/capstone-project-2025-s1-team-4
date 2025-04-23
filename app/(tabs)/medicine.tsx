@@ -35,6 +35,9 @@ export default function DetailsScreen() {
 
   console.log("Unfiltered medicines:", medicines);
 
+  const filteredMedicines = medicines.filter((item) =>
+    item.product_name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
   const filteredMedicines = medicines; // Temporarily show all
 
   return (

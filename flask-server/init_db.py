@@ -23,10 +23,28 @@ def create_tables(cursor):
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS medicine (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT,
+    product_name TEXT,
     company TEXT,
-    dosage TEXT,
     cmi_sheet INTEGER,
-    barcode TEXT,
+    barcode TEXT UNIQUE,
     FOREIGN KEY (cmi_sheet) REFERENCES cmi_sheet(id))
     """)
+
+    # Create ingredients table
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS ingredients(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    ingredient TEXT
+    )
+    """)
+
+    # Create medicine_ingredients table
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS medicine_ingredients (
+        medicine_id INTEGER,
+        ingredient_id INTEGER,
+        dosage TEXT,
+        PRIMARY KEY (medicine_id, ingredient_id),
+        FOREIGN KEY (medicine_id) REFERENCES medicine(id),
+        FOREIGN KEY (ingredient_id) REFERENCES ingredients(id)
+    )""")
