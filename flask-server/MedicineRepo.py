@@ -10,7 +10,7 @@ class MedicineRepo(AbstractRepository):
 
     # Get all medicines alphabetically for the browsing pages 
     def get_medicines(self):
-        self.cursor.execute("SELECT * FROM medicine ORDER BY name ASC")
+        self.cursor.execute("SELECT * FROM medicine ORDER BY product_name ASC")
         return self.cursor.fetchall()
 
     # When someone clicks on a medicine and visits the detail page 
@@ -25,5 +25,5 @@ class MedicineRepo(AbstractRepository):
 
     # Used when someone like searching for a medicine 
     def search_medicine_by_name(self, string):
-        self.cursor.execute("SELECT * FROM medicine WHERE name LIKE ? ORDER BY name ASC", (f"%{string}%",))
+        self.cursor.execute("SELECT * FROM medicine WHERE product_name LIKE ? ORDER BY product_name ASC", (f"%{string}%",))
         return self.cursor.fetchall()

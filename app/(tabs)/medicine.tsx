@@ -1,22 +1,27 @@
 import { View, Text, StyleSheet, FlatList, TextInput, TouchableOpacity } from 'react-native';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { API_BASE_URL } from '../../config'; 
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useBookmarks } from '../../context/bookmarks_context';
-import { useRef } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import { useCallback } from 'react';
 
 export default function DetailsScreen() {
   const [medicines, setMedicines] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const {bookmarks, toggleBookmark } = useBookmarks(); 
+  const { bookmarks, toggleBookmark } = useBookmarks(); 
   const searchRef = useRef<TextInput>(null);
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/all_medicines`)
-      .then((res) => res.json())
-      .then((data) => setMedicines(data))
+      .then((res) => {
+        console.log("Fetch status:", res.status);
+        return res.json();
+      })
+      .then((data) => {
+        console.log("Fetched data:", data);
+        setMedicines(data);
+      })
       .catch((err) => console.error('Failed to fetch medicines:', err));
   }, []);
 
@@ -24,31 +29,30 @@ export default function DetailsScreen() {
     useCallback(() => {
       setTimeout(() => {
         searchRef.current?.focus();
-      }, 100); // slight delay to ensure screen has rendered
+      }, 100);
     }, [])
   );
-  
 
-  const filteredMedicines = medicines.filter((item) =>
-    item.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  console.log("Unfiltered medicines:", medicines);
+
+  const filteredMedicines = medicines; // Temporarily show all
 
   return (
     <View style={styles.container}>
       <View style={styles.searchWrapper}>
-      <TextInput
-        ref={searchRef}
-        style={styles.searchInput}
-        placeholder="Search Medicine"
-        placeholderTextColor="#888"
-        value={searchQuery}
-        onChangeText={setSearchQuery}
-      />
-      <TouchableOpacity onPress={() => console.log('Filter tapped')}>
-        <MaterialCommunityIcons name="filter" size={24} color="#336699" />
-      </TouchableOpacity>
-    </View>
-    
+        <TextInput
+          ref={searchRef}
+          style={styles.searchInput}
+          placeholder="Search Medicine"
+          placeholderTextColor="#888"
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+        />
+        <TouchableOpacity onPress={() => console.log('Filter tapped')}>
+          <MaterialCommunityIcons name="filter" size={24} color="#336699" />
+        </TouchableOpacity>
+      </View>
+
       <FlatList
         data={filteredMedicines}
         keyExtractor={(item) => item.id.toString()}
@@ -60,7 +64,6 @@ export default function DetailsScreen() {
                 <Text style={styles.medicineCompany}>{item.company}</Text>
                 <Text style={styles.medicineDosage}>{item.dosage}</Text>
               </View>
-
               <TouchableOpacity
                 onPress={() => toggleBookmark(item.id)} 
                 style={styles.starButton}
