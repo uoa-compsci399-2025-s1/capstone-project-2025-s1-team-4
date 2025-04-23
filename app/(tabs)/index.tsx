@@ -1,14 +1,12 @@
 import { Text, View, StyleSheet, TextInput, TouchableOpacity } from "react-native";
-import { Link, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { API_BASE_URL } from '../../config'; // adjust path accordingly
 import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
 import { useCallback } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 
-
-// Define the medicine type
 type Medicine = {
   id: number;
   name: string;
@@ -19,18 +17,17 @@ type Medicine = {
 export default function Index() {
   const router = useRouter();
   const [cameraVisible, setCameraVisible] = useState(false);
-  const [facing, setFacing] = useState<CameraType>('back');
+  const [facing] = useState<CameraType>('back');
   const [permission, requestPermission] = useCameraPermissions();
   const [scannedData, setScannedData] = useState<string | null>(null);
   const [medicineInfo, setMedicineInfo] = useState<any>(null);
   const [scanning, setScanning] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useFocusEffect(
     useCallback(() => {
-      // When Home screen is focused, do nothing special.
       return () => {
-        // When navigating away from Home, turn off the camera & reset scanner state
         setCameraVisible(false);
         setScannedData(null);
         setMedicineInfo(null);
@@ -82,14 +79,14 @@ export default function Index() {
       </View>
   
       {/* Search Box */}
-      <View style={styles.searchBox}>
-        <TextInput
-          placeholder="Search here"
-          placeholderTextColor="#aaa"
+      <TouchableOpacity
           style={styles.searchInput}
-        />
-      </View>
-  
+          onPress={() => router.push('/medicine')}
+          activeOpacity={0.8}
+        >
+          <Text style={styles.searchPlaceholder}>Search Medicine</Text>
+      </TouchableOpacity>
+
       {/* Barcode Scanner Icon */}
       {/* Barcode Scanner Icon - only show if camera is not visible */}
       {!cameraVisible && (
@@ -103,8 +100,8 @@ export default function Index() {
           }}
           style={styles.barcodeWrapper}
         >
-          <MaterialCommunityIcons name="barcode-scan" size={130} color="#336699" />
-          <Text style={styles.scanText}>Click Scanner To Scan Medicine Barcode</Text>
+          <MaterialCommunityIcons name="barcode-scan" size={300} color="#336699" />
+          <Text style={styles.scanText}>Tap the scanner to scan a barcode, or use the search box above to search by name.</Text>
         </TouchableOpacity>
       )}
 
@@ -150,9 +147,9 @@ const styles = StyleSheet.create({
   searchBox: {
     backgroundColor: 'white',
     borderRadius: 12,
-    width: '90%',
-    paddingHorizontal: 16,
-    paddingVertical: 10,
+    width: '95%',
+    paddingHorizontal: 20,
+    paddingVertical: 14,
     shadowColor: '#000',
     shadowOpacity: 0.1,
     shadowOffset: { width: 0, height: 2 },
@@ -161,19 +158,27 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   searchInput: {
+    backgroundColor: 'white',
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#ccc',
     fontSize: 16,
-    color: '#333',
+    marginBottom: 16,
+    width: '95%', 
+    alignSelf: 'center', 
   },
   barcodeWrapper: {
     alignItems: 'center',
   },
   scanText: {
     marginTop: 16,
-    fontSize: 16,
+    fontSize: 23,
     color: '#336699',
     fontWeight: 'bold',
     textAlign: 'center',
-    width: 220,
+    paddingHorizontal: 20, 
   },
   cameraContainer: {
     width: '90%',
@@ -183,11 +188,9 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     backgroundColor: '#000',
   },
-  
   camera: {
     flex: 1,
   },
-  
   infoBox: {
     backgroundColor: '#e6f0ff',
     marginTop: 20,
@@ -196,5 +199,9 @@ const styles = StyleSheet.create({
     width: '90%',
     alignItems: 'center',
   },
-  
+  searchPlaceholder: {
+    color: '#888',
+    fontSize: 16,
+  },
+
 });
