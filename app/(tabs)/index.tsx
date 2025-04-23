@@ -83,9 +83,7 @@ export default function Index() {
       {/* Search Box */}
       <TouchableOpacity
         style={styles.searchInput}
-        onPress={() =>
-          router.push({ pathname: '/medicine', params: { focusSearch: 'true' } })
-        }
+        onPress={() => router.push({ pathname: '/medicine', params: { focusSearch: 'true' } })}
         activeOpacity={0.8}
       >
         <Text style={styles.searchPlaceholder}>Search Medicine</Text>

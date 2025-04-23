@@ -4,7 +4,7 @@ import { API_BASE_URL } from '../../config';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useBookmarks } from '../../context/bookmarks_context';
 import { useFocusEffect } from '@react-navigation/native';
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 
 export default function DetailsScreen() {
   const [medicines, setMedicines] = useState<any[]>([]);
@@ -12,6 +12,7 @@ export default function DetailsScreen() {
   const { bookmarks, toggleBookmark } = useBookmarks(); 
   const searchRef = useRef<TextInput>(null);
   const { focusSearch } = useLocalSearchParams();
+  const router = useRouter();
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/all_medicines`)
@@ -33,14 +34,15 @@ export default function DetailsScreen() {
       if (focusSearch === 'true') {
         timeout = setTimeout(() => {
           searchRef.current?.focus();
-        }, 250); // slightly longer delay to ensure mount
+          router.replace('/medicine');
+        }, 250);
       }
   
       return () => {
         if (timeout) clearTimeout(timeout);
       };
     }, [focusSearch])
-  );  
+  ); 
 
   const filteredMedicines = medicines.filter((med) =>
     med.product_name.toLowerCase().includes(searchQuery.toLowerCase())
