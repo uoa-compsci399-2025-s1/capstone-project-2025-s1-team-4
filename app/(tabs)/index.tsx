@@ -103,7 +103,7 @@ export default function Index() {
           style={styles.barcodeWrapper}
         >
           <MaterialCommunityIcons name="barcode-scan" size={300} color="#336699" />
-          <Text style={styles.scanText}>Tap the scanner to scan a barcode, or use the search box above to search by name.</Text>
+          <Text style={styles.scanText}>Tap the scanner icon to scan a barcode, or use the search box above to search by name.</Text>
         </TouchableOpacity>
       )}
 
@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
   },
   scanText: {
     marginTop: 16,
-    fontSize: 23,
+    fontSize: 20,
     color: '#336699',
     fontWeight: 'bold',
     textAlign: 'center',

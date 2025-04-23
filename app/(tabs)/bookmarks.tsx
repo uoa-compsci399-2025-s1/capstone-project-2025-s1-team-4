@@ -65,14 +65,17 @@ export default function BookmarksScreen() {
           data={filteredBookmarks}
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
-            <View style={styles.medicineCard}>
+            <TouchableOpacity
+              style={styles.medicineCard}
+              onPress={() => console.log('Tapped bookmark:', item.product_name)} // Replace with CMI navigation later
+            >
               <View style={styles.cardContent}>
                 <View style={{ flex: 1 }}>
-                <Text style={styles.medicineName}>{item.product_name}</Text>
-                <Text style={styles.medicineCompany}>{item.company}</Text>
-                <Text style={styles.medicineDosage}>
-                  {item.ingredients?.[0]?.dosage || 'N/A'}
-                </Text>
+                  <Text style={styles.medicineName}>{item.product_name}</Text>
+                  <Text style={styles.medicineCompany}>{item.company}</Text>
+                  <Text style={styles.medicineDosage}>
+                    {item.ingredients?.[0]?.dosage || 'N/A'}
+                  </Text>
                 </View>
 
                 <TouchableOpacity
@@ -82,7 +85,7 @@ export default function BookmarksScreen() {
                   <MaterialCommunityIcons name="bookmark" size={26} color="#336699" />
                 </TouchableOpacity>
               </View>
-            </View>
+            </TouchableOpacity>
           )}
         />
       )}
