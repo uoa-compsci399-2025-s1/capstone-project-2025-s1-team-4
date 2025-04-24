@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, FlatList, TextInput, TouchableOpacity } from 'react-native';
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { API_BASE_URL } from '../../config'; 
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useBookmarks } from '../../context/bookmarks_context';
 import { useFocusEffect } from '@react-navigation/native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
@@ -77,87 +77,58 @@ export default function DetailsScreen() {
         onChangeText={setSearchQuery}
       />
       <TouchableOpacity onPress={() => setShowDropdown(!showDropdown)}>
-        <MaterialCommunityIcons name="filter" size={24} color="#336699" />
+        <FontAwesome name="sort" size={24} color="#336699" />
       </TouchableOpacity>
     </View>
 
     {showDropdown && (
   <View style={styles.dropdownPanel}>
-    <TouchableOpacity
-      onPress={() => {
-        setSortBy('name');
-        setSortDirection('asc');
-        setShowDropdown(false);
-      }}
-    >
-      <View style={styles.dropdownItemRow}>
-        <Text
-          style={[
-            styles.dropdownItemText,
-            sortBy === 'name' && sortDirection === 'asc' && { fontWeight: 'bold' },
-          ]}
+    {[
+      { label: 'Name', key: 'name' },
+      { label: 'Manufacturer', key: 'company' },
+    ].map(({ label, key }) => (
+      <View key={key} style={styles.dropdownItemRow}>
+        <TouchableOpacity
+          style={{ flex: 1 }}
+          onPress={() => {
+            setSortBy(key as 'name' | 'company');
+            setSortDirection('asc');
+            setShowDropdown(false);
+          }}
         >
-          Name, ascending (A–Z)
-        </Text>
-      </View>
-    </TouchableOpacity>
+          <Text
+            style={[
+              styles.dropdownItemText,
+              sortBy === key && { fontWeight: 'bold' },
+            ]}
+          >
+            {label}
+          </Text>
+        </TouchableOpacity>
 
-    <TouchableOpacity
-      onPress={() => {
-        setSortBy('name');
-        setSortDirection('desc');
-        setShowDropdown(false);
-      }}
-    >
-      <View style={styles.dropdownItemRow}>
-        <Text
-          style={[
-            styles.dropdownItemText,
-            sortBy === 'name' && sortDirection === 'desc' && { fontWeight: 'bold' },
-          ]}
+        <TouchableOpacity
+          onPress={() => {
+            if (sortBy === key) {
+              setSortDirection(prev => (prev === 'asc' ? 'desc' : 'asc'));
+            } else {
+              setSortBy(key as 'name' | 'company');
+              setSortDirection('desc');
+            }
+            setShowDropdown(false);
+          }}
         >
-          Name, descending (Z–A)
-        </Text>
+          <MaterialCommunityIcons
+            name={
+              sortBy === key && sortDirection === 'desc'
+                ? 'chevron-down'
+                : 'chevron-up'
+            }
+            size={20}
+            color="#336699"
+          />
+        </TouchableOpacity>
       </View>
-    </TouchableOpacity>
-
-    <TouchableOpacity
-      onPress={() => {
-        setSortBy('company');
-        setSortDirection('asc');
-        setShowDropdown(false);
-      }}
-    >
-      <View style={styles.dropdownItemRow}>
-        <Text
-          style={[
-            styles.dropdownItemText,
-            sortBy === 'company' && sortDirection === 'asc' && { fontWeight: 'bold' },
-          ]}
-        >
-          Manufacturer, ascending (A–Z)
-        </Text>
-      </View>
-    </TouchableOpacity>
-
-    <TouchableOpacity
-      onPress={() => {
-        setSortBy('company');
-        setSortDirection('desc');
-        setShowDropdown(false);
-      }}
-    >
-      <View style={styles.dropdownItemRow}>
-        <Text
-          style={[
-            styles.dropdownItemText,
-            sortBy === 'company' && sortDirection === 'desc' && { fontWeight: 'bold' },
-          ]}
-        >
-          Manufacturer, descending (Z–A)
-        </Text>
-      </View>
-    </TouchableOpacity>
+    ))}
   </View>
 )}
 

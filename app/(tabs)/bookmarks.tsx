@@ -1,8 +1,8 @@
-import { View, Text, StyleSheet, FlatList, TextInput, TouchableOpacity} from 'react-native';
+import { View, Text, StyleSheet, FlatList, TextInput, TouchableOpacity } from 'react-native';
 import { useState, useEffect } from 'react';
 import { useBookmarks } from '../../context/bookmarks_context';
 import { API_BASE_URL } from '../../config';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons';
 
 export default function BookmarksScreen() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -12,6 +12,10 @@ export default function BookmarksScreen() {
   const [newTag, setNewTag] = useState('');
   const [tagsById, setTagsById] = useState<{ [id: number]: string[] }>({});
   const [globalTags, setGlobalTags] = useState<string[]>([]);
+  const [sortBy, setSortBy] = useState<'recent' | 'name' | 'company' | 'tags'>('recent');
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [filteredTags, setFilteredTags] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchBookmarkedMedicines = async () => {
@@ -30,186 +34,252 @@ export default function BookmarksScreen() {
     fetchBookmarkedMedicines();
   }, [bookmarks]);
 
-  const filteredBookmarks = bookmarkedMedicines.filter((item) =>
+  const tagFilteredBookmarks =
+    filteredTags.length === 0
+      ? bookmarkedMedicines
+      : bookmarkedMedicines.filter((item) =>
+          (tagsById[item.id] || []).some(tag => filteredTags.includes(tag))
+        );
+
+  const filteredBookmarks = tagFilteredBookmarks.filter(item =>
     item.product_name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const handleAddTag = (id: number) => {
     const tag = newTag.trim();
-    if (!tag) return;
-  
+    if (!tag || (tagsById[id] || []).includes(tag)) return;
+
     setTagsById(prev => ({
       ...prev,
       [id]: [...(prev[id] || []), tag],
     }));
-  
-    setGlobalTags(prev =>
-      prev.includes(tag) ? prev : [...prev, tag]
-    );
-  
+
+    setGlobalTags(prev => (prev.includes(tag) ? prev : [...prev, tag]));
     setNewTag('');
+    const remainingGlobalTags = globalTags.filter(gTag => !(tagsById[id] || []).includes(gTag));
+    if (remainingGlobalTags.length === 0) {
+    setExpandedCardId(null);
+}
     setExpandedCardId(null);
   };
-  
+
+  const removeTagGlobally = (tagToRemove: string) => {
+    setTagsById(prev => {
+      const updated = Object.fromEntries(
+        Object.entries(prev).map(([id, tags]) => [
+          Number(id),
+          tags.filter(t => t !== tagToRemove),
+        ])
+      );
+      return updated;
+    });
+    setGlobalTags(prev => prev.filter(t => t !== tagToRemove));
+  };
+
+  const sortedBookmarks = [...filteredBookmarks].sort((a, b) => {
+    if (sortBy === 'name') {
+      return sortDirection === 'asc'
+        ? a.product_name.localeCompare(b.product_name)
+        : b.product_name.localeCompare(a.product_name);
+    }
+    if (sortBy === 'company') {
+      return sortDirection === 'asc'
+        ? a.company.localeCompare(b.company)
+        : b.company.localeCompare(a.company);
+    }
+    if (sortBy === 'tags') {
+      const aTags = tagsById[a.id] || [];
+      const bTags = tagsById[b.id] || [];
+    
+      const aHasTags = aTags.length > 0;
+      const bHasTags = bTags.length > 0;
+    
+      if (aHasTags && !bHasTags) return -1;
+      if (!aHasTags && bHasTags) return 1;
+    
+      if (!aHasTags && !bHasTags) {
+        return a.product_name.localeCompare(b.product_name);
+      }
+    
+      const aFirstTag = [...aTags].sort()[0];
+      const bFirstTag = [...bTags].sort()[0];
+      const tagComparison = aFirstTag.localeCompare(bFirstTag);
+    
+      if (tagComparison !== 0) return sortDirection === 'asc' ? tagComparison : -tagComparison;
+    
+      return sortDirection === 'asc'
+        ? a.product_name.localeCompare(b.product_name)
+        : b.product_name.localeCompare(a.product_name);
+    }    
+    if (sortBy === 'recent') {
+      const aIndex = bookmarks.indexOf(a.id);
+      const bIndex = bookmarks.indexOf(b.id);
+      return sortDirection === 'asc' ? aIndex - bIndex : bIndex - aIndex;
+    }
+    return 0;
+  });
+
   return (
     <View style={styles.container}>
-      <View style={styles.searchWrapper}>
-        <TextInput
-          style={styles.searchInput}
-          placeholder="Search Bookmarks"
-          placeholderTextColor="#888"
-          value={searchQuery}
-          onChangeText={setSearchQuery}
-        />
-        <TouchableOpacity onPress={() => console.log('Filter tapped')}>
-          <MaterialCommunityIcons name="filter" size={24} color="#336699" />
-        </TouchableOpacity>
-      </View>
-  
-      {filteredBookmarks.length === 0 ? (
-        <View style={styles.emptyState}>
-          <Text style={styles.noBookmarks} numberOfLines={1} adjustsFontSizeToFit>
-            No bookmarked medicines
-          </Text>
-          <Text style={styles.hintText}>
-            You can add bookmarks by tapping on the bookmark icon.
-          </Text>
+      <View>
+        <View style={styles.searchWrapper}>
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Search Bookmarks"
+            placeholderTextColor="#888"
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+          />
+          <TouchableOpacity onPress={() => setShowDropdown(!showDropdown)}>
+            <FontAwesome name="sort" size={24} color="#336699" />
+          </TouchableOpacity>
         </View>
-      ) : (
-        <FlatList
-          data={filteredBookmarks}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => (
-            <View>
-              <TouchableOpacity
-                style={styles.medicineCard}
-                onPress={() => console.log('Tapped bookmark:', item.product_name)}
-              >
-                <View style={styles.cardContent}>
-                  <View style={{ flex: 1 }}>
-                    <Text style={styles.medicineName}>{item.product_name}</Text>
-                    <Text style={styles.medicineCompany}>{item.company}</Text>
-                    <Text style={styles.medicineDosage}>
-                      {item.ingredients?.[0]?.dosage || 'N/A'}
-                    </Text>
-  
-                    <View style={styles.tagRow}>
-                      <View style={styles.tagList}>
-                        {[...(tagsById[item.id] || [])].sort().map((tag, index) => (
-                          <View key={index} style={styles.tagPill}>
+
+        {filteredTags.length > 0 && (
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 8, marginBottom: 6 }}>
+            {filteredTags.map((tag, index) => (
+              <View key={index} style={styles.filterTagPill}>
+                <Text style={styles.filterTagText}>{tag}</Text>
+                <TouchableOpacity onPress={() => setFilteredTags(prev => prev.filter(t => t !== tag))}>
+                  <MaterialCommunityIcons name="close" size={14} color="#336699" />
+                </TouchableOpacity>
+              </View>
+            ))}
+          </View>
+        )}
+
+        {showDropdown && (
+          <View style={styles.dropdownPanel}>
+            {[{ label: 'Recently added', key: 'recent' }, { label: 'Name', key: 'name' }, { label: 'Manufacturer', key: 'company' }, { label: 'Tags', key: 'tags' }].map(({ label, key }) => (
+              <View key={key} style={styles.dropdownItemRow}>
+                <TouchableOpacity style={{ flex: 1 }} activeOpacity={0.7} onPress={() => { setSortBy(key as any); setSortDirection('asc'); setShowDropdown(false); }}>
+                  <Text style={[styles.dropdownItemText, sortBy === key && { fontWeight: 'bold' }]}>{label}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => { if (sortBy === key) { setSortDirection(prev => (prev === 'asc' ? 'desc' : 'asc')); } else { setSortBy(key as any); setSortDirection('desc'); } setShowDropdown(false); }}>
+                  <MaterialCommunityIcons name={sortBy === key && sortDirection === 'desc' ? 'chevron-down' : 'chevron-up'} size={20} color="#336699" />
+                </TouchableOpacity>
+              </View>
+            ))}
+          </View>
+        )}
+      </View>
+
+      <FlatList
+        data={sortedBookmarks}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => (
+          <View>
+            <TouchableOpacity style={styles.medicineCard}>
+              <View style={styles.cardContent}>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.medicineName}>{item.product_name}</Text>
+                  <Text style={styles.medicineCompany}>{item.company}</Text>
+                  <Text style={styles.medicineDosage}>
+                    {item.ingredients?.[0] ? `${item.ingredients[0].dosage} ${item.ingredients[0].unit || ''}` : 'N/A'}
+                  </Text>
+                  <View style={styles.tagRow}>
+                    <View style={styles.tagList}>
+                      {[...(tagsById[item.id] || [])].sort().map((tag, index) => (
+                        <View key={index} style={styles.tagPill}>
+                          <TouchableOpacity onPress={() => {
+                            if (!filteredTags.includes(tag)) {
+                              setFilteredTags(prev => [...prev, tag]);
+                            }
+                          }}>
                             <Text style={styles.tagPillText}>{tag}</Text>
-                            <TouchableOpacity
-                              onPress={() => {
-                                const removedTag = tagsById[item.id][index];
-  
-                                setTagsById(prev => {
-                                  const updatedTags = {
-                                    ...prev,
-                                    [item.id]: prev[item.id].filter((_, i) => i !== index),
-                                  };
-  
-                                  const tagUsedElsewhere = Object.values(updatedTags).some(tagList =>
-                                    tagList.includes(removedTag)
-                                  );
-  
-                                  if (!tagUsedElsewhere) {
-                                    setGlobalTags(prevGlobal =>
-                                      prevGlobal.filter(tag => tag !== removedTag)
-                                    );
-                                  }
-  
-                                  return updatedTags;
-                                });
-                              }}
-                            >
-                              <MaterialCommunityIcons name="close" size={14} color="#336699" />
-                            </TouchableOpacity>
-                          </View>
-                        ))}
-                      </View>
-  
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                          onPress={() => {
+                            setTagsById(prev => {
+                              const updated = {
+                                ...prev,
+                                [item.id]: (prev[item.id] || []).filter(t => t !== tag),
+                              };
+                          
+                              // Check if the tag still exists in any medicine after removal
+                              const tagStillUsed = Object.values(updated).some(tags =>
+                                tags.includes(tag)
+                              );
+                          
+                              if (!tagStillUsed) {
+                                setGlobalTags(prev => prev.filter(t => t !== tag));
+                              }
+                          
+                              return updated;
+                            });
+                          }}
+                        >
+                          <MaterialCommunityIcons name="close" size={14} color="#336699" />
+                        </TouchableOpacity>
+                        </View>
+                      ))}
+                    </View>
+                    <TouchableOpacity style={styles.addTagButton} onPress={() => setExpandedCardId(expandedCardId === item.id ? null : item.id)}>
+                      <MaterialCommunityIcons name="plus" size={20} color="#336699" />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+                <TouchableOpacity onPress={() => toggleBookmark(item.id)} style={styles.starButton}>
+                  <MaterialCommunityIcons name="bookmark" size={26} color="#336699" />
+                </TouchableOpacity>
+              </View>
+            </TouchableOpacity>
+
+            {expandedCardId === item.id && (
+              <View style={styles.tagDropdownCard}>
+                <TextInput
+                  value={newTag}
+                  onChangeText={setNewTag}
+                  placeholder="Enter a new tag"
+                  placeholderTextColor="#999"
+                  style={styles.tagInput}
+                  onSubmitEditing={() => handleAddTag(item.id)}
+                  returnKeyType="done"
+                />
+
+                <View style={styles.dropdownTagList}>
+                  {[...globalTags].filter(tag => !(tagsById[item.id] || []).includes(tag)).sort().map((tag, index) => (
+                    <View key={index} style={styles.dropdownTagPill}>
                       <TouchableOpacity
-                        style={styles.addTagButton}
-                        onPress={() =>
-                          setExpandedCardId(expandedCardId === item.id ? null : item.id)
-                        }
+                        onPress={() => {
+                          setTagsById(prev => ({
+                            ...prev,
+                            [item.id]: [...(prev[item.id] || []), tag],
+                          }));
+
+                          const remainingAfterAdd = globalTags.filter(
+                            t => !(tagsById[item.id] || []).includes(t) && t !== tag
+                          );
+
+                          setExpandedCardId(null); 
+                        }}
                       >
-                        <MaterialCommunityIcons name="plus" size={20} color="#336699" />
+                        <Text style={styles.dropdownTagText}>{tag}</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={() => {
+                          removeTagGlobally(tag);
+
+                          // After removing the tag, check if there are any tags left
+                          const remaining = globalTags.filter(t => t !== tag);
+                          if (remaining.length === 0) {
+                            setExpandedCardId(null);
+                          }
+                        }}
+                      >
+                        <MaterialCommunityIcons name="close" size={14} color="#336699" />
                       </TouchableOpacity>
                     </View>
-                  </View>
-  
-                  <TouchableOpacity
-                    onPress={() => toggleBookmark(item.id)}
-                    style={styles.starButton}
-                  >
-                    <MaterialCommunityIcons name="bookmark" size={26} color="#336699" />
-                  </TouchableOpacity>
+                  ))}
                 </View>
-              </TouchableOpacity>
-  
-              {expandedCardId === item.id && (
-                <View style={styles.tagDropdownCard}>
-                  <TextInput
-                    value={newTag}
-                    onChangeText={setNewTag}
-                    placeholder="Enter a new tag"
-                    placeholderTextColor="#999"
-                    style={styles.tagInput}
-                    onSubmitEditing={() => handleAddTag(item.id)}
-                    returnKeyType="done"
-                  />
-  
-                  {globalTags
-                    .filter(tag => !(tagsById[item.id] || []).includes(tag))
-                    .length > 0 && (
-                    <View style={styles.dropdownTagList}>
-                      {[...globalTags]
-                        .filter(tag => !(tagsById[item.id] || []).includes(tag))
-                        .sort()
-                        .map((tag, index) => (
-                          <View key={index} style={styles.dropdownTagPill}>
-                            <TouchableOpacity
-                              onPress={() => {
-                                setTagsById(prev => ({
-                                  ...prev,
-                                  [item.id]: [...(prev[item.id] || []), tag],
-                                }));
-                              }}
-                            >
-                              <Text style={styles.dropdownTagText}>{tag}</Text>
-                            </TouchableOpacity>
-
-                            <TouchableOpacity
-                              onPress={() => {
-                                setTagsById(prev => {
-                                  const updated = Object.fromEntries(
-                                    Object.entries(prev).map(([id, tags]) => [
-                                      Number(id),
-                                      tags.filter(t => t !== tag),
-                                    ])
-                                  );
-                                  return updated;
-                                });
-
-                                setGlobalTags(prev => prev.filter(t => t !== tag));
-                              }}
-                            >
-                              <MaterialCommunityIcons name="close" size={14} color="#336699" />
-                            </TouchableOpacity>
-                          </View>
-                        ))}
-                    </View>
-                  )}
-                </View>
-              )}
-            </View>
-          )}
-        />
-      )}
+              </View>
+            )}
+          </View>
+        )}
+      />
     </View>
   );
-}  
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -226,7 +296,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ccc',
     paddingHorizontal: 12,
-    marginBottom: 16,
+    marginBottom: 6,
   },
   searchInput: {
     flex: 1,
@@ -379,5 +449,47 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#336699',
     fontWeight: '500',
+  },
+  dropdownPanel: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    paddingTop: 0,
+    paddingBottom: 0,
+    overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 5,
+    marginTop: 6,
+    marginBottom: 6,  
+  },
+  dropdownItemRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderBottomColor: '#eee',
+    borderBottomWidth: 1,
+  },
+  dropdownItemText: {
+    fontSize: 16,
+    color: '#336699',
+  },
+  filterTagPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#d6eaff',
+    borderRadius: 12,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    marginRight: 6,
+    marginTop: 4,
+  },
+  filterTagText: {
+    fontSize: 12,
+    color: '#336699',
+    marginRight: 6,
   },
 });
