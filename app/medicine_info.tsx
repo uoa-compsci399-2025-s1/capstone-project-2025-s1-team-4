@@ -1,6 +1,6 @@
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { useEffect, useState } from 'react';
-import { API_BASE_URL } from '../../config';
+import { API_BASE_URL } from '../config';
 import { useLocalSearchParams } from 'expo-router';
 
 export default function MedicineInfo() {
@@ -30,8 +30,6 @@ export default function MedicineInfo() {
       .catch(console.error);
     
   }, [barcodeStr, medicineId]);
-
-  
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
