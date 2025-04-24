@@ -1,9 +1,13 @@
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { MaterialCommunityIcons, Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useBookmarks } from '../../context/bookmarks_context';
+import { Alert } from 'react-native';
 
 export default function SettingsScreen() {
   const router = useRouter();
+  const { setBookmarks } = useBookmarks();
 
   return (
     <ScrollView style={styles.container}>
@@ -14,7 +18,25 @@ export default function SettingsScreen() {
           { label: 'Appearance', route: '/settings_pages/appearance' },
           { label: 'Notification History', route: '/settings_pages/notification_history' },
           { label: 'Permissions', route: '/settings_pages/permissions' },
-          { label: 'Clear Bookmarks', onPress: () => console.log('Clear bookmarks tapped') },
+          {
+            label: 'Clear Bookmarks',
+            onPress: () =>
+              Alert.alert(
+                'Clear Bookmarks',
+                'Are you sure you want to remove all bookmarks?',
+                [
+                  { text: 'Cancel', style: 'cancel' },
+                  {
+                    text: 'Clear All',
+                    style: 'destructive',
+                    onPress: async () => {
+                      await AsyncStorage.removeItem('bookmarks');
+                      setBookmarks([]);
+                    },
+                  },
+                ]
+              ),
+          }
         ].map((item, index, arr) => {
           const isLast = index === arr.length - 1;
           const isPressable = item.route || item.onPress;

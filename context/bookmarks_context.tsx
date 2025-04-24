@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export const BookmarkContext = createContext<{
   bookmarks: number[];
   toggleBookmark: (id: number) => void;
+  setBookmarks: React.Dispatch<React.SetStateAction<number[]>>;
 } | null>(null);
 
 export const BookmarkProvider = ({ children }: { children: React.ReactNode }) => {
@@ -22,15 +23,13 @@ export const BookmarkProvider = ({ children }: { children: React.ReactNode }) =>
   }, [bookmarks]);
 
   const toggleBookmark = (id: number) => {
-    setBookmarks(prev =>
-      prev.includes(id)
-        ? prev.filter(b => b !== id)
-        : [...prev, id]
+    setBookmarks((prev) =>
+      prev.includes(id) ? prev.filter((b) => b !== id) : [...prev, id]
     );
   };
 
   return (
-    <BookmarkContext.Provider value={{ bookmarks, toggleBookmark }}>
+    <BookmarkContext.Provider value={{ bookmarks, toggleBookmark, setBookmarks }}>
       {children}
     </BookmarkContext.Provider>
   );
