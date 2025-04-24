@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useBookmarks } from '../../context/bookmarks_context';
 import { API_BASE_URL } from '../../config';
 import { MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function BookmarksScreen() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -30,8 +31,21 @@ export default function BookmarksScreen() {
         console.error('Failed to load medicines:', err);
       }
     };
-
+  
+    const loadTagsFromStorage = async () => {
+      try {
+        const storedTags = await AsyncStorage.getItem('tagsById');
+        const storedGlobal = await AsyncStorage.getItem('globalTags');
+  
+        if (storedTags) setTagsById(JSON.parse(storedTags));
+        if (storedGlobal) setGlobalTags(JSON.parse(storedGlobal));
+      } catch (err) {
+        console.error('Failed to load saved tags:', err);
+      }
+    };
+  
     fetchBookmarkedMedicines();
+    loadTagsFromStorage();
   }, [bookmarks]);
 
   const tagFilteredBookmarks =
@@ -48,33 +62,45 @@ export default function BookmarksScreen() {
   const handleAddTag = (id: number) => {
     const tag = newTag.trim();
     if (!tag || (tagsById[id] || []).includes(tag)) return;
-
-    setTagsById(prev => ({
-      ...prev,
-      [id]: [...(prev[id] || []), tag],
-    }));
-
-    setGlobalTags(prev => (prev.includes(tag) ? prev : [...prev, tag]));
+  
+    const updatedTagsById = {
+      ...tagsById,
+      [id]: [...(tagsById[id] || []), tag],
+    };
+    setTagsById(updatedTagsById);
+    AsyncStorage.setItem('tagsById', JSON.stringify(updatedTagsById));
+  
+    const updatedGlobalTags = globalTags.includes(tag)
+      ? globalTags
+      : [...globalTags, tag];
+    setGlobalTags(updatedGlobalTags);
+    AsyncStorage.setItem('globalTags', JSON.stringify(updatedGlobalTags));
+  
     setNewTag('');
-    const remainingGlobalTags = globalTags.filter(gTag => !(tagsById[id] || []).includes(gTag));
+    const remainingGlobalTags = globalTags.filter(
+      gTag => !(updatedTagsById[id] || []).includes(gTag)
+    );
     if (remainingGlobalTags.length === 0) {
+      setExpandedCardId(null);
+    }
     setExpandedCardId(null);
-}
-    setExpandedCardId(null);
-  };
+  };  
 
   const removeTagGlobally = (tagToRemove: string) => {
-    setTagsById(prev => {
-      const updated = Object.fromEntries(
-        Object.entries(prev).map(([id, tags]) => [
-          Number(id),
-          tags.filter(t => t !== tagToRemove),
-        ])
-      );
-      return updated;
-    });
-    setGlobalTags(prev => prev.filter(t => t !== tagToRemove));
+    const updated = Object.fromEntries(
+      Object.entries(tagsById).map(([id, tags]) => [
+        Number(id),
+        tags.filter(t => t !== tagToRemove),
+      ])
+    );
+    setTagsById(updated);
+    AsyncStorage.setItem('tagsById', JSON.stringify(updated));
+  
+    const updatedGlobal = globalTags.filter(t => t !== tagToRemove);
+    setGlobalTags(updatedGlobal);
+    AsyncStorage.setItem('globalTags', JSON.stringify(updatedGlobal));
   };
+  
 
   const sortedBookmarks = [...filteredBookmarks].sort((a, b) => {
     if (sortBy === 'name') {
@@ -195,18 +221,19 @@ export default function BookmarksScreen() {
                                 ...prev,
                                 [item.id]: (prev[item.id] || []).filter(t => t !== tag),
                               };
-                          
-                              // Check if the tag still exists in any medicine after removal
-                              const tagStillUsed = Object.values(updated).some(tags =>
-                                tags.includes(tag)
-                              );
-                          
+                            
+                              AsyncStorage.setItem('tagsById', JSON.stringify(updated));
+                            
+                              const tagStillUsed = Object.values(updated).some(tags => tags.includes(tag));
                               if (!tagStillUsed) {
-                                setGlobalTags(prev => prev.filter(t => t !== tag));
+                                const updatedGlobal = globalTags.filter(t => t !== tag);
+                                setGlobalTags(updatedGlobal);
+                                AsyncStorage.setItem('globalTags', JSON.stringify(updatedGlobal));
                               }
-                          
+                            
                               return updated;
                             });
+                            
                           }}
                         >
                           <MaterialCommunityIcons name="close" size={14} color="#336699" />
@@ -259,8 +286,6 @@ export default function BookmarksScreen() {
                       <TouchableOpacity
                         onPress={() => {
                           removeTagGlobally(tag);
-
-                          // After removing the tag, check if there are any tags left
                           const remaining = globalTags.filter(t => t !== tag);
                           if (remaining.length === 0) {
                             setExpandedCardId(null);
