@@ -15,9 +15,9 @@ export default function SettingsScreen() {
       <Text style={styles.sectionHeader}>App Settings</Text>
       <View style={styles.settingCard}>
         {[
-          { label: 'Appearance', route: '/settings_pages/appearance' },
-          { label: 'Notification History', route: '/settings_pages/notification_history' },
-          { label: 'Permissions', route: '/settings_pages/permissions' },
+          { label: 'Appearance', route: '/(settings_pages)/appearance' },
+          { label: 'Notification History', route: '/(settings_pages)/notification_history' },
+          { label: 'Permissions', route: '/(settings_pages)/permissions' },
           {
             label: 'Clear Bookmarks',
             onPress: () =>
@@ -65,8 +65,8 @@ export default function SettingsScreen() {
       <Text style={styles.sectionHeader}>About</Text>
       <View style={styles.settingCard}>
         {[
-          { label: 'About Us', route: '/settings_pages/about_us' },
-          { label: 'Privacy Policy', route: '/settings_pages/privacy_policy' },
+          { label: 'About Us', route: '/(settings_pages)/about_us' },
+          { label: 'Privacy Policy', route: '/(settings_pages)/privacy_policy' },
           { label: 'App Version', right: <Text style={styles.settingValue}>v1.0.0</Text> },
         ].map((item, index, arr) => {
           const isLast = index === arr.length - 1;
