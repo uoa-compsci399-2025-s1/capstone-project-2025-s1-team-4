@@ -1,7 +1,8 @@
-import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { useEffect, useState } from 'react';
 import { API_BASE_URL } from '../../config';
 import { useLocalSearchParams } from 'expo-router';
+import { Linking } from 'react-native';
 
 export default function MedicineInfo() {
   const { barcode, id } = useLocalSearchParams();
@@ -9,7 +10,36 @@ export default function MedicineInfo() {
   const barcodeStr = typeof barcode === 'string' ? barcode : null;
   const medicineId = typeof id === 'string' ? Number(id) : null;
 
+
   const [cmiData, setCmiData] = useState<any>(null);
+  const [expandedSections, setExpandedSections] = useState<string[]>([]);
+
+  // // Expand + collapse behaviour 
+  const toggleSection = (key: string) => {
+    setExpandedSections(prev =>
+      prev.includes(key)
+        ? prev.filter(k => k !== key)
+        : [...prev, key]
+    );
+  };
+  
+  // Not sure why but the CMI section keys are numbers 
+  const getSectionTitle = (key: string, name?: string) => {
+    const sectionMap: Record<string, string> = {
+      2: `What this medicine is used for`,
+      3: `Before you use this medicine`,
+      4: `How to use this medicine`,
+      5: `While you are using this medicine`,
+      6: `In case of overdose`,
+      7: `Side effects`,
+      8: `After using this medicine`,
+      9: `Product description`,
+      10: `Supplier details`,
+      11: `Date of preparation`,
+      12: `Link to data sheet`
+    };
+    return sectionMap[key] || key.toUpperCase();
+  };
 
   useEffect(() => {
     // Construct the query parameter correctly
@@ -31,22 +61,47 @@ export default function MedicineInfo() {
     
   }, [barcodeStr, medicineId]);
 
-  
-
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.header}>CMI Sheet</Text>
       {barcodeStr && <Text style={styles.header}>{barcodeStr}</Text>}
-      
+  
       {!cmiData ? (
         <Text style={styles.body}>Loading CMI data...</Text>
       ) : (
-        Object.entries(cmiData).map(([key, value]) => (
-          <View key={key} style={styles.section}>
-            <Text style={styles.title}>{key.toUpperCase()}</Text>
-            <Text style={styles.body}>{String(value)}</Text>
-          </View>
-        ))
+        Object.entries(cmiData.cmi_sheet)
+        .filter(([key]) => key !== '0' && key !== '1')
+        .map(([key, value]) => {
+          const isExpanded = expandedSections.includes(key);
+          const sectionTitle = getSectionTitle(key, cmiData.medicine_name); // helper function
+
+          // Makes link the data sheet clickable
+          const handleLinkClick = (url: string) => {
+            Linking.openURL(url); // Opens the URL in a browser
+          };
+  
+          return (
+            <View key={key} style={styles.section}>
+              <TouchableOpacity onPress={() => toggleSection(key)} style={styles.sectionHeader}>
+                <Text style={styles.title}>{sectionTitle}</Text>
+                <Text style={styles.arrow}>{isExpanded ? '▲' : '▼'}</Text>
+              </TouchableOpacity>
+
+              {isExpanded && (
+                // Check if it's the "Link to data sheet" section and handle it accordingly
+                key === '12' ? (
+                  <TouchableOpacity onPress={() => handleLinkClick(String(value))}>
+                    <Text style={[styles.body, styles.link]}>{String(value)}</Text>
+                  </TouchableOpacity>
+                ) : (
+                  <Text style={styles.body}>{String(value)}</Text>
+                )
+              )}
+
+              {/* {isExpanded && <Text style={styles.body}>{String(value)}</Text>} */}
+            </View>
+          );
+        })
       )}
     </ScrollView>
   );
@@ -75,4 +130,21 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#333',
   },
+
+  arrow: {
+    fontSize: 16,
+    color: '#336699',
+  },
+
+  sectionHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between', 
+    alignItems: 'center',       
+  },
+
+  link: {
+    color: 'blue',
+    textDecorationLine: 'underline',
+  },
+  
 });
