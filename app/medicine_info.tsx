@@ -12,8 +12,8 @@ export default function MedicineInfo() {
   const barcodeStr = typeof barcode === 'string' ? barcode : null;
   const medicineId = typeof id === 'string' ? Number(id) : null;
 
-
-  const [cmiData, setCmiData] = useState<any>(null);
+  const [medicineData, setMedicineData] = useState<any>(null);  // State for holding the medicine data
+  const [cmiData, setCmiData] = useState<any>(null);  // State for holding the CMI sheet data
   const [expandedSections, setExpandedSections] = useState<string[]>([]);
 
   // Expand + collapse behaviour 
@@ -24,7 +24,7 @@ export default function MedicineInfo() {
         : [...prev, key]
     );
   };
-  
+
   // Not sure why but the CMI section keys are numbers 
   const getSectionTitle = (key: string, name?: string) => {
     const sectionMap: Record<string, string> = {
@@ -54,25 +54,50 @@ export default function MedicineInfo() {
   
     if (!queryParam) return;
   
-  
-    fetch(`${API_BASE_URL}/medicine/cmi_sheet?${queryParam}`)
-      .then(res =>  res.json())
+    // Fetch the medicine data using barcode or id
+    fetch(`${API_BASE_URL}/medicine?${queryParam}`)
+      .then(res => res.json())
       .then(json => {
-        setCmiData(json); // Set the data you want from the response
+        if (json.found && json.medicine.length > 0) {
+          const medicine = json.medicine[0]; // Assuming the medicine data is in the first item of the array
+          setMedicineData(medicine); // Set the medicine data (product name, company, etc.)
+          
+          // Now, fetch the CMI sheet using the medicine ID
+          const medicineId = medicine.id;
+          fetch(`${API_BASE_URL}/medicine/cmi_sheet?id=${medicineId}`)
+            .then(res => res.json())
+            .then(cmiJson => {
+              setCmiData(cmiJson);  // Set the CMI data
+            })
+            .catch(error => {
+              console.error('Error fetching CMI sheet:', error);
+            });
+        } else {
+          console.error('Medicine not found');
+        }
       })
-      .catch(console.error);
-    
+      .catch(error => {
+        console.error('Error fetching medicine:', error);
+      });
   }, [barcodeStr, medicineId]);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
 
-<     TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
+      {/* Back button to home page */}
+      <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
         <Ionicons name="arrow-back" size={24} color="#336699" />
       </TouchableOpacity>
 
-      <Text style={styles.header}>CMI Sheet</Text>
-      {barcodeStr && <Text style={styles.header}>{barcodeStr}</Text>}
+      {/* Display the medicine name and company */}
+      {medicineData ? (
+        <>
+          <Text style={styles.header}>{medicineData.product_name}</Text>
+          <Text style={styles.subheader}>{medicineData.company}</Text>
+        </>
+      ) : (
+        <Text style={styles.body}>Loading medicine information...</Text>
+      )}
   
       {!cmiData ? (
         <Text style={styles.body}>Loading CMI data...</Text>
@@ -118,10 +143,24 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   header: {
-    fontSize: 22,
+    fontSize: 26,
+    fontWeight: 'bold',
+    marginTop: 20,
+    marginBottom: 6,
+    textAlign: 'center',
+    color: '#336699'
+  },
+  subheader: {
+    fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 16,
     textAlign: 'center',
+    color: '#336699'
+  },
+  activeIngredients: {
+    fontSize: 14,
+    marginBottom: 16,
+    textAlign: 'center'
   },
   section: {
     marginBottom: 20,
