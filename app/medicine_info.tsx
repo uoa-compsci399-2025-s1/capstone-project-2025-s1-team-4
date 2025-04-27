@@ -1,10 +1,12 @@
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { useEffect, useState } from 'react';
 import { API_BASE_URL } from '../config';
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Linking } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function MedicineInfo() {
+  const router = useRouter();
   const { barcode, id } = useLocalSearchParams();
 
   const barcodeStr = typeof barcode === 'string' ? barcode : null;
@@ -64,6 +66,11 @@ export default function MedicineInfo() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+
+<     TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
+        <Ionicons name="arrow-back" size={24} color="#336699" />
+      </TouchableOpacity>
+
       <Text style={styles.header}>CMI Sheet</Text>
       {barcodeStr && <Text style={styles.header}>{barcodeStr}</Text>}
   
@@ -144,6 +151,13 @@ const styles = StyleSheet.create({
   link: {
     color: 'blue',
     textDecorationLine: 'underline',
+  },
+
+  backButton: {
+    position: 'absolute',
+    top: 20,
+    left: 16,
+    zIndex: 1,
   },
   
 });
