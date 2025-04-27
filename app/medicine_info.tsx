@@ -1,6 +1,6 @@
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { useEffect, useState } from 'react';
-import { API_BASE_URL } from '../../config';
+import { API_BASE_URL } from '../config';
 import { useLocalSearchParams } from 'expo-router';
 import { Linking } from 'react-native';
 

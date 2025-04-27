@@ -10,7 +10,7 @@ def group_medicines_with_ingredients(rows):
 
     for each_row in rows:
         medicine_id = each_row[0]
-        name = each_row[1]
+        product_name = each_row[1]
         company = each_row[2]
         cmi_sheet = each_row[3]
         barcode = each_row[4]
@@ -19,7 +19,7 @@ def group_medicines_with_ingredients(rows):
         if medicine_id not in grouped:
             grouped[medicine_id] = {
                 "id": medicine_id,
-                "name": name,
+                "product_name": product_name,
                 "company": company,
                 "cmi_sheet": cmi_sheet,
                 "barcode": barcode,
