@@ -141,7 +141,7 @@ export default function DetailsScreen() {
   renderItem={({ item }) => (
     <TouchableOpacity
       style={styles.medicineCard}
-      onPress={() => console.log('Tapped:', item.product_name)} // Replace with navigation later
+      onPress={() => {router.push(`/medicine_info?barcode=${encodeURIComponent(item.barcode)}` as const)}}
     >
       <View style={styles.cardContent}>
         <View style={{ flex: 1 }}>
