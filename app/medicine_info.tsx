@@ -26,6 +26,7 @@ export default function MedicineInfo() {
   // Not sure why but the CMI section keys are numbers 
   const getSectionTitle = (key: string, name?: string) => {
     const sectionMap: Record<string, string> = {
+      1: `Link to CMI`,
       2: `What this medicine is used for`,
       3: `Before you use this medicine`,
       4: `How to use this medicine`,
@@ -70,7 +71,7 @@ export default function MedicineInfo() {
         <Text style={styles.body}>Loading CMI data...</Text>
       ) : (
         Object.entries(cmiData.cmi_sheet)
-        .filter(([key]) => key !== '0' && key !== '1')
+        .filter(([key]) => key !== '0')
         .map(([key, value]) => {
           const isExpanded = expandedSections.includes(key);
           const sectionTitle = getSectionTitle(key, cmiData.medicine_name); // helper function
@@ -89,7 +90,7 @@ export default function MedicineInfo() {
 
               {isExpanded && (
                 // Check if it's the "Link to data sheet" section and handle it accordingly
-                key === '12' ? (
+                key === '12' || key === '1'? (
                   <TouchableOpacity onPress={() => handleLinkClick(String(value))}>
                     <Text style={[styles.body, styles.link]}>{String(value)}</Text>
                   </TouchableOpacity>
@@ -97,8 +98,6 @@ export default function MedicineInfo() {
                   <Text style={styles.body}>{String(value)}</Text>
                 )
               )}
-
-              {/* {isExpanded && <Text style={styles.body}>{String(value)}</Text>} */}
             </View>
           );
         })
