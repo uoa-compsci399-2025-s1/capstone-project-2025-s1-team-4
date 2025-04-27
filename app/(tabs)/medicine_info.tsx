@@ -14,7 +14,7 @@ export default function MedicineInfo() {
   const [cmiData, setCmiData] = useState<any>(null);
   const [expandedSections, setExpandedSections] = useState<string[]>([]);
 
-  // // Expand + collapse behaviour 
+  // Expand + collapse behaviour 
   const toggleSection = (key: string) => {
     setExpandedSections(prev =>
       prev.includes(key)
@@ -75,9 +75,9 @@ export default function MedicineInfo() {
           const isExpanded = expandedSections.includes(key);
           const sectionTitle = getSectionTitle(key, cmiData.medicine_name); // helper function
 
-          // Makes link the data sheet clickable
+          // Link is clickable and opens 
           const handleLinkClick = (url: string) => {
-            Linking.openURL(url); // Opens the URL in a browser
+            Linking.openURL(url);
           };
   
           return (
