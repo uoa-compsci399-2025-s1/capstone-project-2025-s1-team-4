@@ -12,11 +12,11 @@ export default function MedicineInfo() {
   const barcodeStr = typeof barcode === 'string' ? barcode : null;
   const medicineId = typeof id === 'string' ? Number(id) : null;
 
-  const [medicineData, setMedicineData] = useState<any>(null);  // State for holding the medicine data
-  const [cmiData, setCmiData] = useState<any>(null);  // State for holding the CMI sheet data
+  const [medicineData, setMedicineData] = useState<any>(null); // Product name, company, active ingredients, dosage
+  const [cmiData, setCmiData] = useState<any>(null); 
   const [expandedSections, setExpandedSections] = useState<string[]>([]);
 
-  // Expand + collapse behaviour 
+  // Dropdown section expanding + collapsing behaviour 
   const toggleSection = (key: string) => {
     setExpandedSections(prev =>
       prev.includes(key)
@@ -45,7 +45,6 @@ export default function MedicineInfo() {
   };
 
   useEffect(() => {
-    // Construct the query parameter correctly
     const queryParam = barcodeStr 
       ? `barcode=${encodeURIComponent(barcodeStr)}`
       : medicineId !== null
@@ -62,7 +61,7 @@ export default function MedicineInfo() {
           const medicine = json.medicine[0]; // Assuming the medicine data is in the first item of the array
           setMedicineData(medicine); // Set the medicine data (product name, company, etc.)
           
-          // Now, fetch the CMI sheet using the medicine ID
+          // Fetch the CMI sheet using the medicine ID
           const medicineId = medicine.id;
           fetch(`${API_BASE_URL}/medicine/cmi_sheet?id=${medicineId}`)
             .then(res => res.json())
@@ -72,8 +71,6 @@ export default function MedicineInfo() {
             .catch(error => {
               console.error('Error fetching CMI sheet:', error);
             });
-        } else {
-          console.error('Medicine not found');
         }
       })
       .catch(error => {
@@ -94,6 +91,17 @@ export default function MedicineInfo() {
         <>
           <Text style={styles.header}>{medicineData.product_name}</Text>
           <Text style={styles.subheader}>{medicineData.company}</Text>
+
+          {/* Display the active ingredients and dosage */}
+          {medicineData.ingredients && medicineData.ingredients.length > 0 && (
+            <View style={styles.activeIngredientsContainer}>
+              {medicineData.ingredients.map((ingredient, index) => (
+                <Text key={index} style={styles.activeIngredients}>
+                  {ingredient.ingredient} {ingredient.dosage}
+                </Text>
+              ))}
+            </View>
+          )}
         </>
       ) : (
         <Text style={styles.body}>Loading medicine information...</Text>
@@ -121,7 +129,7 @@ export default function MedicineInfo() {
               </TouchableOpacity>
 
               {isExpanded && (
-                // Check if it's the "Link to data sheet" section and handle it accordingly
+                // Check if it's the "link to cmi / data sheet" section and handle it accordingly
                 key === '12' || key === '1'? (
                   <TouchableOpacity onPress={() => handleLinkClick(String(value))}>
                     <Text style={[styles.body, styles.link]}>{String(value)}</Text>
@@ -157,10 +165,15 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#336699'
   },
+  activeIngredientsContainer: {
+    marginBottom: 16,
+    paddingLeft: 8,
+    paddingRight: 8,
+  },
   activeIngredients: {
     fontSize: 14,
-    marginBottom: 16,
-    textAlign: 'center'
+    marginBottom: 8,
+    textAlign: 'center',
   },
   section: {
     marginBottom: 20,
