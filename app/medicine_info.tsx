@@ -83,7 +83,7 @@ export default function MedicineInfo() {
 
       {/* Back button to home page */}
       <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-        <Ionicons name="arrow-back" size={24} color="#336699" />
+        <Ionicons name="arrow-back" size={40} color="#336699" />
       </TouchableOpacity>
 
       {/* Display the medicine name and company */}
@@ -96,7 +96,7 @@ export default function MedicineInfo() {
           {medicineData.ingredients && medicineData.ingredients.length > 0 && (
             <View style={styles.activeIngredientsContainer}>
               <Text style={styles.activeIngredients}>
-                {medicineData.ingredients?.map(ing => `${ing.ingredient} ${ing.dosage || 'N/A'}`).join(',\n') || 'N/A'}
+                {medicineData.ingredients?.map((ing: { ingredient: string; dosage?: string }) => `${ing.ingredient} ${ing.dosage || 'N/A'}`).join(',\n') || 'N/A'}
               </Text>
             </View>
           )}
@@ -205,7 +205,7 @@ const styles = StyleSheet.create({
 
   backButton: {
     position: 'absolute',
-    top: 20,
+    top: 35,
     left: 16,
     zIndex: 1,
   },
