@@ -148,7 +148,7 @@ export default function DetailsScreen() {
           <Text style={styles.medicineName}>{item.product_name}</Text>
           <Text style={styles.medicineCompany}>{item.company}</Text>
           <Text style={styles.medicineDosage}>
-            {item.ingredients?.[0]?.dosage || 'N/A'}
+            {item.ingredients?.map((ing: { ingredient: string; dosage?: string }) => `${ing.ingredient} ${ing.dosage || 'N/A'}`).join(',\n') || 'N/A'}
           </Text>
         </View>
 

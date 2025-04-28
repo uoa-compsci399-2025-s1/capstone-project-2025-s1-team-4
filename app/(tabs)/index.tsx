@@ -57,6 +57,7 @@ export default function Index() {
         // Show cmi page
         router.push(`/medicine_info?barcode=${encodeURIComponent(data)}` as const);
         if (json.found) {
+          console.log(json.medicine)
           setMedicineInfo(json.medicine);
           setMessage(null);
         } else {
