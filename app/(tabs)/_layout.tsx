@@ -1,6 +1,7 @@
-import { Tabs } from "expo-router";
-import { Feather, MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
+import { Tabs, Stack } from "expo-router";
+import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import { BookmarkProvider } from '../../context/bookmarks_context';
+
 
 export default function TabLayout() {
   return (
