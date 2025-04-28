@@ -95,11 +95,9 @@ export default function MedicineInfo() {
           {/* Display the active ingredients and dosage */}
           {medicineData.ingredients && medicineData.ingredients.length > 0 && (
             <View style={styles.activeIngredientsContainer}>
-              {medicineData.ingredients.map((ingredient, index) => (
-                <Text key={index} style={styles.activeIngredients}>
-                  {ingredient.ingredient} {ingredient.dosage}
-                </Text>
-              ))}
+              <Text style={styles.activeIngredients}>
+                {medicineData.ingredients?.map(ing => `${ing.ingredient} ${ing.dosage || 'N/A'}`).join(',\n') || 'N/A'}
+              </Text>
             </View>
           )}
         </>
