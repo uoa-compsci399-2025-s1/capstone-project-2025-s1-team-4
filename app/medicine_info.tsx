@@ -120,22 +120,23 @@ export default function MedicineInfo() {
           };
   
           return (
-            <View key={key} style={styles.section}>
-              <TouchableOpacity onPress={() => toggleSection(key)} style={styles.sectionHeader}>
-                <Text style={styles.title}>{sectionTitle}</Text>
-                <Text style={styles.arrow}>{isExpanded ? '▲' : '▼'}</Text>
-              </TouchableOpacity>
+            <View key={key} style={styles.sectionWrapper}>
+              <View style={styles.sectionCard}>
+                <TouchableOpacity onPress={() => toggleSection(key)} style={styles.sectionHeader}>
+                  <Text style={styles.title}>{sectionTitle}</Text>
+                  <Text style={styles.arrow}>{isExpanded ? '▲' : '▼'}</Text>
+                </TouchableOpacity>
 
-              {isExpanded && (
-                // Check if it's the "link to cmi / data sheet" section and handle it accordingly
-                key === '12' || key === '1'? (
-                  <TouchableOpacity onPress={() => handleLinkClick(String(value))}>
-                    <Text style={[styles.body, styles.link]}>{String(value)}</Text>
-                  </TouchableOpacity>
-                ) : (
-                  <Text style={styles.body}>{String(value)}</Text>
-                )
-              )}
+                {isExpanded && (
+                  key === '12' || key === '1' ? (
+                    <TouchableOpacity onPress={() => handleLinkClick(String(value))}>
+                      <Text style={[styles.body, styles.link]}>{String(value)}</Text>
+                    </TouchableOpacity>
+                  ) : (
+                    <Text style={styles.body}>{String(value)}</Text>
+                  )
+                )}
+              </View>
             </View>
           );
         })
@@ -147,26 +148,27 @@ export default function MedicineInfo() {
 const styles = StyleSheet.create({
   container: {
     padding: 16,
+    backgroundColor: '#f0f8ff', 
+    flexGrow: 1, 
   },
   header: {
-    fontSize: 26,
+    fontSize: 24,
     fontWeight: 'bold',
-    marginTop: 20,
-    marginBottom: 6,
+    marginTop: 12,    
+    marginBottom: 4,   
     textAlign: 'center',
-    color: '#336699'
+    color: '#336699',
   },
   subheader: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: 'bold',
-    marginBottom: 16,
+    marginBottom: 8,   
     textAlign: 'center',
-    color: '#336699'
-  },
+    color: '#336699',
+  },  
   activeIngredientsContainer: {
-    marginBottom: 16,
-    paddingLeft: 8,
-    paddingRight: 8,
+    marginBottom: 8,    
+    paddingHorizontal: 8,
   },
   activeIngredients: {
     fontSize: 14,
@@ -210,4 +212,18 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   
+  sectionWrapper: {
+    marginBottom: 12,
+  },
+  
+  sectionCard: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 14,
+    shadowColor: '#000',
+    shadowOpacity: 0.05,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 6,
+    elevation: 3,
+  },
 });

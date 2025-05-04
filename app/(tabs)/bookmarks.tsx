@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useBookmarks } from '../../context/bookmarks_context';
 import { API_BASE_URL } from '../../config';
 import { MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function BookmarksScreen() {
@@ -17,6 +18,7 @@ export default function BookmarksScreen() {
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
   const [showDropdown, setShowDropdown] = useState(false);
   const [filteredTags, setFilteredTags] = useState<string[]>([]);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchBookmarkedMedicines = async () => {
@@ -195,13 +197,18 @@ export default function BookmarksScreen() {
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <View>
-            <TouchableOpacity style={styles.medicineCard}>
+            <TouchableOpacity
+              style={styles.medicineCard}
+              onPress={() => router.push(`/medicine_info?barcode=${encodeURIComponent(item.barcode)}`)} // ⭐ ADDED THIS
+            >
               <View style={styles.cardContent}>
                 <View style={{ flex: 1 }}>
                   <Text style={styles.medicineName}>{item.product_name}</Text>
                   <Text style={styles.medicineCompany}>{item.company}</Text>
                   <Text style={styles.medicineDosage}>
-                    {item.ingredients?.[0] ? `${item.ingredients[0].dosage} ${item.ingredients[0].unit || ''}` : 'N/A'}
+                    {item.ingredients?.[0]
+                      ? `${item.ingredients[0].dosage} ${item.ingredients[0].unit || ''}`
+                      : 'N/A'}
                   </Text>
                   <View style={styles.tagRow}>
                     <View style={styles.tagList}>
@@ -214,40 +221,41 @@ export default function BookmarksScreen() {
                           }}>
                             <Text style={styles.tagPillText}>{tag}</Text>
                           </TouchableOpacity>
-                          <TouchableOpacity
-                          onPress={() => {
+                          <TouchableOpacity onPress={() => {
                             setTagsById(prev => {
                               const updated = {
                                 ...prev,
                                 [item.id]: (prev[item.id] || []).filter(t => t !== tag),
                               };
-                            
                               AsyncStorage.setItem('tagsById', JSON.stringify(updated));
-                            
                               const tagStillUsed = Object.values(updated).some(tags => tags.includes(tag));
                               if (!tagStillUsed) {
                                 const updatedGlobal = globalTags.filter(t => t !== tag);
                                 setGlobalTags(updatedGlobal);
                                 AsyncStorage.setItem('globalTags', JSON.stringify(updatedGlobal));
                               }
-                            
                               return updated;
                             });
-                            
-                          }}
-                        >
-                          <MaterialCommunityIcons name="close" size={14} color="#336699" />
-                        </TouchableOpacity>
+                          }}>
+                            <MaterialCommunityIcons name="close" size={14} color="#336699" />
+                          </TouchableOpacity>
                         </View>
                       ))}
                     </View>
-                    <TouchableOpacity style={styles.addTagButton} onPress={() => setExpandedCardId(expandedCardId === item.id ? null : item.id)}>
+                    <TouchableOpacity
+                      style={styles.addTagButton}
+                      onPress={() => setExpandedCardId(expandedCardId === item.id ? null : item.id)}
+                    >
                       <MaterialCommunityIcons name="plus" size={20} color="#336699" />
                     </TouchableOpacity>
                   </View>
                 </View>
                 <TouchableOpacity onPress={() => toggleBookmark(item.id)} style={styles.starButton}>
-                  <MaterialCommunityIcons name="bookmark" size={26} color="#336699" />
+                  <MaterialCommunityIcons
+                    name={bookmarks.includes(item.id) ? 'bookmark' : 'bookmark-outline'} // ⭐ ADDED this for filled/outline icon
+                    size={26}
+                    color="#336699"
+                  />
                 </TouchableOpacity>
               </View>
             </TouchableOpacity>
@@ -263,39 +271,32 @@ export default function BookmarksScreen() {
                   onSubmitEditing={() => handleAddTag(item.id)}
                   returnKeyType="done"
                 />
-
                 <View style={styles.dropdownTagList}>
-                  {[...globalTags].filter(tag => !(tagsById[item.id] || []).includes(tag)).sort().map((tag, index) => (
-                    <View key={index} style={styles.dropdownTagPill}>
-                      <TouchableOpacity
-                        onPress={() => {
+                  {[...globalTags]
+                    .filter(tag => !(tagsById[item.id] || []).includes(tag))
+                    .sort()
+                    .map((tag, index) => (
+                      <View key={index} style={styles.dropdownTagPill}>
+                        <TouchableOpacity onPress={() => {
                           setTagsById(prev => ({
                             ...prev,
                             [item.id]: [...(prev[item.id] || []), tag],
                           }));
-
-                          const remainingAfterAdd = globalTags.filter(
-                            t => !(tagsById[item.id] || []).includes(t) && t !== tag
-                          );
-
-                          setExpandedCardId(null); 
-                        }}
-                      >
-                        <Text style={styles.dropdownTagText}>{tag}</Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        onPress={() => {
+                          setExpandedCardId(null);
+                        }}>
+                          <Text style={styles.dropdownTagText}>{tag}</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => {
                           removeTagGlobally(tag);
                           const remaining = globalTags.filter(t => t !== tag);
                           if (remaining.length === 0) {
                             setExpandedCardId(null);
                           }
-                        }}
-                      >
-                        <MaterialCommunityIcons name="close" size={14} color="#336699" />
-                      </TouchableOpacity>
-                    </View>
-                  ))}
+                        }}>
+                          <MaterialCommunityIcons name="close" size={14} color="#336699" />
+                        </TouchableOpacity>
+                      </View>
+                    ))}
                 </View>
               </View>
             )}
