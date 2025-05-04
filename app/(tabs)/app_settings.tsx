@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import { MaterialCommunityIcons, Feather } from '@expo/vector-icons';
+import { MaterialCommunityIcons, Ionicons, Feather} from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useBookmarks } from '../../context/bookmarks_context';
@@ -11,6 +11,9 @@ export default function SettingsScreen() {
 
   return (
     <ScrollView style={styles.container}>
+        <View style={styles.iconWrapper}>
+        <Ionicons name="medkit" size={36} color="#336699" />
+  </View>
       {/* App Settings */}
       <Text style={styles.sectionHeader}>App Settings</Text>
       <View style={styles.settingCard}>
@@ -96,24 +99,32 @@ export default function SettingsScreen() {
 }
 
 const styles = StyleSheet.create({
+  iconWrapper: {
+    flex: 1,
+    padding: 20,
+    paddingTop: 60,
+    backgroundColor: '#f0f8ff',
+    alignItems: 'center',
+  },
   container: {
     flex: 1,
-    backgroundColor: '#f0f8ff',
     padding: 20,
+    paddingTop: 20,
+    backgroundColor: '#f0f8ff',
   },
   sectionHeader: {
-    fontSize: 20,
+    fontSize: 25,
     fontWeight: 'bold',
     color: '#336699',
     marginBottom: 12,
-    marginTop: 24,
+    marginTop: -10,
   },
   settingCard: {
     backgroundColor: '#fff',
     borderRadius: 12,
     paddingVertical: 4,
     paddingHorizontal: 12,
-    marginBottom: 16,
+    marginBottom: 30,
     shadowColor: '#000',
     shadowOpacity: 0.05,
     shadowOffset: { width: 0, height: 2 },

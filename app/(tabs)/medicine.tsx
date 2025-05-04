@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, FlatList, TextInput, TouchableOpacity } from 'react-native';
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { API_BASE_URL } from '../../config'; 
-import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
+import { FontAwesome, MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import { useBookmarks } from '../../context/bookmarks_context';
 import { useFocusEffect } from '@react-navigation/native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
@@ -66,6 +66,11 @@ export default function DetailsScreen() {
 
   return (
     <View style={styles.container}>
+      {/* Pill Icon Header */}
+      <View style={{ alignItems: 'center', marginTop: 40, marginBottom: 20 }}>
+        <Ionicons name="medkit" size={36} color="#336699" />
+      </View>
+
   <View>
     <View style={styles.searchWrapper}>
       <TextInput

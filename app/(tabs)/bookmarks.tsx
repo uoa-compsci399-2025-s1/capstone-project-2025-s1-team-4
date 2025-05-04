@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, FlatList, TextInput, TouchableOpacity } from 'r
 import { useState, useEffect } from 'react';
 import { useBookmarks } from '../../context/bookmarks_context';
 import { API_BASE_URL } from '../../config';
-import { MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons';
+import { MaterialCommunityIcons, FontAwesome, Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -150,6 +150,12 @@ export default function BookmarksScreen() {
   return (
     <View style={styles.container}>
       <View>
+        
+      {/* Pill Icon Header */}
+      <View style={{ alignItems: 'center', marginTop: 40, marginBottom: 20 }}>
+        <Ionicons name="medkit" size={36} color="#336699" />
+      </View>
+
         <View style={styles.searchWrapper}>
           <TextInput
             style={styles.searchInput}
