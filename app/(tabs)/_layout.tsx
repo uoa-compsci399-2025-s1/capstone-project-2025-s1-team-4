@@ -13,10 +13,10 @@ export default function TabLayout() {
           },
           tabBarLabelStyle: {
             fontSize: 12,
-            marginTop: 3
+            marginTop: 3,
           },
-          tabBarActiveTintColor: '#99CCFF',
-          tabBarInactiveTintColor: '#336699',
+          tabBarActiveTintColor: '#336699',
+          tabBarInactiveTintColor: '#99CCFF',
           tabBarLabelPosition: 'below-icon'
         }}
       >
@@ -29,7 +29,7 @@ export default function TabLayout() {
               <MaterialCommunityIcons
                 name={focused ? 'home' : 'home-outline'}
                 color={color}
-                size={30}
+                size={29}
               />
             )
           }}
@@ -57,7 +57,7 @@ export default function TabLayout() {
               <MaterialCommunityIcons
                 name={focused ? 'bookmark' : 'bookmark-outline'}
                 color={color}
-                size={30}
+                size={27}
               />
             )
           }}
@@ -71,7 +71,7 @@ export default function TabLayout() {
               <Ionicons
                 name={focused ? 'settings-sharp' : 'settings-outline'}
                 color={color}
-                size={30}
+                size={27}
               />
             )
           }}
