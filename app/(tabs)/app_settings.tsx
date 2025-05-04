@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import { MaterialCommunityIcons, Ionicons, Feather} from '@expo/vector-icons';
+import { Feather} from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useBookmarks } from '../../context/bookmarks_context';
@@ -11,9 +11,9 @@ export default function SettingsScreen() {
 
   return (
     <ScrollView style={styles.container}>
-        <View style={styles.iconWrapper}>
-        <Ionicons name="medkit" size={36} color="#336699" />
-  </View>
+        <View style={styles.pageTitleWrapper}>
+      <Text style={styles.pageTitleText}>Settings</Text> 
+      </View>
       {/* App Settings */}
       <Text style={styles.sectionHeader}>App Settings</Text>
       <View style={styles.settingCard}>
@@ -48,7 +48,7 @@ export default function SettingsScreen() {
             <TouchableOpacity
               key={item.label}
               onPress={() => {
-                if (item.route) router.push(item.route as any); // ✅ fix route TS error
+                if (item.route) router.push(item.route as any); 
                 else if (item.onPress) item.onPress();
               }}
               activeOpacity={isPressable ? 0.6 : 1}
@@ -99,12 +99,14 @@ export default function SettingsScreen() {
 }
 
 const styles = StyleSheet.create({
-  iconWrapper: {
-    flex: 1,
-    padding: 20,
-    paddingTop: 60,
-    backgroundColor: '#f0f8ff',
+  pageTitleWrapper: {
     alignItems: 'center',
+    marginTop: 60,
+    marginBottom: 23,
+  },
+  pageTitleText: {
+    fontSize: 40,
+    color: '#336699',
   },
   container: {
     flex: 1,
@@ -113,11 +115,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#f0f8ff',
   },
   sectionHeader: {
-    fontSize: 25,
+    fontSize: 20,
     fontWeight: 'bold',
     color: '#336699',
-    marginBottom: 12,
-    marginTop: -10,
+    marginBottom: 10,
+    marginTop: -7,
   },
   settingCard: {
     backgroundColor: '#fff',
@@ -128,7 +130,7 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOpacity: 0.05,
     shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
+    shadowRadius: 12,
     elevation: 2,
   },
   settingRow: {
@@ -142,11 +144,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
   },
   settingText: {
-    fontSize: 16,
+    fontSize: 17,
     color: '#336699',
   },
   settingValue: {
-    fontSize: 16,
+    fontSize: 17,
     color: '#336699',
     fontWeight: 'bold',
   },

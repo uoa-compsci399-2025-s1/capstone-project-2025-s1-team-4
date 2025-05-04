@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, FlatList, TextInput, TouchableOpacity } from 'react-native';
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { API_BASE_URL } from '../../config'; 
-import { FontAwesome, MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, Ionicons} from '@expo/vector-icons';
 import { useBookmarks } from '../../context/bookmarks_context';
 import { useFocusEffect } from '@react-navigation/native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
@@ -67,9 +67,9 @@ export default function DetailsScreen() {
   return (
     <View style={styles.container}>
       {/* Pill Icon Header */}
-      <View style={{ alignItems: 'center', marginTop: 40, marginBottom: 20 }}>
-        <Ionicons name="medkit" size={36} color="#336699" />
-      </View>
+      <View style={styles.pageTitleWrapper}>
+            <Text style={styles.pageTitleText}>All Medicines</Text> 
+        </View>
 
   <View>
     <View style={styles.searchWrapper}>
@@ -82,7 +82,7 @@ export default function DetailsScreen() {
         onChangeText={setSearchQuery}
       />
       <TouchableOpacity onPress={() => setShowDropdown(!showDropdown)}>
-        <FontAwesome name="sort" size={24} color="#336699" />
+        <Ionicons name="chevron-expand-sharp" size={24} color="#336699" />
       </TouchableOpacity>
     </View>
 
@@ -182,6 +182,15 @@ const styles = StyleSheet.create({
     padding: 20,
     paddingTop: 40,
     backgroundColor: '#f0f8ff',
+  },
+  pageTitleWrapper: {
+    alignItems: 'center',
+    marginTop: 40,
+    marginBottom: 20,
+  },
+  pageTitleText: {
+    fontSize: 40,
+    color: '#336699',
   },
   medicineCard: {
     backgroundColor: '#fff',

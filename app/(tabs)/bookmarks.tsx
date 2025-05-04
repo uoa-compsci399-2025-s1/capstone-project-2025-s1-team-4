@@ -152,9 +152,10 @@ export default function BookmarksScreen() {
       <View>
         
       {/* Pill Icon Header */}
-      <View style={{ alignItems: 'center', marginTop: 40, marginBottom: 20 }}>
-        <Ionicons name="medkit" size={36} color="#336699" />
+      <View style={styles.pageTitleWrapper}>
+      <Text style={styles.pageTitleText}>Bookmarks</Text> 
       </View>
+
 
         <View style={styles.searchWrapper}>
           <TextInput
@@ -165,7 +166,7 @@ export default function BookmarksScreen() {
             onChangeText={setSearchQuery}
           />
           <TouchableOpacity onPress={() => setShowDropdown(!showDropdown)}>
-            <FontAwesome name="sort" size={24} color="#336699" />
+            <Ionicons name="chevron-expand-sharp" size={24} color="#336699" />
           </TouchableOpacity>
         </View>
 
@@ -212,9 +213,7 @@ export default function BookmarksScreen() {
                   <Text style={styles.medicineName}>{item.product_name}</Text>
                   <Text style={styles.medicineCompany}>{item.company}</Text>
                   <Text style={styles.medicineDosage}>
-                    {item.ingredients?.[0]
-                      ? `${item.ingredients[0].dosage} ${item.ingredients[0].unit || ''}`
-                      : 'N/A'}
+                      {item.ingredients?.map((ing: { ingredient: string; dosage?: string }) => `${ing.ingredient} ${ing.dosage || 'N/A'}`).join(',\n') || 'N/A'}
                   </Text>
                   <View style={styles.tagRow}>
                     <View style={styles.tagList}>
@@ -316,7 +315,7 @@ export default function BookmarksScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    paddingHorizontal: 20, // reduce from 20 to 16 or 12 if shadows are getting clipped
     paddingTop: 40,
     backgroundColor: '#f0f8ff',
   },
@@ -339,13 +338,13 @@ const styles = StyleSheet.create({
   medicineCard: {
     backgroundColor: '#fff',
     padding: 14,
-    borderRadius: 10,
+    borderRadius: 12,
     marginVertical: 6,
     shadowColor: '#000',
-    shadowOpacity: 0.05,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
-    elevation: 2,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.1,
+    shadowRadius: 12,
+    elevation: 6,
   },
   cardContent: {
     flexDirection: 'row',
@@ -383,7 +382,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
     backgroundColor: '#f5faff',
     padding: 10,
-    borderRadius: 8,
+    borderRadius: 12,
     borderWidth: 1,
     borderColor: '#cce0ff',
   },
@@ -391,7 +390,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     paddingVertical: 8,
     paddingHorizontal: 12,
-    borderRadius: 6,
+    borderRadius: 12,
     fontSize: 14,
     borderWidth: 1,
     borderColor: '#ccc',
@@ -425,13 +424,13 @@ const styles = StyleSheet.create({
   tagDropdownCard: {
     backgroundColor: '#fff',
     padding: 14,
-    borderRadius: 10,
+    borderRadius: 12,
     marginTop: 4,
     marginBottom: 10,
     shadowColor: '#000',
-    shadowOpacity: 0.05,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.1,
+    shadowRadius: 12,
     elevation: 2,
   },
   tagList: {
@@ -483,18 +482,18 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   dropdownPanel: {
-    backgroundColor: '#fff',
+    backgroundColor: 'white',
     borderRadius: 12,
-    paddingTop: 0,
-    paddingBottom: 0,
-    overflow: 'hidden',
+    paddingTop: 0,         
+    paddingBottom: 0,      
+    overflow: 'hidden',    
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 5,
     marginTop: 6,
-    marginBottom: 6,  
+    marginBottom: 6,
   },
   dropdownItemRow: {
     flexDirection: 'row',
@@ -524,4 +523,15 @@ const styles = StyleSheet.create({
     color: '#336699',
     marginRight: 6,
   },
+  pageTitleWrapper: {
+    alignItems: 'center',
+    marginTop: 40,
+    marginBottom: 20,
+  },
+  
+  pageTitleText: {
+    fontSize: 40,
+    color: '#336699',
+  },
+  
 });
