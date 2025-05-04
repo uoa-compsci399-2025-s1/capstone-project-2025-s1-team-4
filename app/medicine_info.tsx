@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { API_BASE_URL } from '../config';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Linking } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 
 export default function MedicineInfo() {
   const router = useRouter();
@@ -90,13 +90,13 @@ export default function MedicineInfo() {
       {medicineData ? (
         <>
           <Text style={styles.header}>{medicineData.product_name}</Text>
-          <Text style={styles.subheader}>{medicineData.company}</Text>
+          <Text style={styles.subheader}>Manufacturer: {medicineData.company}</Text>
 
           {/* Display the active ingredients and dosage */}
           {medicineData.ingredients && medicineData.ingredients.length > 0 && (
             <View style={styles.activeIngredientsContainer}>
               <Text style={styles.activeIngredients}>
-                {medicineData.ingredients?.map((ing: { ingredient: string; dosage?: string }) => `${ing.ingredient} ${ing.dosage || 'N/A'}`).join(',\n') || 'N/A'}
+                Active Ingredients: {medicineData.ingredients?.map((ing: { ingredient: string; dosage?: string }) => `${ing.ingredient} ${ing.dosage || 'N/A'}`).join(',\n') || 'N/A'}
               </Text>
             </View>
           )}
@@ -124,7 +124,11 @@ export default function MedicineInfo() {
               <View style={styles.sectionCard}>
                 <TouchableOpacity onPress={() => toggleSection(key)} style={styles.sectionHeader}>
                   <Text style={styles.title}>{sectionTitle}</Text>
-                  <Text style={styles.arrow}>{isExpanded ? '▲' : '▼'}</Text>
+                  <MaterialCommunityIcons
+                    name={isExpanded ? 'chevron-up' : 'chevron-down'}
+                    size={24}
+                    color="#336699"
+                  />
                 </TouchableOpacity>
 
                 {isExpanded && (
@@ -147,13 +151,13 @@ export default function MedicineInfo() {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
+    padding: 20,
     backgroundColor: '#f0f8ff', 
     flexGrow: 1, 
   },
   header: {
-    fontSize: 24,
-    fontWeight: 'bold',
+    fontSize: 40,
+    paddingTop: 47,
     marginTop: 12,    
     marginBottom: 4,   
     textAlign: 'center',
@@ -162,16 +166,17 @@ const styles = StyleSheet.create({
   subheader: {
     fontSize: 14,
     fontWeight: 'bold',
-    marginBottom: 8,   
+    marginBottom: 0,  
+    fontStyle: 'italic', 
     textAlign: 'center',
     color: '#336699',
   },  
   activeIngredientsContainer: {
-    marginBottom: 8,    
+    marginBottom: 27,    
     paddingHorizontal: 8,
   },
   activeIngredients: {
-    fontSize: 14,
+    fontSize: 12,
     marginBottom: 8,
     textAlign: 'center',
   },
@@ -213,7 +218,7 @@ const styles = StyleSheet.create({
   },
   
   sectionWrapper: {
-    marginBottom: 12,
+    marginBottom: 10,
   },
   
   sectionCard: {
@@ -223,7 +228,7 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOpacity: 0.05,
     shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 6,
+    shadowRadius: 12,
     elevation: 3,
   },
 });

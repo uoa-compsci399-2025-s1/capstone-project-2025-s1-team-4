@@ -139,10 +139,21 @@ export default function Index() {
 
 
 const styles = StyleSheet.create({
+  searchWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'white',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    paddingHorizontal: 12,
+    marginBottom: 10,
+  },
   container: {
     flex: 1,
     backgroundColor: '#f0f8ff',
-    paddingTop: 60,
+    padding: 11,
+    paddingTop: 97,
     alignItems: 'center',
   },
   header: {
@@ -151,15 +162,15 @@ const styles = StyleSheet.create({
   searchBox: {
     backgroundColor: 'white',
     borderRadius: 12,
-    width: '95%',
+    width: 360,
     paddingHorizontal: 20,
-    paddingVertical: 14,
+    paddingVertical: 10,
     shadowColor: '#000',
     shadowOpacity: 0.1,
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
     elevation: 3,
-    marginBottom: 40,
+    marginBottom: 20,
   },
   searchInput: {
     backgroundColor: 'white',
@@ -168,8 +179,9 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: 1,
     borderColor: '#ccc',
-    fontSize: 16,
-    marginBottom: 16,
+    fontSize: 20,
+    marginBottom: 12,
+    marginTop: 0,
     width: '95%', 
     alignSelf: 'center', 
   },
