@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 export default function PageNameScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.subtitle}>ava do ur stuff here pls thx.</Text>
+      <Text style={styles.subtitle}>We are the 6 degrees of computation and we hope to solve your everyday medicinal concerns.</Text>
     </View>
   );
 }

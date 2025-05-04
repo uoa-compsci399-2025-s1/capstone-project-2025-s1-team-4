@@ -33,7 +33,7 @@ export const API_BASE_URL = "http://IPADDRESS:PORT";
 2. Install dependencies (in powershell/VSCode terminal)
 
    ```
-   npm install expo@latest
+   npm install expo@^52.0.0
    npm install expo-module-scripts
    npx expo install expo-status-bar
    ```
