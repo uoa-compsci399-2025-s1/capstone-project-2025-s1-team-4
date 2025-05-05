@@ -315,7 +315,7 @@ export default function BookmarksScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 20, // reduce from 20 to 16 or 12 if shadows are getting clipped
+    paddingHorizontal: 20, 
     paddingTop: 40,
     backgroundColor: '#f0f8ff',
   },
@@ -328,6 +328,7 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     paddingHorizontal: 12,
     marginBottom: 6,
+    marginHorizontal: 4,
   },
   searchInput: {
     flex: 1,
@@ -337,14 +338,15 @@ const styles = StyleSheet.create({
   },
   medicineCard: {
     backgroundColor: '#fff',
-    padding: 14,
-    borderRadius: 12,
+    padding: 12,
+    borderRadius: 10,
     marginVertical: 6,
+    marginHorizontal: 4,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.1,
-    shadowRadius: 12,
-    elevation: 6,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 8,
+    elevation: 5
   },
   cardContent: {
     flexDirection: 'row',
@@ -494,6 +496,7 @@ const styles = StyleSheet.create({
     elevation: 5,
     marginTop: 6,
     marginBottom: 6,
+    marginHorizontal: 4
   },
   dropdownItemRow: {
     flexDirection: 'row',
