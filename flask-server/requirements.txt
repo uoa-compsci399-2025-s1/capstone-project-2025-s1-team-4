@@ -3,3 +3,4 @@ flask_restx
 SQLAlchemy
 pytest
 flask_cors
+selenium
