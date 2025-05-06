@@ -4,16 +4,18 @@ import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useBookmarks } from '../../context/bookmarks_context';
 import { Alert } from 'react-native';
+import { useTheme } from '../../ThemeContext';
 
 export default function SettingsScreen() {
   const router = useRouter();
   const { setBookmarks } = useBookmarks();
+  const { themeStyles, textSize } = useTheme();
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={[styles.container, themeStyles.container]}>
       {/* App Settings */}
-      <Text style={styles.sectionHeader}>App Settings</Text>
-      <View style={styles.settingCard}>
+      <Text style={[styles.sectionHeader, themeStyles.text, { fontSize: textSize + 2 }]}>App Settings</Text>
+      <View style={[styles.settingCard, themeStyles.container]}>
         {[
           { label: 'Appearance', route: '/(settings_pages)/appearance' },
           { label: 'Notification History', route: '/(settings_pages)/notification_history' },
@@ -54,7 +56,7 @@ export default function SettingsScreen() {
                 isLast && { borderBottomWidth: 0 },
               ]}
             >
-              <Text style={styles.settingText}>{item.label}</Text>
+              <Text style={[themeStyles.text, { fontSize: textSize }]}>{item.label}</Text>
               <Feather name="chevron-right" size={20} color="#336699" />
             </TouchableOpacity>
           );
@@ -62,8 +64,8 @@ export default function SettingsScreen() {
       </View>
 
       {/* About Section */}
-      <Text style={styles.sectionHeader}>About</Text>
-      <View style={styles.settingCard}>
+      <Text style={[styles.sectionHeader, themeStyles.text, { fontSize: textSize + 2 }]}>About</Text>
+      <View style={[styles.settingCard, themeStyles.container]}>
         {[
           { label: 'About Us', route: '/(settings_pages)/about_us' },
           { label: 'Privacy Policy', route: '/(settings_pages)/privacy_policy' },
@@ -83,7 +85,7 @@ export default function SettingsScreen() {
                 isLast && { borderBottomWidth: 0 },
               ]}
             >
-              <Text style={styles.settingText}>{item.label}</Text>
+              <Text style={[themeStyles.text, { fontSize: textSize }]}>{item.label}</Text>
               {item.right ?? (
                 isPressable && <Feather name="chevron-right" size={20} color="#336699" />
               )}

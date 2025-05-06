@@ -6,6 +6,7 @@ import { API_BASE_URL } from '../../config'; // adjust path accordingly
 import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
 import { useCallback } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
+import { useTheme } from '../../ThemeContext';
 
 type Medicine = {
   id: number;
@@ -24,6 +25,7 @@ export default function Index() {
   const [scanning, setScanning] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const { themeStyles, textSize } = useTheme();
 
   useFocusEffect(
     useCallback(() => {
@@ -75,19 +77,19 @@ export default function Index() {
   
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, themeStyles.container]}>
       {/* Pill Icon Header */}
-      <View style={styles.header}>
+      <View style={[styles.header, themeStyles.container]}>
         <Ionicons name="medkit" size={36} color="#336699" />
       </View>
   
       {/* Search Box */}
       <TouchableOpacity
-        style={styles.searchInput}
+        style={[styles.searchInput, themeStyles.container]}
         onPress={() => router.push({ pathname: '/medicine', params: { focusSearch: 'true' } })}
         activeOpacity={0.8}
       >
-        <Text style={styles.searchPlaceholder}>Search Medicine</Text>
+        <Text style={[styles.searchPlaceholder, themeStyles.container]}>Search Medicine</Text>
       </TouchableOpacity>
 
       {/* Barcode Scanner Icon */}
@@ -101,15 +103,15 @@ export default function Index() {
             }
             setCameraVisible(true);
           }}
-          style={styles.barcodeWrapper}
+          style={[styles.barcodeWrapper, themeStyles.container]}
         >
           <MaterialCommunityIcons name="barcode-scan" size={300} color="#336699" />
-          <Text style={styles.scanText}>Tap the scanner icon to scan a barcode, or use the search box above to search by name.</Text>
+          <Text style={[styles.scanText, themeStyles.text, { fontSize: textSize + 2 }]}>Tap the scanner icon to scan a barcode, or use the search box above to search by name.</Text>
         </TouchableOpacity>
       )}
 
       {cameraVisible && permission?.granted && (
-        <View style={styles.cameraContainer}>
+        <View style={[styles.cameraContainer, themeStyles.container]}>
           <CameraView
             style={styles.camera}
             facing={facing}
@@ -120,16 +122,16 @@ export default function Index() {
       )}
 
       {medicineInfo && (
-        <View style={styles.infoBox}>
-          <Text style={styles.scanText}>Name: {medicineInfo.name}</Text>
-          <Text style={styles.scanText}>Company: {medicineInfo.company}</Text>
-          <Text style={styles.scanText}>Dosage: {medicineInfo.dosage}</Text>
+        <View style={[styles.infoBox, themeStyles.container]}>
+          <Text style={[styles.scanText, themeStyles.text, { fontSize: textSize + 2 }]}>Name: {medicineInfo.name}</Text>
+          <Text style={[styles.scanText, themeStyles.text, { fontSize: textSize + 2 }]}>Company: {medicineInfo.company}</Text>
+          <Text style={[styles.scanText, themeStyles.text, { fontSize: textSize + 2 }]}>Dosage: {medicineInfo.dosage}</Text>
         </View>
       )}
 
       {message && (
-        <View style={styles.infoBox}>
-          <Text style={styles.scanText}>{message}</Text>
+        <View style={[styles.infoBox, themeStyles.text, { fontSize: textSize + 2 }]}>
+          <Text style={[styles.scanText, themeStyles.text, { fontSize: textSize + 2 }]}>{message}</Text>
         </View>
       )}
       

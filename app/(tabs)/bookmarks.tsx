@@ -4,6 +4,7 @@ import { useBookmarks } from '../../context/bookmarks_context';
 import { API_BASE_URL } from '../../config';
 import { MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useTheme } from '../../ThemeContext';
 
 export default function BookmarksScreen() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -17,6 +18,7 @@ export default function BookmarksScreen() {
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
   const [showDropdown, setShowDropdown] = useState(false);
   const [filteredTags, setFilteredTags] = useState<string[]>([]);
+  const { themeStyles, textSize } = useTheme();
 
   useEffect(() => {
     const fetchBookmarkedMedicines = async () => {
@@ -146,11 +148,11 @@ export default function BookmarksScreen() {
   });
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, themeStyles.container]}>
       <View>
-        <View style={styles.searchWrapper}>
+        <View style={[styles.searchWrapper, themeStyles.container]}>
           <TextInput
-            style={styles.searchInput}
+            style={[styles.searchInput, themeStyles.container]}
             placeholder="Search Bookmarks"
             placeholderTextColor="#888"
             value={searchQuery}
@@ -164,8 +166,8 @@ export default function BookmarksScreen() {
         {filteredTags.length > 0 && (
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 8, marginBottom: 6 }}>
             {filteredTags.map((tag, index) => (
-              <View key={index} style={styles.filterTagPill}>
-                <Text style={styles.filterTagText}>{tag}</Text>
+              <View key={index} style={[styles.filterTagPill, themeStyles.container]}>
+                <Text style={[styles.filterTagText, themeStyles.text, { fontSize: textSize + 2 }]}>{tag}</Text>
                 <TouchableOpacity onPress={() => setFilteredTags(prev => prev.filter(t => t !== tag))}>
                   <MaterialCommunityIcons name="close" size={14} color="#336699" />
                 </TouchableOpacity>
@@ -175,9 +177,9 @@ export default function BookmarksScreen() {
         )}
 
         {showDropdown && (
-          <View style={styles.dropdownPanel}>
+          <View style={[styles.dropdownPanel, themeStyles.container]}>
             {[{ label: 'Recently added', key: 'recent' }, { label: 'Name', key: 'name' }, { label: 'Manufacturer', key: 'company' }, { label: 'Tags', key: 'tags' }].map(({ label, key }) => (
-              <View key={key} style={styles.dropdownItemRow}>
+              <View key={key} style={[styles.dropdownItemRow, themeStyles.container]}>
                 <TouchableOpacity style={{ flex: 1 }} activeOpacity={0.7} onPress={() => { setSortBy(key as any); setSortDirection('asc'); setShowDropdown(false); }}>
                   <Text style={[styles.dropdownItemText, sortBy === key && { fontWeight: 'bold' }]}>{label}</Text>
                 </TouchableOpacity>
@@ -196,15 +198,15 @@ export default function BookmarksScreen() {
         renderItem={({ item }) => (
           <View>
             <TouchableOpacity style={styles.medicineCard}>
-              <View style={styles.cardContent}>
+              <View style={[styles.cardContent, themeStyles.container]}>
                 <View style={{ flex: 1 }}>
-                  <Text style={styles.medicineName}>{item.product_name}</Text>
-                  <Text style={styles.medicineCompany}>{item.company}</Text>
-                  <Text style={styles.medicineDosage}>
+                  <Text style={[styles.medicineName, themeStyles.text, { fontSize: textSize + 2 }]}>{item.product_name}</Text>
+                  <Text style={[styles.medicineCompany, themeStyles.text, { fontSize: textSize + 2 }]}>{item.company}</Text>
+                  <Text style={[styles.medicineDosage, themeStyles.text, { fontSize: textSize + 2 }]}>
                     {item.ingredients?.[0] ? `${item.ingredients[0].dosage} ${item.ingredients[0].unit || ''}` : 'N/A'}
                   </Text>
-                  <View style={styles.tagRow}>
-                    <View style={styles.tagList}>
+                  <View style={[styles.tagRow, themeStyles.container]}>
+                    <View style={[styles.tagList, themeStyles.container]}>
                       {[...(tagsById[item.id] || [])].sort().map((tag, index) => (
                         <View key={index} style={styles.tagPill}>
                           <TouchableOpacity onPress={() => {
@@ -212,7 +214,7 @@ export default function BookmarksScreen() {
                               setFilteredTags(prev => [...prev, tag]);
                             }
                           }}>
-                            <Text style={styles.tagPillText}>{tag}</Text>
+                            <Text style={[styles.tagPillText, themeStyles.text, { fontSize: textSize + 2 }]}>{tag}</Text>
                           </TouchableOpacity>
                           <TouchableOpacity
                           onPress={() => {
@@ -253,7 +255,7 @@ export default function BookmarksScreen() {
             </TouchableOpacity>
 
             {expandedCardId === item.id && (
-              <View style={styles.tagDropdownCard}>
+              <View style={[styles.tagDropdownCard, themeStyles.container]}>
                 <TextInput
                   value={newTag}
                   onChangeText={setNewTag}
@@ -264,7 +266,7 @@ export default function BookmarksScreen() {
                   returnKeyType="done"
                 />
 
-                <View style={styles.dropdownTagList}>
+                <View style={[styles.dropdownTagList, themeStyles.container]}>
                   {[...globalTags].filter(tag => !(tagsById[item.id] || []).includes(tag)).sort().map((tag, index) => (
                     <View key={index} style={styles.dropdownTagPill}>
                       <TouchableOpacity
@@ -281,7 +283,7 @@ export default function BookmarksScreen() {
                           setExpandedCardId(null); 
                         }}
                       >
-                        <Text style={styles.dropdownTagText}>{tag}</Text>
+                        <Text style={[styles.dropdownTagText, themeStyles.text, { fontSize: textSize + 2 }]}>{tag}</Text>
                       </TouchableOpacity>
                       <TouchableOpacity
                         onPress={() => {

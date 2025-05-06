@@ -1,9 +1,11 @@
 import { View, Text, StyleSheet } from 'react-native';
+import { useTheme } from '../../ThemeContext';
 
 export default function PageNameScreen() {
+  const { themeStyles, textSize } = useTheme();
   return (
-    <View style={styles.container}>
-      <Text style={styles.subtitle}>ava do ur stuff here pls thx.</Text>
+    <View style={themeStyles.container}>
+      <Text style={[themeStyles.text, { fontSize: textSize }]}>ava do ur stuff here pls thx.</Text>
     </View>
   );
 }

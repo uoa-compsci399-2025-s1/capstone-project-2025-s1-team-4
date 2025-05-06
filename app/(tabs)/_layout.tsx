@@ -1,24 +1,26 @@
 import { Tabs } from "expo-router";
 import { Feather, MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import { BookmarkProvider } from '../../context/bookmarks_context';
+import { useTheme } from '../../ThemeContext';
 
 export default function TabLayout() {
+  const { themeStyles, textSize } = useTheme();
   return (
-    <BookmarkProvider>
-      <Tabs
-        screenOptions={{
-          tabBarStyle: {
-            height: 70
-          },
-          tabBarLabelStyle: {
-            fontSize: 12,
-            marginTop: 2
-          },
-          tabBarActiveTintColor: '#99CCFF',
-          tabBarInactiveTintColor: '#336699',
-          tabBarLabelPosition: 'below-icon'
-        }}
-      >
+      <BookmarkProvider>
+        <Tabs
+          screenOptions={{
+            tabBarStyle: {
+              height: 70
+            },
+            tabBarLabelStyle: {
+              fontSize: 12,
+              marginTop: 2
+            },
+            tabBarActiveTintColor: '#99CCFF',
+            tabBarInactiveTintColor: '#336699',
+            tabBarLabelPosition: 'below-icon'
+          }}
+        >
         <Tabs.Screen
           name="index"
           options={{
@@ -75,7 +77,7 @@ export default function TabLayout() {
             )
           }}
         />
-      </Tabs>
-    </BookmarkProvider>
+        </Tabs>
+      </BookmarkProvider>
   );
 }

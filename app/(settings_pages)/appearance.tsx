@@ -1,73 +1,77 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Switch, Platform } from 'react-native';
-import Slider from '@react-native-community/slider';
+import React from 'react';
+import { View, Text, Switch, StyleSheet, Platform } from 'react-native';
+import Slider from '@react-native-community/slider'; // Ensure this is installed
+import { useTheme } from '../../ThemeContext';
 
-export default function AppearanceScreen() {
-  const [isDarkMode, setIsDarkMode] = useState(false);
-  const [textSize, setTextSize] = useState(16);
-  const themeStyles = isDarkMode ? darkTheme : lightTheme;
+const AppearanceTab = () => {
+  const { theme, toggleTheme, textSize, setTextSize, themeStyles } = useTheme();
 
   return (
     <View style={[styles.container, themeStyles.container]}>
-      <Text style={[styles.subtitle, themeStyles.text]}>Appearance Settings</Text>
-      <View style={styles.section}>
-        <Text style={[styles.label, themeStyles.text]}>Dark Mode</Text>
+      <Text style={[styles.heading, themeStyles.text, { fontSize: textSize + 4 }]}>
+        Appearance Settings
+      </Text>
+
+      {/* Theme Toggle */}
+      <View style={styles.settingRow}>
+        <Text style={[styles.label, themeStyles.text, { fontSize: textSize }]}>
+          Dark Mode
+        </Text>
         <Switch
-          value={isDarkMode}
-          onValueChange={() => setIsDarkMode(!isDarkMode)}
+          value={theme === 'dark'}
+          onValueChange={toggleTheme}
+          thumbColor={theme === 'dark' ? '#fff' : '#000'}
+          trackColor={{ false: '#ccc', true: '#444' }}
         />
       </View>
 
-      <View style={styles.section}>
-        <Text style={[styles.label, themeStyles.text]}>Text Size: {textSize}</Text>
+      {/* Text Size Slider */}
+      <View style={styles.sliderBlock}>
+        <Text style={[styles.label, themeStyles.text, { fontSize: textSize }]}>
+          Text Size: {textSize}
+        </Text>
         <Slider
-          style={{ width: 200 }}
+          style={styles.slider}
           minimumValue={12}
-          maximumValue={30}
+          maximumValue={24}
           step={1}
           value={textSize}
           onValueChange={setTextSize}
+          minimumTrackTintColor="#1EB1FC"
+          maximumTrackTintColor="#d3d3d3"
+          thumbTintColor={Platform.OS === 'android' ? '#1EB1FC' : undefined}
         />
-        <Text style={[themeStyles.text, { fontSize: textSize, marginTop: 20 }]}>
-          Sample Text with size {textSize}
-        </Text>
       </View>
     </View>
   );
-}
-
-const lightTheme = StyleSheet.create({
-  container: {
-    backgroundColor: '#f0f8ff',
-  },
-  text: {
-    color: '#333',
-  },
-});
-
-const darkTheme = StyleSheet.create({
-  container: {
-    backgroundColor: '#1c1c1c',
-  },
-  text: {
-    color: '#f8f8f8',
-  },
-})
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     padding: 20,
+    justifyContent: 'flex-start',
   },
-  title: {
-    fontSize: 24,
+  heading: {
     fontWeight: 'bold',
-    marginBottom: 12,
+    marginBottom: 30,
   },
-  subtitle: {
-    fontSize: 16,
-    textAlign: 'center',
+  settingRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 40,
+  },
+  label: {
+    flex: 1,
+  },
+  sliderBlock: {
+    marginTop: 10,
+  },
+  slider: {
+    width: '100%',
+    height: 40,
   },
 });
+
+export default AppearanceTab;

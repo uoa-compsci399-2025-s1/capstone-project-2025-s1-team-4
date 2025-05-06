@@ -4,6 +4,7 @@ import { API_BASE_URL } from '../config';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Linking } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useTheme } from '../ThemeContext';
 
 export default function MedicineInfo() {
   const router = useRouter();
@@ -15,6 +16,7 @@ export default function MedicineInfo() {
   const [medicineData, setMedicineData] = useState<any>(null); // Product name, company, active ingredients, dosage
   const [cmiData, setCmiData] = useState<any>(null); 
   const [expandedSections, setExpandedSections] = useState<string[]>([]);
+  const { themeStyles, textSize } = useTheme();
 
   // Dropdown section expanding + collapsing behaviour 
   const toggleSection = (key: string) => {
@@ -79,34 +81,34 @@ export default function MedicineInfo() {
   }, [barcodeStr, medicineId]);
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView contentContainerStyle={[styles.container, themeStyles.container]}>
 
       {/* Back button to home page */}
-      <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
+      <TouchableOpacity style={[styles.backButton, themeStyles.container]} onPress={() => router.back()}>
         <Ionicons name="arrow-back" size={40} color="#336699" />
       </TouchableOpacity>
 
       {/* Display the medicine name and company */}
       {medicineData ? (
         <>
-          <Text style={styles.header}>{medicineData.product_name}</Text>
-          <Text style={styles.subheader}>{medicineData.company}</Text>
+          <Text style={[styles.header, themeStyles.text, { fontSize: textSize + 2 }]}>{medicineData.product_name}</Text>
+          <Text style={[styles.subheader, themeStyles.text, { fontSize: textSize + 2 }]}>{medicineData.company}</Text>
 
           {/* Display the active ingredients and dosage */}
           {medicineData.ingredients && medicineData.ingredients.length > 0 && (
-            <View style={styles.activeIngredientsContainer}>
-              <Text style={styles.activeIngredients}>
+            <View style={[styles.activeIngredientsContainer, themeStyles.container]}>
+              <Text style={[styles.activeIngredients, themeStyles.text, { fontSize: textSize + 2 }]}>
                 {medicineData.ingredients?.map((ing: { ingredient: string; dosage?: string }) => `${ing.ingredient} ${ing.dosage || 'N/A'}`).join(',\n') || 'N/A'}
               </Text>
             </View>
           )}
         </>
       ) : (
-        <Text style={styles.body}>Loading medicine information...</Text>
+        <Text style={[styles.body, themeStyles.text, { fontSize: textSize + 2 }]}>Loading medicine information...</Text>
       )}
   
       {!cmiData ? (
-        <Text style={styles.body}>Loading CMI data...</Text>
+        <Text style={[styles.body, themeStyles.text, { fontSize: textSize + 2 }]}>Loading CMI data...</Text>
       ) : (
         Object.entries(cmiData.cmi_sheet)
         .filter(([key]) => key !== '0')
@@ -120,20 +122,20 @@ export default function MedicineInfo() {
           };
   
           return (
-            <View key={key} style={styles.section}>
+            <View key={key} style={[styles.section, themeStyles.container]}>
               <TouchableOpacity onPress={() => toggleSection(key)} style={styles.sectionHeader}>
-                <Text style={styles.title}>{sectionTitle}</Text>
-                <Text style={styles.arrow}>{isExpanded ? '▲' : '▼'}</Text>
+                <Text style={[styles.title, themeStyles.text, { fontSize: textSize + 2 }]}>{sectionTitle}</Text>
+                <Text style={[styles.arrow, themeStyles.text, { fontSize: textSize + 2 }]}>{isExpanded ? '▲' : '▼'}</Text>
               </TouchableOpacity>
 
               {isExpanded && (
                 // Check if it's the "link to cmi / data sheet" section and handle it accordingly
                 key === '12' || key === '1'? (
                   <TouchableOpacity onPress={() => handleLinkClick(String(value))}>
-                    <Text style={[styles.body, styles.link]}>{String(value)}</Text>
+                    <Text style={[styles.body, styles.link, themeStyles.text, { fontSize: textSize + 2 }]}>{String(value)}</Text>
                   </TouchableOpacity>
                 ) : (
-                  <Text style={styles.body}>{String(value)}</Text>
+                  <Text style={[styles.body, themeStyles.text, { fontSize: textSize + 2 }]}>{String(value)}</Text>
                 )
               )}
             </View>

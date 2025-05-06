@@ -5,6 +5,7 @@ import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useBookmarks } from '../../context/bookmarks_context';
 import { useFocusEffect } from '@react-navigation/native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useTheme } from '../../ThemeContext';
 
 export default function DetailsScreen() {
   const [medicines, setMedicines] = useState<any[]>([]);
@@ -16,7 +17,7 @@ export default function DetailsScreen() {
   const [showDropdown, setShowDropdown] = useState(false);
   const [sortBy, setSortBy] = useState<'name' | 'company'>('name');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
-
+  const { themeStyles, textSize } = useTheme();
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/all_medicines`)
@@ -65,9 +66,9 @@ export default function DetailsScreen() {
   
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, themeStyles.container]}>
   <View>
-    <View style={styles.searchWrapper}>
+    <View style={[styles.searchWrapper, themeStyles.container]}>
       <TextInput
         ref={searchRef}
         style={styles.searchInput}
@@ -82,12 +83,12 @@ export default function DetailsScreen() {
     </View>
 
     {showDropdown && (
-  <View style={styles.dropdownPanel}>
+  <View style={[styles.dropdownPanel, themeStyles.container]}>
     {[
       { label: 'Name', key: 'name' },
       { label: 'Manufacturer', key: 'company' },
     ].map(({ label, key }) => (
-      <View key={key} style={styles.dropdownItemRow}>
+      <View key={key} style={[styles.dropdownItemRow, themeStyles.container]}>
         <TouchableOpacity
           style={{ flex: 1 }}
           onPress={() => {
@@ -100,6 +101,7 @@ export default function DetailsScreen() {
             style={[
               styles.dropdownItemText,
               sortBy === key && { fontWeight: 'bold' },
+              themeStyles.text, { fontSize: textSize + 2 }
             ]}
           >
             {label}
@@ -140,14 +142,14 @@ export default function DetailsScreen() {
   keyExtractor={(item) => item.id.toString()}
   renderItem={({ item }) => (
     <TouchableOpacity
-      style={styles.medicineCard}
+      style={[styles.medicineCard, themeStyles.container]}
       onPress={() => {router.push(`/medicine_info?barcode=${encodeURIComponent(item.barcode)}` as const)}}
     >
-      <View style={styles.cardContent}>
+      <View style={[styles.cardContent, themeStyles.container]}>
         <View style={{ flex: 1 }}>
-          <Text style={styles.medicineName}>{item.product_name}</Text>
-          <Text style={styles.medicineCompany}>{item.company}</Text>
-          <Text style={styles.medicineDosage}>
+          <Text style={[styles.medicineName, themeStyles.text, { fontSize: textSize + 2 }]}>{item.product_name}</Text>
+          <Text style={[styles.medicineCompany, themeStyles.text, { fontSize: textSize + 2 }]}>{item.company}</Text>
+          <Text style={[styles.medicineDosage, themeStyles.text, { fontSize: textSize + 2 }]}>
             {item.ingredients?.map((ing: { ingredient: string; dosage?: string }) => `${ing.ingredient} ${ing.dosage || 'N/A'}`).join(',\n') || 'N/A'}
           </Text>
         </View>
