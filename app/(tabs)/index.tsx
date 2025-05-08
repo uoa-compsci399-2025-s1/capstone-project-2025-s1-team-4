@@ -119,14 +119,6 @@ export default function Index() {
         </View>
       )}
 
-      {medicineInfo && (
-        <View style={styles.infoBox}>
-          <Text style={styles.scanText}>Name: {medicineInfo.name}</Text>
-          <Text style={styles.scanText}>Company: {medicineInfo.company}</Text>
-          <Text style={styles.scanText}>Dosage: {medicineInfo.dosage}</Text>
-        </View>
-      )}
-
       {message && (
         <View style={styles.infoBox}>
           <Text style={styles.scanText}>{message}</Text>
