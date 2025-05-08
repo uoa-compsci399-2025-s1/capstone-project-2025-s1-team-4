@@ -82,9 +82,9 @@ export default function MedicineInfo() {
     <ScrollView contentContainerStyle={styles.container}>
 
       {/* Back button to home page */}
-      <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
+      {/* <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
         <Ionicons name="arrow-back" size={40} color="#336699" />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
       {/* Display the medicine name and company */}
       {medicineData ? (
