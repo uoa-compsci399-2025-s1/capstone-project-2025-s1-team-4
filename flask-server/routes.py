@@ -104,7 +104,7 @@ def get_cmi_sheet():
     
     return jsonify({'cmi_sheet': data})
 
-'''API to return medicines cmi sheet'''
+'''API to return medicine recalls'''
 @blueprint.route('/recalls', methods=['GET'])
 def get_recalls():
     repo = get_repo()
