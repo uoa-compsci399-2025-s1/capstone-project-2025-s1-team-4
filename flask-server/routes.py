@@ -109,4 +109,6 @@ def get_cmi_sheet():
 def get_recalls():
     repo = get_repo()
     recalls = repo.get_recalls()  
+    if not recalls:
+        return jsonify({'error': 'Failed to fetch recall data.'}), 500
     return jsonify(recalls)

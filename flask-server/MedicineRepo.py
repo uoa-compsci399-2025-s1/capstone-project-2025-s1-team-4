@@ -5,7 +5,7 @@ from IMedicineRepo import AbstractRepository
 from collections import defaultdict
 
 # Recalls
-# from get_recalls import get_recalls, format_recalls
+from get_recalls import get_recalls, format_recalls
 
 """Helper functions"""
 def group_medicines_with_ingredients(rows):
@@ -145,10 +145,12 @@ class MedicineRepo(AbstractRepository):
         """, (medicine_id,))
         return self.cursor.fetchall()
     
-    # # Returns recall information in as a list of dictionaries
-    # def get_recalls(self):
-    #     raw_data = get_recalls()
-    #     formatted = format_recalls(raw_data)
-    #     headers = ["date", "recall_url", "brand_name", "recall_action"]
-    #     return [dict(zip(headers, row)) for row in formatted]
+    # Returns recall information in as a list of dictionaries
+    def get_recalls(self):
+        raw_data = get_recalls()
+        if not raw_data:
+            return None
+        formatted = format_recalls(raw_data)
+        headers = ["date", "recall_url", "brand_name", "recall_action"]
+        return [dict(zip(headers, row)) for row in formatted]
 
