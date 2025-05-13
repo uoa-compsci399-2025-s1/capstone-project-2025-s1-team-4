@@ -23,6 +23,27 @@ Start-Process python server.py
 
 cd ..
 
+# Get the local IPv4 address (non-loopback)
+$ip = (Get-NetIPAddress -AddressFamily IPv4 `
+       | Where-Object { $_.IPAddress -notmatch "^169\.254|^127\." -and $_.InterfaceAlias -notmatch "Virtual|Loopback" } `
+       | Select-Object -First 1 -ExpandProperty IPAddress)
+
+# Define port and construct URL
+$port = 5000
+$baseUpiUrl = "http://$ip`:$port/"
+
+# TypeScript export string
+$tsContent = @"
+export const API_BASE_URL = '$baseUpiUrl';
+"@
+
+# Write to config.ts
+Set-Content -Path "./config.ts" -Value $tsContent
+
+# Optional: output to console
+Write-Host "Generated config.ts with BASE_UPI_URL: $baseUpiUrl"
+
+
 # Setup Expo
 Write-Host "Installing Expo dependencies..."
 npm install expo@^52.0.0
