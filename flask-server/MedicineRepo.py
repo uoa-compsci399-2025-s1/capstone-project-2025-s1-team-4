@@ -163,6 +163,8 @@ class MedicineRepo(AbstractRepository):
     # Update recall information (inserting data into database)
     def update_recalls(self):
         raw_data = get_recalls()
+        if not raw_data:
+            return None
         formatted = format_recalls(raw_data)
         inserted_count = 0
 
