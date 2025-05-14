@@ -1,6 +1,29 @@
 ## Get started
+This first section is to quickly run the application.
+If you are a developer for this project, please scroll down to the **For developers** section.
 
-## To allow the flask server to run:
+# To run the application
+### For windows users:
+In your terminal, ensure that you are in the project directory. Then enter the following command in the terminal:
+
+```shell
+.\setup-windows.ps1
+```
+
+If you are getting permission errors, you can temporarily bypass them by doing the following:
+
+```shell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+```
+
+Then try the first command again.
+
+### For mac or linux users
+COMING SOON
+
+
+# For developers
+### To allow the flask server to run:
 **Windows**
 ```shell
 $ cd <project directory>

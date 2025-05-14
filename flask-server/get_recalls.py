@@ -3,6 +3,11 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from datetime import datetime, timedelta
 import re
+from selenium.common.exceptions import (
+    ElementNotInteractableException,
+    NoSuchElementException,
+    WebDriverException
+)
 
 def get_recalls():
     today = datetime.today()
@@ -13,22 +18,41 @@ def get_recalls():
 
     options = Options()
     options.add_argument("--headless")
-    driver = webdriver.Chrome(options=options)
-    driver.implicitly_wait(5)
-    driver.get("https://www.medsafe.govt.nz/hot/Recalls/RecallSearch.asp")
-    date_from = driver.find_element(By.ID, "txtDateFrom")
-    date_to = driver.find_element(By.ID, 'txtDateTo')
-    medicine = driver.find_element(By.ID, 'optMedicine')
-    search_button = driver.find_element(By.NAME, 'cmdSearch')
-    date_from.clear()
-    date_from.send_keys(f"{formatted_today}")
-    date_to.send_keys(f"{formatted_minus_six_months}")
-    medicine.click()
-    search_button.click()
-    results_table = driver.find_element(By.XPATH, '//*[@id="content-area"]/table')
-    results = results_table.get_attribute('outerHTML')
-    driver.quit()
-    return str(results)
+
+    try:
+        driver = webdriver.Chrome(options=options)
+        driver.implicitly_wait(5)
+        driver.get("https://www.medsafe.govt.nz/hot/Recalls/RecallSearch.asp")
+
+        date_from = driver.find_element(By.ID, "txtDateFrom")
+        date_to = driver.find_element(By.ID, 'txtDateTo')
+        medicine = driver.find_element(By.ID, 'optMedicine')
+        search_button = driver.find_element(By.NAME, 'cmdSearch')
+
+        date_from.clear()
+        date_from.send_keys(f"{formatted_today}")
+        date_to.send_keys(f"{formatted_minus_six_months}")
+
+        try:
+            medicine.click()
+        except ElementNotInteractableException:
+            print("Medicine option not interactable — skipping click.")
+
+        search_button.click()
+
+        results_table = driver.find_element(By.XPATH, '//*[@id="content-area"]/table')
+        results = results_table.get_attribute('outerHTML')
+        return results
+
+    except (WebDriverException, NoSuchElementException, ElementNotInteractableException) as e:
+        print(f"Recall scraping error: {e}")
+        return None
+
+    finally:
+        try:
+            driver.quit()
+        except:
+            pass
 
 def format_recalls(HTML_data):
     split_table = re.split('(<[a-zA-Z=" 0-9/.?]*>)', HTML_data)
