@@ -104,11 +104,10 @@ def get_cmi_sheet():
     
     return jsonify({'cmi_sheet': data})
 
-'''API to return medicine recalls'''
+'''API to recieve all medicines in the database'''
 @blueprint.route('/recalls', methods=['GET'])
-def get_recalls():
+def recalls():
     repo = get_repo()
-    recalls = repo.get_recalls()  
-    if not recalls:
-        return jsonify({'error': 'Failed to fetch recall data.'}), 500
+    recalls = repo.get_recalls()
     return jsonify(recalls)
+

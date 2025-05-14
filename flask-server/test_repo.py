@@ -31,6 +31,9 @@ repo = MedicineRepo(connection)
 # print("\n=== Get recalls===")
 # print(repo.get_recalls())
 
+# print("\n=== Update recalls===")
+# print(repo.update_recalls())
+
 connection.close()
 
 

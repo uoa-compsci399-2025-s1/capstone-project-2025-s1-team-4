@@ -48,3 +48,13 @@ def create_tables(cursor):
         FOREIGN KEY (medicine_id) REFERENCES medicine(id),
         FOREIGN KEY (ingredient_id) REFERENCES ingredients(id)
     )""")
+
+    # Create recalls table 
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS recalls (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        date TEXT,
+        recall_url TEXT UNIQUE,
+        brand_name TEXT,
+        recall_action TEXT
+        )""")
