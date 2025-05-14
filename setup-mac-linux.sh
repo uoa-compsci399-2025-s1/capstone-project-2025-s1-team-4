@@ -6,7 +6,7 @@ cd flask-server
 # Setup Python virtual environment only if it doesn't already exist
 if [ ! -d "venv" ]; then
   echo "Setting up virtual environment..."
-  python3 -m venv venv  # Create virtual environment
+  python3 -m venv venv
   echo "Virtual environment created."
 else
   echo "Virtual environment already exists. Skipping creation."
@@ -21,10 +21,25 @@ pip install -r requirements.txt
 
 # Run the server in the background
 echo "Starting backend server..."
-python server.py &
+python3 server.py &
 
-# Go back to the root project directory
 cd ..
+
+# Get the local IPv4 address (non-loopback)
+ip=$(hostname -I | awk '{print $1}')
+
+# Define port and construct URL
+port=5000
+baseUpiUrl="http://$ip:$port/"
+
+# TypeScript export string
+tsContent="export const API_BASE_URL = '$baseUpiUrl';"
+
+# Write to config.ts
+echo "$tsContent" > ./config.ts
+
+# Optional: output to console
+echo "Generated config.ts with BASE_UPI_URL: $baseUpiUrl"
 
 # Setup Expo dependencies
 echo "Installing Expo dependencies..."
