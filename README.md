@@ -31,6 +31,12 @@ If you are getting permission errors, you can temporarily bypass them by doing t
 chmod +x setup-mac-linux.sh
 ```
 
+If you had to change the permission, run the following code in the terminal to ignore permission changes in git.
+
+```shell
+git config core.fileMode false
+```
+
 
 # For developers
 ### To allow the flask server to run:
