@@ -19,23 +19,7 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 Then try the first command again.
 
 ### For mac or linux users
-In your terminal ensure that you are in the project directory. Then enter the following command to run the application:
-
-```shell
-./setup-mac-linux.sh
-```
-
-If you are getting permission errors, you can temporarily bypass them by doing the following:
-
-```shell
-chmod +x setup-mac-linux.sh
-```
-
-If you had to change the permission, run the following code in the terminal to ignore permission changes in git.
-
-```shell
-git config core.fileMode false
-```
+COMING SOON
 
 
 # For developers
