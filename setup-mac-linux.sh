@@ -25,8 +25,16 @@ python3 server.py &
 
 cd ..
 
-# Get the local IPv4 address (non-loopback)
-ip=$(hostname -I | awk '{print $1}')
+# Detect OS type
+os=$(uname)
+
+if [ "$os" == "Darwin" ]; then
+  # macOS: get IP from en0 (Wi-Fi). Might need to change to en1 depending on your machine.
+  ip=$(ipconfig getifaddr en0)
+else
+  # Linux
+  ip=$(hostname -I | awk '{print $1}')
+fi
 
 # Define port and construct URL
 port=5000
