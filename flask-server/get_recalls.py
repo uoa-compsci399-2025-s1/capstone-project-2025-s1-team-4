@@ -52,6 +52,6 @@ def format_recalls(HTML_data):
         
     return formatted_output
 
-recalls = get_recalls()
-DB_format = format_recalls(recalls)
-print(DB_format)
+# recalls = get_recalls()
+# DB_format = format_recalls(recalls)
+# print(DB_format)

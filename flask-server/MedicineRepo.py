@@ -145,10 +145,39 @@ class MedicineRepo(AbstractRepository):
         """, (medicine_id,))
         return self.cursor.fetchall()
     
-    # Returns recall information in as a list of dictionaries
+    # Get recall information (list of dictionaries)
     def get_recalls(self):
+        self.cursor.execute("""
+            SELECT 
+            r.id,
+            r.date,
+            r.recall_url,
+            r.brand_name,
+            r.recall_action
+            FROM recalls r
+            """)
+        rows = self.cursor.fetchall()
+        headers = ["id", "date", "recall_url", "brand_name", "recall_action"]
+        return [dict(zip(headers, row)) for row in rows]
+    
+    # Update recall information (inserting data into database)
+    def update_recalls(self):
         raw_data = get_recalls()
         formatted = format_recalls(raw_data)
-        headers = ["date", "recall_url", "brand_name", "recall_action"]
-        return [dict(zip(headers, row)) for row in formatted]
+        inserted_count = 0
+
+        for row in formatted:
+            self.cursor.execute("""
+                INSERT OR IGNORE INTO recalls (date, recall_url, brand_name, recall_action)
+                VALUES (?, ?, ?, ?)
+                """, row)
+            
+            if self.cursor.rowcount > 0:
+                inserted_count += 1
+            
+        self.connection.commit()            
+        return inserted_count > 0
+    
+   
+    
 
