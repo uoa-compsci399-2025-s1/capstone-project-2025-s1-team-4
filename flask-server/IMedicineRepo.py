@@ -39,4 +39,14 @@ class AbstractRepository(ABC):
         """Can use the get_medicine_by_barcode to find id if we have barcode only"""
         raise NotImplementedError
     
+    @abstractmethod
+    def get_recalls(self):
+        """Gets all recalls from our database"""
+        raise NotImplementedError
+    
+    @abstractmethod
+    def update_recalls(self):
+        """Inserts new recall data into our database"""
+        raise NotImplementedError
+    
     
