@@ -1,11 +1,16 @@
 import { View, Text, StyleSheet } from 'react-native';
-import { useTheme } from '../../context/theme_context'
+import { useTheme } from '../../context/theme_context';
 
 export default function PageNameScreen() {
   const { themeStyles, textSize } = useTheme();
   return (
-    <View style={themeStyles.container}>
-      <Text style={[themeStyles.text, { fontSize: textSize }]}>We are the 6 degrees of computation and we hope to solve your everyday medicinal concerns.</Text>
+    <View style={[styles.container, themeStyles.container]}>
+      <Text style={[styles.title, themeStyles.text, { fontSize: textSize + 8 }]}>
+        About Us
+      </Text>
+      <Text style={[styles.subtitle, themeStyles.text, { fontSize: textSize }]}>
+        We are the 6 Degrees of Computation and we hope to solve your everyday medicinal concerns.
+      </Text>
     </View>
   );
 }
@@ -13,7 +18,6 @@ export default function PageNameScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f0f8ff',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
@@ -21,12 +25,10 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#336699',
     marginBottom: 12,
   },
   subtitle: {
     fontSize: 16,
-    color: '#666',
     textAlign: 'center',
   },
 });
