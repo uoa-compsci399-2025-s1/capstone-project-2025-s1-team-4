@@ -2,10 +2,11 @@ import { Text, View, StyleSheet, TextInput, TouchableOpacity } from "react-nativ
 import { useRouter } from 'expo-router';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useState } from 'react';
-import { API_BASE_URL } from '../../config'; // adjust path accordingly
+import { API_BASE_URL } from '../../config'; 
 import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
 import { useCallback } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
+import { useTheme } from '../../context/theme_context'
 
 type Medicine = {
   id: number;

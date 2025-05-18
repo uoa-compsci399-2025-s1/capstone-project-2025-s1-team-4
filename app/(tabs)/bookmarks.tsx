@@ -2,9 +2,10 @@ import { View, Text, StyleSheet, FlatList, TextInput, TouchableOpacity } from 'r
 import { useState, useEffect } from 'react';
 import { useBookmarks } from '../../context/bookmarks_context';
 import { API_BASE_URL } from '../../config';
-import { MaterialCommunityIcons, FontAwesome, Ionicons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useTheme } from '../../context/theme_context'
 
 export default function BookmarksScreen() {
   const [searchQuery, setSearchQuery] = useState('');

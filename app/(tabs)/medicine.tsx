@@ -5,6 +5,7 @@ import { MaterialCommunityIcons, Ionicons} from '@expo/vector-icons';
 import { useBookmarks } from '../../context/bookmarks_context';
 import { useFocusEffect } from '@react-navigation/native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useTheme } from '../../context/theme_context'
 
 export default function DetailsScreen() {
   const [medicines, setMedicines] = useState<any[]>([]);

@@ -4,6 +4,7 @@ import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useBookmarks } from '../../context/bookmarks_context';
 import { Alert } from 'react-native';
+import { useTheme } from '../../context/theme_context'
 
 export default function SettingsScreen() {
   const router = useRouter();
