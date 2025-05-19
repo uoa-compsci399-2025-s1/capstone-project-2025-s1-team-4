@@ -81,9 +81,8 @@ const AppearanceTab = () => {
       step={1}
       value={textSize}
       onValueChange={setTextSize}
-      minimumTrackTintColor="#1EB1FC"
-      maximumTrackTintColor="#d3d3d3"
-      thumbTintColor={Platform.OS === 'android' ? '#336699' : undefined}
+      minimumTrackTintColor="#336699"
+      maximumTrackTintColor="000000"
     />
   </View>
 </View>
