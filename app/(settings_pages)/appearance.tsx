@@ -1,66 +1,108 @@
 import React from 'react';
-import { View, Text, Switch, StyleSheet, Platform } from 'react-native';
+import { View, Text, StyleSheet, Platform, TouchableOpacity } from 'react-native';
 import Slider from '@react-native-community/slider'; 
-import { useTheme } from '../../context/theme_context'
+import { useTheme } from '../../context/theme_context';
+import { useRouter } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 
 const AppearanceTab = () => {
-  const { theme, toggleTheme, textSize, setTextSize, themeStyles } = useTheme();
+  const { theme, setTheme, textSize, setTextSize, themeStyles } = useTheme();
+  const router = useRouter();
 
   return (
     <View style={[styles.container, themeStyles.container]}>
+      
+      {/* Back Arrow */}
+      <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
+        <Ionicons name="arrow-back" size={40} color="#336699" />
+      </TouchableOpacity>
+
+      {/* Page Header */}
+      <View style={styles.pageTitleWrapper}>
+        <Text style={[styles.pageTitleText, themeStyles.text]}>
+          Appearance
+        </Text>
+      </View>
+
+      {/* Heading */}
       <Text style={[styles.heading, themeStyles.text, { fontSize: textSize + 4 }]}>
-        Appearance Settings
+        Theme
       </Text>
 
-      {/* Theme Toggle */}
-      <View style={styles.settingRow}>
-        <Text style={[styles.label, themeStyles.text, { fontSize: textSize }]}>
-          Dark Mode
-        </Text>
-        <Switch
-          value={theme === 'dark'}
-          onValueChange={toggleTheme}
-          thumbColor={theme === 'dark' ? '#fff' : '#000'}
-          trackColor={{ false: '#ccc', true: '#444' }}
-        />
+      {/* Theme Toggle Options */}
+      <View style={styles.settingCard}>
+        {['light', 'dark', 'system'].map((mode, index, arr) => {
+          const isLast = index === arr.length - 1;
+          const isSelected = theme === mode;
+
+          return (
+            <TouchableOpacity
+              key={mode}
+              onPress={() => setTheme(mode as 'light' | 'dark' | 'system')}
+              activeOpacity={0.7}
+              style={[
+                styles.settingRow,
+                !isLast && { borderBottomWidth: 1, borderBottomColor: '#eee' }
+              ]}
+            >
+              <Text
+                style={[
+                  styles.settingText,
+                  isSelected && { fontWeight: 'bold', color: '#336699' }
+                ]}
+              >
+                {mode.charAt(0).toUpperCase() + mode.slice(1)}
+              </Text>
+              <Ionicons
+                name="checkmark-sharp"
+                size={18}
+                color={isSelected ? '#336699' : 'transparent'}
+              />
+            </TouchableOpacity>
+          );
+        })}
       </View>
 
-      {/* Text Size Slider */}
-      <View style={styles.sliderBlock}>
-        <Text style={[styles.label, themeStyles.text, { fontSize: textSize }]}>
-          Text Size: {textSize}
-        </Text>
-        <Slider
-          style={styles.slider}
-          minimumValue={12}
-          maximumValue={24}
-          step={1}
-          value={textSize}
-          onValueChange={setTextSize}
-          minimumTrackTintColor="#1EB1FC"
-          maximumTrackTintColor="#d3d3d3"
-          thumbTintColor={Platform.OS === 'android' ? '#1EB1FC' : undefined}
-        />
-      </View>
+      {/* Heading */}
+      <Text style={[styles.heading, themeStyles.text, { fontSize: textSize + 4 }]}>
+        Font Size
+      </Text>
+
+{/* Font Slider Card */}
+<View style={styles.settingCard}>
+  <View style={styles.sliderContent}>
+    <Text style={[styles.label, themeStyles.text, { fontSize: textSize }]}>
+      Font Size: {textSize}
+    </Text>
+    <Slider
+      style={styles.slider}
+      minimumValue={12}
+      maximumValue={24}
+      step={1}
+      value={textSize}
+      onValueChange={setTextSize}
+      minimumTrackTintColor="#1EB1FC"
+      maximumTrackTintColor="#d3d3d3"
+      thumbTintColor={Platform.OS === 'android' ? '#336699' : undefined}
+    />
+  </View>
+</View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     padding: 20,
-    justifyContent: 'flex-start',
+    backgroundColor: '#f0f8ff', 
+    flexGrow: 1, 
   },
   heading: {
+    fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 30,
-  },
-  settingRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 40,
+    color: '#336699',
+    marginBottom: 10,
+    marginTop: -7,
   },
   label: {
     flex: 1,
@@ -72,6 +114,56 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 40,
   },
+  pageTitleWrapper: {
+    alignItems: 'center',
+    marginTop: 60,
+    marginBottom: 23,
+  },
+  pageTitleText: {
+    fontSize: 40,
+    color: '#336699',
+  },
+  backButton: {
+    position: 'absolute',
+    top: 35,
+    left: 16,
+    zIndex: 1,
+  },
+  themeCard: {
+    backgroundColor: '#fff',
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    marginBottom: 30,
+    marginTop: 10,
+    elevation: 3,
+  },
+  settingCard: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    paddingVertical: 0,
+    paddingHorizontal: 12,
+    marginBottom: 30,
+    elevation: 3,
+  },
+settingRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 14,
+    borderBottomColor: '#eee',
+    borderBottomWidth: 1,
+    marginHorizontal: -12,
+    paddingHorizontal: 12,
+  },
+settingText: {
+    fontSize: 17,
+    color: '#336699',
+  },
+sliderContent: {
+  paddingVertical: 8,
+  paddingHorizontal: 4,
+}
 });
 
 export default AppearanceTab;

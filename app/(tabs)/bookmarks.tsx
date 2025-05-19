@@ -353,7 +353,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'white',
-    borderRadius: 12,
+    borderRadius: 10,
     borderWidth: 1,
     borderColor: '#ccc',
     paddingHorizontal: 12,
@@ -363,7 +363,7 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     fontSize: 16,
-    paddingVertical: 10,
+    paddingVertical: 12,
     color: '#333',
   },
   medicineCard: {
@@ -372,11 +372,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginVertical: 6,
     marginHorizontal: 4,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 8,
-    elevation: 5
+    elevation: 3
   },
   cardContent: {
     flexDirection: 'row',
@@ -414,7 +410,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
     backgroundColor: '#f5faff',
     padding: 10,
-    borderRadius: 12,
+    borderRadius: 10,
     borderWidth: 1,
     borderColor: '#cce0ff',
   },
@@ -422,7 +418,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     paddingVertical: 8,
     paddingHorizontal: 12,
-    borderRadius: 12,
+    borderRadius: 10,
     fontSize: 14,
     borderWidth: 1,
     borderColor: '#ccc',
@@ -459,11 +455,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginVertical: 6,
     marginHorizontal: 4,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 8,
-    elevation: 5
+    elevation: 3
   },
   tagList: {
     flexDirection: 'row',
@@ -514,15 +506,11 @@ const styles = StyleSheet.create({
   },
   dropdownPanel: {
     backgroundColor: 'white',
-    borderRadius: 12,
+    borderRadius: 10,
     paddingTop: 0,         
     paddingBottom: 0,      
     overflow: 'hidden',    
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 5,
+    elevation: 3,
     marginTop: 6,
     marginBottom: 6,
     marginHorizontal: 4
@@ -544,7 +532,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#d6eaff',
-    borderRadius: 12,
+    borderRadius: 10,
     paddingHorizontal: 10,
     paddingVertical: 4,
     marginRight: 6,

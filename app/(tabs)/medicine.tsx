@@ -199,11 +199,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginVertical: 6,
     marginHorizontal: 4,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 8,
-    elevation: 5
+    elevation: 3
   },
   cardContent: {
     flexDirection: 'row',
@@ -235,7 +231,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'white',
-    borderRadius: 12,
+    borderRadius: 10,
     borderWidth: 1,
     borderColor: '#ccc',
     paddingHorizontal: 12,
@@ -245,20 +241,16 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     fontSize: 16,
-    paddingVertical: 10,
+    paddingVertical: 12,
     color: '#333',
   },
   dropdownPanel: {
     backgroundColor: 'white',
-    borderRadius: 12,
+    borderRadius: 10,
     paddingTop: 0,         
     paddingBottom: 0,      
     overflow: 'hidden',    
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 5,
+    elevation: 3,
     marginTop: 6,
     marginBottom: 6,
     marginHorizontal: 4

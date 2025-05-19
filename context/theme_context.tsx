@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, useColorScheme } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-type ThemeType = 'light' | 'dark';
+type ThemeType = 'light' | 'dark' | 'system';
 
 interface ThemeStyles {
   container: any;
@@ -12,7 +12,7 @@ interface ThemeStyles {
 
 interface ThemeContextProps {
   theme: ThemeType;
-  toggleTheme: () => void;
+  setTheme: (mode: ThemeType) => void;
   textSize: number;
   setTextSize: (size: number) => void;
   themeStyles: ThemeStyles;
@@ -21,23 +21,27 @@ interface ThemeContextProps {
 const ThemeContext = createContext<ThemeContextProps | undefined>(undefined);
 
 export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
-  const [theme, setTheme] = useState<ThemeType>('light');
+  const [theme, setThemeState] = useState<ThemeType>('light');
   const [textSize, setTextSize] = useState<number>(16);
+  const systemColorScheme = useColorScheme(); // 'light' or 'dark'
 
   useEffect(() => {
     const loadPrefs = async () => {
       const storedTheme = await AsyncStorage.getItem('theme');
       const storedTextSize = await AsyncStorage.getItem('textSize');
-      if (storedTheme === 'dark' || storedTheme === 'light') setTheme(storedTheme);
-      if (storedTextSize && !isNaN(Number(storedTextSize))) setTextSize(Number(storedTextSize));
+      if (storedTheme === 'light' || storedTheme === 'dark' || storedTheme === 'system') {
+        setThemeState(storedTheme);
+      }
+      if (storedTextSize && !isNaN(Number(storedTextSize))) {
+        setTextSize(Number(storedTextSize));
+      }
     };
     loadPrefs();
   }, []);
 
-  const toggleTheme = async () => {
-    const newTheme = theme === 'light' ? 'dark' : 'light';
-    setTheme(newTheme);
-    await AsyncStorage.setItem('theme', newTheme);
+  const setTheme = async (mode: ThemeType) => {
+    setThemeState(mode);
+    await AsyncStorage.setItem('theme', mode);
   };
 
   const handleSetTextSize = async (size: number) => {
@@ -45,10 +49,11 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
     await AsyncStorage.setItem('textSize', size.toString());
   };
 
-  const themeStyles = theme === 'dark' ? darkTheme : lightTheme;
+  const resolvedTheme = theme === 'system' ? (systemColorScheme || 'light') : theme;
+  const themeStyles = resolvedTheme === 'dark' ? darkTheme : lightTheme;
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme, textSize, setTextSize: handleSetTextSize, themeStyles }}>
+    <ThemeContext.Provider value={{ theme, setTheme, textSize, setTextSize: handleSetTextSize, themeStyles }}>
       {children}
     </ThemeContext.Provider>
   );
