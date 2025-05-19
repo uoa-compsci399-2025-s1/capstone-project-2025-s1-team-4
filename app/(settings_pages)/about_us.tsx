@@ -1,34 +1,61 @@
-import { View, Text, StyleSheet } from 'react-native';
+import React from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useTheme } from '../../context/theme_context';
+import { useRouter } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 
-export default function PageNameScreen() {
+const AboutUsScreen = () => {
   const { themeStyles, textSize } = useTheme();
+  const router = useRouter();
+
   return (
     <View style={[styles.container, themeStyles.container]}>
-      <Text style={[styles.title, themeStyles.text, { fontSize: textSize + 8 }]}>
-        About Us
-      </Text>
-      <Text style={[styles.subtitle, themeStyles.text, { fontSize: textSize }]}>
-        We are the 6 Degrees of Computation and we hope to solve your everyday medicinal concerns.
+      
+      {/* Back Arrow */}
+      <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
+        <Ionicons name="arrow-back" size={40} color="#336699" />
+      </TouchableOpacity>
+
+      {/* Page Title */}
+      <View style={styles.pageTitleWrapper}>
+        <Text style={[styles.pageTitleText, themeStyles.text]}>
+          About Us
+        </Text>
+      </View>
+
+      {/* Page Content Placeholder */}
+      <Text style={[styles.bodyText, themeStyles.text, { fontSize: textSize }]}>
+        insert jargon here
       </Text>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     padding: 20,
+    backgroundColor: '#f0f8ff',
+    flexGrow: 1,
   },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 12,
+  backButton: {
+    position: 'absolute',
+    top: 35,
+    left: 16,
+    zIndex: 1,
   },
-  subtitle: {
-    fontSize: 16,
+  pageTitleWrapper: {
+    alignItems: 'center',
+    marginTop: 60,
+    marginBottom: 23,
+  },
+  pageTitleText: {
+    fontSize: 40,
+    color: '#336699',
+  },
+  bodyText: {
     textAlign: 'center',
+    marginTop: 20,
   },
 });
+
+export default AboutUsScreen;
