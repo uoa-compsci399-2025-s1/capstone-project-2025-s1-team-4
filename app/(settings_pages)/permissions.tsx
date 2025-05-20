@@ -106,7 +106,7 @@ const PermissionsScreen = () => {
       </Animated.View>
 
       <Text style={[styles.bodyText, themeStyles.text, { fontSize: textSize }]}>
-        MediDex will notify you if there is a medicine recall or a CMI change. To revoke notification access, update your device settings.
+        MediDex will only notify you if there is a medicine recall. To revoke notification access, update your device settings.
       </Text>
     </View>
   );
