@@ -87,7 +87,7 @@ export default function DetailsScreen() {
       </TouchableOpacity>
     </View>
 
-    {showDropdown && (
+  {showDropdown && (
   <View style={styles.dropdownPanel}>
     {[
       { label: 'Name', key: 'name' },
@@ -154,7 +154,13 @@ export default function DetailsScreen() {
           <Text style={styles.medicineName}>{item.product_name}</Text>
           <Text style={styles.medicineCompany}>{item.company}</Text>
           <Text style={styles.medicineDosage}>
-            {item.ingredients?.map((ing: { ingredient: string; dosage?: string }) => `${ing.ingredient} ${ing.dosage || 'N/A'}`).join(',\n') || 'N/A'}
+            {item.ingredients
+              ?.slice()
+              .sort((a: { ingredient: string }, b: { ingredient: string }) => 
+                  a.ingredient.localeCompare(b.ingredient)
+                )
+              .map((ing: { ingredient: string; dosage?: string }) => `${ing.ingredient} ${ing.dosage || 'N/A'}`)
+              .join(',\n') || 'N/A'}
           </Text>
         </View>
 

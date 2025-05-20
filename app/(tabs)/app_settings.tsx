@@ -21,7 +21,7 @@ export default function SettingsScreen() {
       <View style={[styles.settingCard, themeStyles.card]}>
         {[
           { label: 'Appearance', route: '/(settings_pages)/appearance' },
-          { label: 'Notification History', route: '/(settings_pages)/notification_history' },
+          { label: 'Recall History', route: '/(settings_pages)/recall_history' },
           { label: 'Permissions', route: '/(settings_pages)/permissions' },
           {
             label: 'Clear Bookmarks',

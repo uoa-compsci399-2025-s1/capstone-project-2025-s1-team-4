@@ -1,5 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Switch, Animated, Platform } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Switch,
+  Platform,
+} from 'react-native';
 import { useTheme } from '../../context/theme_context';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -11,7 +18,6 @@ const PermissionsScreen = () => {
   const router = useRouter();
   const [cameraEnabled, setCameraEnabled] = useState(false);
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
-  const scaleAnim = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
     const loadPermissions = async () => {
@@ -35,18 +41,11 @@ const PermissionsScreen = () => {
     loadPermissions();
   }, []);
 
-  const animateCard = () => {
-    Animated.sequence([
-      Animated.timing(scaleAnim, { toValue: 0.98, duration: 80, useNativeDriver: true }),
-      Animated.timing(scaleAnim, { toValue: 1, duration: 80, useNativeDriver: true }),
-    ]).start();
-  };
-
   const handleToggle = async (type: 'camera' | 'notifications', value: boolean) => {
     if (Platform.OS !== 'web') {
       Haptics.selectionAsync();
     }
-    animateCard();
+
     if (type === 'camera') {
       setCameraEnabled(value);
       await AsyncStorage.setItem('cameraEnabled', value ? 'true' : 'false');
@@ -135,11 +134,12 @@ const styles = StyleSheet.create({
   },
   bodyText: {
     textAlign: 'center',
-    marginTop: 20,
+    marginTop: 10,
+    marginBottom: 20,
   },
   permissionCard: {
     backgroundColor: '#fff',
-    paddingVertical: 12,
+    paddingVertical: 10,
     paddingHorizontal: 15,
     borderRadius: 10,
     marginTop: 10,
