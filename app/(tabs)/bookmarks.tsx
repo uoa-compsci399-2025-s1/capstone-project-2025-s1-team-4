@@ -553,11 +553,11 @@ const styles = StyleSheet.create({
     color: '#336699',
   },
   emptyBookmarksText: {
-    marginTop: 16,
+    marginTop: 5,
     fontSize: 20,
     color: '#336699',
     fontWeight: 'bold',
     textAlign: 'center',
-    paddingHorizontal: 0, 
+    paddingHorizontal: 5, 
   }
 });
