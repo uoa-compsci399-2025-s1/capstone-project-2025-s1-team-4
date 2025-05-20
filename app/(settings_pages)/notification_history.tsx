@@ -51,7 +51,7 @@ const NotificationsScreen = () => {
       {/* Page Title */}
       <View style={styles.pageTitleWrapper}>
         <Text style={[styles.pageTitleText, themeStyles.text]}>
-          Notification History
+          Recall History
         </Text>
       </View>
 
