@@ -6,6 +6,8 @@ import { API_BASE_URL } from '../../config';
 import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
 import { useCallback } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Alert } from 'react-native';
 import { useTheme } from '../../context/theme_context'
 
 type Medicine = {
@@ -24,7 +26,7 @@ export default function Index() {
   const [medicineInfo, setMedicineInfo] = useState<any>(null);
   const [scanning, setScanning] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [cameraAllowed, setCameraAllowed] = useState(false);
 
   useFocusEffect(
     useCallback(() => {
@@ -76,60 +78,61 @@ export default function Index() {
   
 
   return (
-    <View style={styles.container}>
-      {/* Pill Icon Header */}
-      <View style={styles.header}>
-        <Ionicons name="medkit" size={36} color="#336699" />
-      </View>
-  
-      {/* Search Box */}
-      <TouchableOpacity
-        style={styles.searchInput}
-        onPress={() => router.push({ pathname: '/medicine', params: { focusSearch: 'true' } })}
-        activeOpacity={0.8}
-      >
-        <Text style={styles.searchPlaceholder}>Search Medicine</Text>
-      </TouchableOpacity>
-
-      {/* Barcode Scanner Icon */}
-      {/* Barcode Scanner Icon - only show if camera is not visible */}
-      {!cameraVisible && (
-        <TouchableOpacity
-          onPress={async () => {
-            if (!permission?.granted) {
-              const { granted } = await requestPermission();
-              if (!granted) return;
-            }
-            setCameraVisible(true);
-          }}
-          style={styles.barcodeWrapper}
-        >
-          <MaterialCommunityIcons name="barcode-scan" size={300} color="#336699" />
-          <Text style={styles.scanText}>Tap the scanner icon to scan a barcode, or use the search box above to search by name.</Text>
-        </TouchableOpacity>
-      )}
-
-      {cameraVisible && permission?.granted && (
-        <View style={styles.cameraContainer}>
-          <CameraView
-            style={styles.camera}
-            facing={facing}
-            barcodeScannerSettings={{ barcodeTypes: ['ean13'] }}
-            onBarcodeScanned={scannedData || scanning ? undefined : handleBarcodeScanned}
-          />
-        </View>
-      )}
-
-      {message && (
-        <View style={styles.infoBox}>
-          <Text style={styles.scanText}>{message}</Text>
-        </View>
-      )}
-      
+  <View style={styles.container}>
+    {/* Pill Icon Header */}
+    <View style={styles.header}>
+      <Ionicons name="medkit" size={36} color="#336699" />
     </View>
-  );  
-}
 
+    {/* Search Box */}
+    <TouchableOpacity
+      style={styles.searchInput}
+      onPress={() => router.push({ pathname: '/medicine', params: { focusSearch: 'true' } })}
+      activeOpacity={0.8}
+    >
+      <Text style={styles.searchPlaceholder}>Search Medicine</Text>
+    </TouchableOpacity>
+
+    {/* Barcode Scanner Icon */}
+    {!cameraVisible && (
+  <TouchableOpacity
+    onPress={async () => {
+      const allowed = await AsyncStorage.getItem('cameraEnabled');
+      if (allowed !== 'true') {
+        Alert.alert('Camera Disabled', 'Enable camera usage in Settings > Permissions.');
+        return;
+      }
+
+      setCameraVisible(true);
+    }}
+    style={styles.barcodeWrapper}
+  >
+    <MaterialCommunityIcons name="barcode-scan" size={300} color="#336699" />
+    <Text style={styles.scanText}>
+      Tap the scanner icon to scan a barcode, or use the search box above to search by name.
+    </Text>
+  </TouchableOpacity>
+)}
+
+    {cameraVisible && permission?.granted && (
+      <View style={styles.cameraContainer}>
+        <CameraView
+          style={styles.camera}
+          facing={facing}
+          barcodeScannerSettings={{ barcodeTypes: ['ean13'] }}
+          onBarcodeScanned={scannedData || scanning ? undefined : handleBarcodeScanned}
+        />
+      </View>
+    )}
+
+    {message && (
+      <View style={styles.infoBox}>
+        <Text style={styles.scanText}>{message}</Text>
+      </View>
+    )}
+  </View>
+);
+}
 
 const styles = StyleSheet.create({
   searchWrapper: {

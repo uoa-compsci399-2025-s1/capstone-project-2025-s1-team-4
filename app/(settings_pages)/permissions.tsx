@@ -3,36 +3,29 @@ import { View, Text, StyleSheet, TouchableOpacity, Switch, Alert } from 'react-n
 import { useTheme } from '../../context/theme_context';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { Camera } from 'expo-camera';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const PermissionsScreen = () => {
-  const { themeStyles, textSize } = useTheme();
-  const router = useRouter();
-  const [cameraEnabled, setCameraEnabled] = useState(false);
+const { themeStyles, textSize } = useTheme();
+const router = useRouter();
+const [cameraEnabled, setCameraEnabled] = useState(false);
 
- useEffect(() => {
-  const checkPermission = async () => {
-    const { status } = await Camera.getCameraPermissionsAsync(); 
-    setCameraEnabled(status === 'granted');
+useEffect(() => {
+  const loadCameraPref = async () => {
+    const saved = await AsyncStorage.getItem('cameraEnabled');
+    if (saved === null) {
+      setCameraEnabled(true);
+      await AsyncStorage.setItem('cameraEnabled', 'true');
+    } else {
+      setCameraEnabled(saved === 'true');
+    }
   };
-  checkPermission();
+  loadCameraPref();
 }, []);
 
 const handleToggle = async (value: boolean) => {
-  if (value) {
-    const { status } = await Camera.requestCameraPermissionsAsync(); 
-    if (status === 'granted') {
-      setCameraEnabled(true);
-    } else {
-      setCameraEnabled(false);
-      Alert.alert(
-        'Permission Denied',
-        'Camera access was denied. You can still use the app with manual search.'
-      );
-    }
-  } else {
-    setCameraEnabled(false);
-  }
+  setCameraEnabled(value);
+  await AsyncStorage.setItem('cameraEnabled', value ? 'true' : 'false');
 };
 
   return (
@@ -61,6 +54,7 @@ const handleToggle = async (value: boolean) => {
 
       <Text style={[styles.bodyText, themeStyles.text, { fontSize: textSize }]}>
         Access to camera is required to scan barcodes, although MediDex is still useable without camera access through manual searching.
+        To revoke camera permissions from MediDex, update permissions in your device settings.
       </Text>
     </View>
   );
