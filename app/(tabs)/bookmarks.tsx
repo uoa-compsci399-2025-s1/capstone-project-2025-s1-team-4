@@ -2,9 +2,10 @@ import { View, Text, StyleSheet, FlatList, TextInput, TouchableOpacity } from 'r
 import { useState, useEffect } from 'react';
 import { useBookmarks } from '../../context/bookmarks_context';
 import { API_BASE_URL } from '../../config';
-import { MaterialCommunityIcons, FontAwesome, Ionicons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useTheme } from '../../context/theme_context'
 
 export default function BookmarksScreen() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -29,6 +30,13 @@ export default function BookmarksScreen() {
           bookmarks.some((b: any) => b === m.id || b.id === m.id)
         );
         setBookmarkedMedicines(filtered);
+    if (bookmarks.length === 0) {
+      setTagsById({});
+      setGlobalTags([]);
+      AsyncStorage.removeItem('tagsById');
+      AsyncStorage.removeItem('globalTags');
+    }
+
       } catch (err) {
         console.error('Failed to load medicines:', err);
       }
@@ -199,7 +207,17 @@ export default function BookmarksScreen() {
         )}
       </View>
 
-      <FlatList
+      
+{sortedBookmarks.length === 0 && (
+  <View style={{ flex: 0, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 0 }}>
+    <Text style={[styles.emptyBookmarksText]}>
+      Add a bookmark by selecting the bookmark icon on the right of each medicine card.
+    </Text>
+  </View>
+)}
+
+
+<FlatList
         data={sortedBookmarks}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
@@ -255,7 +273,19 @@ export default function BookmarksScreen() {
                     </TouchableOpacity>
                   </View>
                 </View>
-                <TouchableOpacity onPress={() => toggleBookmark(item.id)} style={styles.starButton}>
+                <TouchableOpacity onPress={() => {
+  toggleBookmark(item.id);
+  const updatedTags = { ...tagsById };
+  const removedTags = updatedTags[item.id] || [];
+  delete updatedTags[item.id];
+  setTagsById(updatedTags);
+  AsyncStorage.setItem('tagsById', JSON.stringify(updatedTags));
+
+  const remainingTags = Object.values(updatedTags).flat();
+  const cleanedGlobalTags = globalTags.filter(tag => remainingTags.includes(tag));
+  setGlobalTags(cleanedGlobalTags);
+  AsyncStorage.setItem('globalTags', JSON.stringify(cleanedGlobalTags));
+}} style={styles.starButton}>
                   <MaterialCommunityIcons
                     name={bookmarks.includes(item.id) ? 'bookmark' : 'bookmark-outline'} // ⭐ ADDED this for filled/outline icon
                     size={26}
@@ -323,7 +353,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'white',
-    borderRadius: 12,
+    borderRadius: 10,
     borderWidth: 1,
     borderColor: '#ccc',
     paddingHorizontal: 12,
@@ -333,7 +363,7 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     fontSize: 16,
-    paddingVertical: 10,
+    paddingVertical: 12,
     color: '#333',
   },
   medicineCard: {
@@ -342,11 +372,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginVertical: 6,
     marginHorizontal: 4,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 8,
-    elevation: 5
+    elevation: 3
   },
   cardContent: {
     flexDirection: 'row',
@@ -372,7 +398,7 @@ const styles = StyleSheet.create({
   addTagButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 10,
+    marginTop: 0,
   },
   addTagText: {
     marginLeft: 6,
@@ -384,7 +410,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
     backgroundColor: '#f5faff',
     padding: 10,
-    borderRadius: 12,
+    borderRadius: 10,
     borderWidth: 1,
     borderColor: '#cce0ff',
   },
@@ -392,7 +418,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     paddingVertical: 8,
     paddingHorizontal: 12,
-    borderRadius: 12,
+    borderRadius: 10,
     fontSize: 14,
     borderWidth: 1,
     borderColor: '#ccc',
@@ -425,37 +451,33 @@ const styles = StyleSheet.create({
   },
   tagDropdownCard: {
     backgroundColor: '#fff',
-    padding: 14,
-    borderRadius: 12,
-    marginTop: 4,
-    marginBottom: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.1,
-    shadowRadius: 12,
-    elevation: 2,
+    padding: 7,
+    borderRadius: 10,
+    marginVertical: 6,
+    marginHorizontal: 4,
+    elevation: 3
   },
   tagList: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 6,
-    marginTop: 8,
+    marginTop: 0,
   },
   tagRow: {
     flexDirection: 'row',
     alignItems: 'center',
     flexWrap: 'wrap',
-    marginTop: 10,
+    marginTop: 5,
   },
   tagPill: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#e0efff',
-    borderRadius: 12,
+    borderRadius: 10,
     paddingHorizontal: 10,
     paddingVertical: 4,
     marginRight: 6,
-    marginTop: 4,
+    marginTop: 0,
   },
   tagPillText: {
     fontSize: 12,
@@ -465,35 +487,30 @@ const styles = StyleSheet.create({
   dropdownTagList: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginTop: 12,
+    marginTop: 7,
   },
   dropdownTagPill: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: '#e9f2ff',
-    borderRadius: 12,
+    backgroundColor: '#e0efff',
+    borderRadius: 10,
     paddingHorizontal: 10,
     paddingVertical: 4,
     marginRight: 6,
-    marginTop: 6,
+    marginTop: 0,
   },
   dropdownTagText: {
     fontSize: 12,
     color: '#336699',
-    fontWeight: '500',
+    marginRight: 6,
   },
   dropdownPanel: {
     backgroundColor: 'white',
-    borderRadius: 12,
+    borderRadius: 10,
     paddingTop: 0,         
     paddingBottom: 0,      
     overflow: 'hidden',    
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 5,
+    elevation: 3,
     marginTop: 6,
     marginBottom: 6,
     marginHorizontal: 4
@@ -515,7 +532,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#d6eaff',
-    borderRadius: 12,
+    borderRadius: 10,
     paddingHorizontal: 10,
     paddingVertical: 4,
     marginRight: 6,
@@ -531,10 +548,16 @@ const styles = StyleSheet.create({
     marginTop: 40,
     marginBottom: 20,
   },
-  
   pageTitleText: {
     fontSize: 40,
     color: '#336699',
   },
-  
+  emptyBookmarksText: {
+    marginTop: 16,
+    fontSize: 20,
+    color: '#336699',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    paddingHorizontal: 0, 
+  }
 });

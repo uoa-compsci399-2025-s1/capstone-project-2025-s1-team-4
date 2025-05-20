@@ -4,6 +4,7 @@ import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useBookmarks } from '../../context/bookmarks_context';
 import { Alert } from 'react-native';
+import { useTheme } from '../../context/theme_context'
 
 export default function SettingsScreen() {
   const router = useRouter();
@@ -123,15 +124,11 @@ const styles = StyleSheet.create({
   },
   settingCard: {
     backgroundColor: '#fff',
-    borderRadius: 12,
-    paddingVertical: 4,
+    borderRadius: 10,
+    paddingVertical: 0,
     paddingHorizontal: 12,
     marginBottom: 30,
-    shadowColor: '#000',
-    shadowOpacity: 0.05,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 12,
-    elevation: 2,
+    elevation: 3,
   },
   settingRow: {
     flexDirection: 'row',
