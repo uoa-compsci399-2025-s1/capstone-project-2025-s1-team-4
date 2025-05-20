@@ -14,7 +14,9 @@ const AppearanceTab = () => {
       
       {/* Back Arrow */}
       <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-        <Ionicons name="arrow-back" size={40} color="#336699" />
+        <Ionicons name="arrow-back" 
+        size={40} 
+        color="#336699" />
       </TouchableOpacity>
 
       {/* Page Header */}
@@ -30,7 +32,7 @@ const AppearanceTab = () => {
       </Text>
 
       {/* Theme Toggle Options */}
-      <View style={styles.settingCard}>
+      <View style={[styles.settingCard, themeStyles.card]}>
         {['light', 'dark', 'system'].map((mode, index, arr) => {
           const isLast = index === arr.length - 1;
           const isSelected = theme === mode;
@@ -47,7 +49,7 @@ const AppearanceTab = () => {
             >
               <Text
                 style={[
-                  styles.settingText,
+                  styles.settingText, themeStyles.text,
                   isSelected && { fontWeight: 'bold', color: '#336699' }
                 ]}
               >
@@ -69,7 +71,7 @@ const AppearanceTab = () => {
       </Text>
 
 {/* Font Slider Card */}
-<View style={styles.settingCard}>
+<View style={[styles.settingCard, themeStyles.card]}>
   <View style={styles.sliderContent}>
     <Text style={[styles.label, themeStyles.text, { fontSize: textSize }]}>
       Font Size: {textSize}
@@ -138,7 +140,6 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   settingCard: {
-    backgroundColor: '#fff',
     borderRadius: 10,
     paddingVertical: 0,
     paddingHorizontal: 12,
@@ -150,8 +151,6 @@ settingRow: {
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: 14,
-    borderBottomColor: '#eee',
-    borderBottomWidth: 1,
     marginHorizontal: -12,
     paddingHorizontal: 12,
   },

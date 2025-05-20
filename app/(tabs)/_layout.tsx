@@ -4,6 +4,7 @@ import { BookmarkProvider } from '../../context/bookmarks_context';
 import { useTheme } from '../../context/theme_context'
 
 export default function TabLayout() {
+  const { themeStyles, textSize } = useTheme();
   return (
     <BookmarkProvider>
       <Tabs

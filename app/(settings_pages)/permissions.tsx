@@ -68,7 +68,7 @@ const PermissionsScreen = () => {
 
       <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
         <TouchableOpacity
-          style={styles.permissionCard}
+          style={[styles.permissionCard, themeStyles.card]}
           activeOpacity={0.8}
           onPress={() => handleToggle('camera', !cameraEnabled)}
         >
@@ -90,7 +90,7 @@ const PermissionsScreen = () => {
 
       <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
         <TouchableOpacity
-          style={styles.permissionCard}
+          style={[styles.permissionCard, themeStyles.card]}
           activeOpacity={0.8}
           onPress={() => handleToggle('notifications', !notificationsEnabled)}
         >

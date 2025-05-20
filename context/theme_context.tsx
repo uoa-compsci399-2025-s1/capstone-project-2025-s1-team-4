@@ -72,7 +72,8 @@ const lightTheme: ThemeStyles = StyleSheet.create({
 });
 
 const darkTheme: ThemeStyles = StyleSheet.create({
-  container: { backgroundColor: '#07141f' },
-  text: { color: '#d8eaff' },
-  card: { backgroundColor: '#1e2a36' }, 
+  container: { backgroundColor: '#343635' },
+  text: { color: '#eeeeee' },
+  card: { backgroundColor: '#7f7f7f' }, 
 });
+

@@ -9,15 +9,16 @@ import { useTheme } from '../../context/theme_context'
 export default function SettingsScreen() {
   const router = useRouter();
   const { setBookmarks } = useBookmarks();
+  const { themeStyles, textSize } = useTheme();
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={[styles.container, themeStyles.container]}>
         <View style={styles.pageTitleWrapper}>
-      <Text style={styles.pageTitleText}>Settings</Text> 
+      <Text style={[styles.pageTitleText, themeStyles.text]}>Settings</Text> 
       </View>
       {/* App Settings */}
-      <Text style={styles.sectionHeader}>App Settings</Text>
-      <View style={styles.settingCard}>
+      <Text style={[styles.sectionHeader, themeStyles.text]}>App Settings</Text>
+      <View style={[styles.settingCard, themeStyles.card]}>
         {[
           { label: 'Appearance', route: '/(settings_pages)/appearance' },
           { label: 'Notification History', route: '/(settings_pages)/notification_history' },
@@ -58,7 +59,7 @@ export default function SettingsScreen() {
                 isLast && { borderBottomWidth: 0 },
               ]}
             >
-              <Text style={styles.settingText}>{item.label}</Text>
+              <Text style={[styles.settingText, themeStyles.text]}>{item.label}</Text>
               <Feather name="chevron-right" size={20} color="#336699" />
             </TouchableOpacity>
           );
@@ -66,12 +67,12 @@ export default function SettingsScreen() {
       </View>
 
       {/* About Section */}
-      <Text style={styles.sectionHeader}>About</Text>
-      <View style={styles.settingCard}>
+      <Text style={[styles.sectionHeader, themeStyles.text]}>About</Text>
+      <View style={[styles.settingCard, themeStyles.card]}>
         {[
           { label: 'About Us', route: '/(settings_pages)/about_us' },
           { label: 'Privacy Policy', route: '/(settings_pages)/privacy_policy' },
-          { label: 'App Version', right: <Text style={styles.settingValue}>v1.0.0</Text> },
+          { label: 'App Version', right: <Text style={[styles.settingValue, themeStyles.text]}>v1.0.0</Text> },
         ].map((item, index, arr) => {
           const isLast = index === arr.length - 1;
           const isPressable = !!item.route;
@@ -87,7 +88,7 @@ export default function SettingsScreen() {
                 isLast && { borderBottomWidth: 0 },
               ]}
             >
-              <Text style={styles.settingText}>{item.label}</Text>
+              <Text style={[styles.settingText, themeStyles.text]}>{item.label}</Text>
               {item.right ?? (
                 isPressable && <Feather name="chevron-right" size={20} color="#336699" />
               )}
