@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
   card: {
     borderRadius: 20,
     padding: 16,
-    marginBottom: 16,
+    marginBottom: 10,
   },
   brandName: {
     fontWeight: 'bold',

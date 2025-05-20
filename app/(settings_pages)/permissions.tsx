@@ -135,11 +135,12 @@ const styles = StyleSheet.create({
   },
   bodyText: {
     textAlign: 'center',
-    marginTop: 20,
+    marginTop: 10,
+    marginBottom: 20,
   },
   permissionCard: {
     backgroundColor: '#fff',
-    paddingVertical: 12,
+    paddingVertical: 10,
     paddingHorizontal: 15,
     borderRadius: 10,
     marginTop: 10,
