@@ -1,5 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Switch, Animated, Platform } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Switch,
+  Platform,
+} from 'react-native';
 import { useTheme } from '../../context/theme_context';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -11,7 +18,6 @@ const PermissionsScreen = () => {
   const router = useRouter();
   const [cameraEnabled, setCameraEnabled] = useState(false);
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
-  const scaleAnim = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
     const loadPermissions = async () => {
@@ -35,18 +41,11 @@ const PermissionsScreen = () => {
     loadPermissions();
   }, []);
 
-  const animateCard = () => {
-    Animated.sequence([
-      Animated.timing(scaleAnim, { toValue: 0.98, duration: 80, useNativeDriver: true }),
-      Animated.timing(scaleAnim, { toValue: 1, duration: 80, useNativeDriver: true }),
-    ]).start();
-  };
-
   const handleToggle = async (type: 'camera' | 'notifications', value: boolean) => {
     if (Platform.OS !== 'web') {
       Haptics.selectionAsync();
     }
-    animateCard();
+
     if (type === 'camera') {
       setCameraEnabled(value);
       await AsyncStorage.setItem('cameraEnabled', value ? 'true' : 'false');
@@ -66,44 +65,40 @@ const PermissionsScreen = () => {
         <Text style={[styles.pageTitleText, themeStyles.text]}>Permissions</Text>
       </View>
 
-      <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
-        <TouchableOpacity
-          style={styles.permissionCard}
-          activeOpacity={0.8}
-          onPress={() => handleToggle('camera', !cameraEnabled)}
-        >
-          <Text style={[styles.permissionLabel, themeStyles.text]}>Camera</Text>
-          <Switch
-            value={cameraEnabled}
-            onValueChange={(val) => handleToggle('camera', val)}
-            thumbColor={cameraEnabled ? '#fff' : '#fff'}
-            trackColor={{ false: '#ccc', true: '#336699' }}
-            pointerEvents="none"
-          />
-        </TouchableOpacity>
-      </Animated.View>
+      <TouchableOpacity
+        style={styles.permissionCard}
+        activeOpacity={0.8}
+        onPress={() => handleToggle('camera', !cameraEnabled)}
+      >
+        <Text style={[styles.permissionLabel, themeStyles.text]}>Camera</Text>
+        <Switch
+          value={cameraEnabled}
+          onValueChange={(val) => handleToggle('camera', val)}
+          thumbColor={cameraEnabled ? '#fff' : '#fff'}
+          trackColor={{ false: '#ccc', true: '#336699' }}
+          pointerEvents="none"
+        />
+      </TouchableOpacity>
 
       <Text style={[styles.bodyText, themeStyles.text, { fontSize: textSize }]}>
         Camera must be enabled to scan barcodes, although MediDex is still useable without camera access through manual searching.
         To revoke camera permissions from MediDex, update permissions in your device settings.
       </Text>
 
-      <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
-        <TouchableOpacity
-          style={styles.permissionCard}
-          activeOpacity={0.8}
-          onPress={() => handleToggle('notifications', !notificationsEnabled)}
-        >
-          <Text style={[styles.permissionLabel, themeStyles.text]}>Notifications</Text>
-          <Switch
-            value={notificationsEnabled}
-            onValueChange={(val) => handleToggle('notifications', val)}
-            thumbColor={notificationsEnabled ? '#fff' : '#fff'}
-            trackColor={{ false: '#ccc', true: '#336699' }}
-            pointerEvents="none"
-          />
-        </TouchableOpacity>
-      </Animated.View>
+      <TouchableOpacity
+        style={styles.permissionCard}
+        activeOpacity={0.8}
+        onPress={() => handleToggle('notifications', !notificationsEnabled)}
+      >
+        <Text style={[styles.permissionLabel, themeStyles.text]}>Notifications</Text>
+        <Switch
+          value={notificationsEnabled}
+          onValueChange={(val) => handleToggle('notifications', val)}
+          thumbColor={notificationsEnabled ? '#fff' : '#fff'}
+          trackColor={{ false: '#ccc', true: '#336699' }}
+          pointerEvents="none"
+        />
+      </TouchableOpacity>
 
       <Text style={[styles.bodyText, themeStyles.text, { fontSize: textSize }]}>
         MediDex will only notify you if there is a medicine recall. To revoke notification access, update your device settings.

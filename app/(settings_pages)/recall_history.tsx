@@ -68,7 +68,7 @@ const NotificationsScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    padding: 10,
     flexGrow: 1,
   },
   backButton: {
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
   },
   pageTitleWrapper: {
     alignItems: 'center',
-    marginTop: 60,
+    marginTop: 70,
     marginBottom: 23,
   },
   pageTitleText: {
@@ -87,22 +87,33 @@ const styles = StyleSheet.create({
     color: '#336699',
   },
   listContent: {
-    paddingBottom: 20,
+    paddingBottom:10,
+    paddingTop: 10,
+    paddingHorizontal: 10,
   },
   card: {
-    borderRadius: 20,
+    borderRadius: 10,
     padding: 16,
     marginBottom: 10,
+    backgroundColor: '#fff',
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    overflow: 'visible',
   },
   brandName: {
     fontWeight: 'bold',
-    marginBottom: 4,
+    fontSize: 20,
+    marginBottom: 2,  
   },
   date: {
-    marginBottom: 4,
+    marginBottom: 2,  
   },
   tap: {
     textDecorationLine: 'underline',
+    marginBottom: 0, 
   },
 });
 

@@ -553,7 +553,7 @@ const styles = StyleSheet.create({
     color: '#336699',
   },
   emptyBookmarksText: {
-    marginTop: 60,
+    marginTop: 5,
     fontSize: 20,
     color: '#336699',
     fontWeight: 'bold',
