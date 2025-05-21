@@ -56,13 +56,19 @@ const NotificationsScreen = () => {
         </Text>
       </View>
 
-      {/* Recall Cards */}
-      <FlatList
-        data={recalls}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={renderRecall}
-        contentContainerStyle={styles.listContent}
-      />
+      {!recalls || recalls.length === 0 ? (
+  <View style={styles.loadingRecalls}>
+    <Text style={styles.brandName}>Loading recalls...</Text>
+  </View>
+) : (
+  <FlatList
+    data={recalls}
+    keyExtractor={(item) => item.id.toString()}
+    renderItem={renderRecall}
+    contentContainerStyle={styles.listContent}
+  />
+)}
+
     </View>
   );
 };
@@ -115,6 +121,11 @@ const styles = StyleSheet.create({
   tap: {
     textDecorationLine: 'underline',
     marginBottom: 0, 
+  },
+  loadingRecalls: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
 });
 

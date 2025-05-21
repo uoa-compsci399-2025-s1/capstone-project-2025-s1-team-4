@@ -71,7 +71,22 @@ export default function DetailsScreen() {
       {/* Pill Icon Header */}
       <View style={styles.pageTitleWrapper}>
             <Text style={[styles.pageTitleText, themeStyles.text]}>All Medicines</Text> 
-        </View>
+      </View>
+
+    {/* Loading medicines message when server is slow */}
+      {!medicines || medicines.length === 0 ? (
+        <View style={styles.loadingMedicines}>
+      <Text style={styles.medicineName}>Loading medicines...</Text>
+      </View>
+    ) : (
+      <View style={{ flex: 1 }}>
+      {medicines.map((medicine) => (
+        <Text key={medicine.id} style={styles.medicineName}>
+          {medicine.name}
+        </Text>
+      ))}
+    </View>
+    )}
 
   <View>
     <View style={[styles.searchWrapper, themeStyles.card]}>
@@ -87,6 +102,7 @@ export default function DetailsScreen() {
         <Ionicons name="chevron-expand-sharp" size={24} color={themeColors.iconColor} />
       </TouchableOpacity>
     </View>
+
 
 {showDropdown && (
   <View style={[styles.dropdownPanel, themeStyles.card]}>
@@ -148,10 +164,12 @@ export default function DetailsScreen() {
       );
     })}
   </View>
+
+  
 )}
 
-
   </View>
+
 
   <FlatList
   data={sortedMedicines}
@@ -285,5 +303,10 @@ const styles = StyleSheet.create({
   dropdownItemText: {
     fontSize: 16,
     color: '#336699',
+  },
+  loadingMedicines: {
+    flex: 1, 
+    justifyContent: 'center', 
+    alignItems: 'center'
   },
 });

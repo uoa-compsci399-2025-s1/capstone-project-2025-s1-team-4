@@ -1,1 +1,1 @@
-export const API_BASE_URL = "https://sixdegreesofcomputation-latest.onrender.com/"; // changeable
+export const API_BASE_URL = "https://sixdegreesofcomputation-latest.onrender.com/"; // Deployed server
