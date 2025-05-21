@@ -2,9 +2,10 @@ import { View, Text, StyleSheet, FlatList, TextInput, TouchableOpacity } from 'r
 import { useState, useEffect } from 'react';
 import { useBookmarks } from '../../context/bookmarks_context';
 import { API_BASE_URL } from '../../config';
-import { MaterialCommunityIcons, FontAwesome, Ionicons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useTheme } from '../../context/theme_context'
 
 export default function BookmarksScreen() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -18,6 +19,7 @@ export default function BookmarksScreen() {
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
   const [showDropdown, setShowDropdown] = useState(false);
   const [filteredTags, setFilteredTags] = useState<string[]>([]);
+  const { theme, setTheme, textSize, setTextSize, themeStyles, themeColors } = useTheme();
   const router = useRouter();
 
   useEffect(() => {
@@ -29,6 +31,13 @@ export default function BookmarksScreen() {
           bookmarks.some((b: any) => b === m.id || b.id === m.id)
         );
         setBookmarkedMedicines(filtered);
+    if (bookmarks.length === 0) {
+      setTagsById({});
+      setGlobalTags([]);
+      AsyncStorage.removeItem('tagsById');
+      AsyncStorage.removeItem('globalTags');
+    }
+
       } catch (err) {
         console.error('Failed to load medicines:', err);
       }
@@ -148,25 +157,25 @@ export default function BookmarksScreen() {
   });
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, themeStyles.container]}>
       <View>
         
       {/* Pill Icon Header */}
       <View style={styles.pageTitleWrapper}>
-      <Text style={styles.pageTitleText}>Bookmarks</Text> 
+      <Text style={[styles.pageTitleText, themeStyles.text]}>Bookmarks</Text> 
       </View>
 
 
-        <View style={styles.searchWrapper}>
+        <View style={[styles.searchWrapper, themeStyles.card]}>
           <TextInput
-            style={styles.searchInput}
+            style={[styles.searchInput, themeStyles.text]}
             placeholder="Search Bookmarks"
-            placeholderTextColor="#888"
+            placeholderTextColor={themeColors.transparentTextColor}
             value={searchQuery}
             onChangeText={setSearchQuery}
           />
           <TouchableOpacity onPress={() => setShowDropdown(!showDropdown)}>
-            <Ionicons name="chevron-expand-sharp" size={24} color="#336699" />
+            <Ionicons name="chevron-expand-sharp" size={24} color={themeColors.iconColor} />
           </TouchableOpacity>
         </View>
 
@@ -176,7 +185,7 @@ export default function BookmarksScreen() {
               <View key={index} style={styles.filterTagPill}>
                 <Text style={styles.filterTagText}>{tag}</Text>
                 <TouchableOpacity onPress={() => setFilteredTags(prev => prev.filter(t => t !== tag))}>
-                  <MaterialCommunityIcons name="close" size={14} color="#336699" />
+                  <MaterialCommunityIcons name="close" size={14} color={themeColors.iconColor} />
                 </TouchableOpacity>
               </View>
             ))}
@@ -184,47 +193,106 @@ export default function BookmarksScreen() {
         )}
 
         {showDropdown && (
-          <View style={styles.dropdownPanel}>
-            {[{ label: 'Recently added', key: 'recent' }, { label: 'Name', key: 'name' }, { label: 'Manufacturer', key: 'company' }, { label: 'Tags', key: 'tags' }].map(({ label, key }) => (
-              <View key={key} style={styles.dropdownItemRow}>
-                <TouchableOpacity style={{ flex: 1 }} activeOpacity={0.7} onPress={() => { setSortBy(key as any); setSortDirection('asc'); setShowDropdown(false); }}>
-                  <Text style={[styles.dropdownItemText, sortBy === key && { fontWeight: 'bold' }]}>{label}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => { if (sortBy === key) { setSortDirection(prev => (prev === 'asc' ? 'desc' : 'asc')); } else { setSortBy(key as any); setSortDirection('desc'); } setShowDropdown(false); }}>
-                  <MaterialCommunityIcons name={sortBy === key && sortDirection === 'desc' ? 'chevron-down' : 'chevron-up'} size={20} color="#336699" />
-                </TouchableOpacity>
-              </View>
-            ))}
-          </View>
-        )}
+  <View style={[styles.dropdownPanel, themeStyles.card]}>
+    {[
+      { label: 'Recently added', key: 'recent' },
+      { label: 'Name', key: 'name' },
+      { label: 'Manufacturer', key: 'company' },
+      { label: 'Tags', key: 'tags' }
+    ].map(({ label, key }, index, arr) => {
+      const isLast = index === arr.length - 1;
+
+      return (
+        <View
+          key={key}
+          style={[
+            styles.dropdownItemRow,
+            !isLast && { borderBottomWidth: 1, borderBottomColor: '#ccc' }
+          ]}
+        >
+          <TouchableOpacity
+            style={{ flex: 1 }}
+            activeOpacity={0.7}
+            onPress={() => {
+              setSortBy(key as any);
+              setSortDirection('asc');
+              setShowDropdown(false);
+            }}
+          >
+            <Text
+              style={[
+                styles.dropdownItemText,
+                themeStyles.text,
+                sortBy === key && { fontWeight: 'bold' }
+              ]}
+            >
+              {label}
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              if (sortBy === key) {
+                setSortDirection(prev => (prev === 'asc' ? 'desc' : 'asc'));
+              } else {
+                setSortBy(key as any);
+                setSortDirection('desc');
+              }
+              setShowDropdown(false);
+            }}
+          >
+            <MaterialCommunityIcons
+              name={
+                sortBy === key && sortDirection === 'desc'
+                  ? 'chevron-down'
+                  : 'chevron-up'
+              }
+              size={20}
+              color={themeColors.iconColor}
+            />
+          </TouchableOpacity>
+        </View>
+      );
+    })}
+  </View>
+)}
       </View>
 
-      <FlatList
+      
+{sortedBookmarks.length === 0 && (
+  <View style={{ flex: 0, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 0, marginTop: 25 }}>
+    <Text style={[styles.emptyBookmarksText, themeStyles.text]}>
+      Add a bookmark by selecting the bookmark icon on the right of each medicine card.
+    </Text>
+  </View>
+)}
+
+
+<FlatList
         data={sortedBookmarks}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <View>
             <TouchableOpacity
-              style={styles.medicineCard}
+              style={[styles.medicineCard, themeStyles.card]}
               onPress={() => router.push(`/medicine_info?barcode=${encodeURIComponent(item.barcode)}`)} // ⭐ ADDED THIS
             >
               <View style={styles.cardContent}>
                 <View style={{ flex: 1 }}>
-                  <Text style={styles.medicineName}>{item.product_name}</Text>
-                  <Text style={styles.medicineCompany}>{item.company}</Text>
-                  <Text style={styles.medicineDosage}>
+                  <Text style={[styles.medicineName, themeStyles.text]}>{item.product_name}</Text>
+                  <Text style={[styles.medicineCompany, themeStyles.bodyText]}>{item.company}</Text>
+                  <Text style={[styles.medicineDosage, themeStyles.bodyText]}>
                       {item.ingredients?.map((ing: { ingredient: string; dosage?: string }) => `${ing.ingredient} ${ing.dosage || 'N/A'}`).join(',\n') || 'N/A'}
                   </Text>
                   <View style={styles.tagRow}>
                     <View style={styles.tagList}>
                       {[...(tagsById[item.id] || [])].sort().map((tag, index) => (
-                        <View key={index} style={styles.tagPill}>
+                        <View key={index} style={[styles.tagPill, themeStyles.container]}>
                           <TouchableOpacity onPress={() => {
                             if (!filteredTags.includes(tag)) {
                               setFilteredTags(prev => [...prev, tag]);
                             }
                           }}>
-                            <Text style={styles.tagPillText}>{tag}</Text>
+                            <Text style={[styles.tagPillText, themeStyles.text]}>{tag}</Text>
                           </TouchableOpacity>
                           <TouchableOpacity onPress={() => {
                             setTagsById(prev => {
@@ -242,7 +310,7 @@ export default function BookmarksScreen() {
                               return updated;
                             });
                           }}>
-                            <MaterialCommunityIcons name="close" size={14} color="#336699" />
+                            <MaterialCommunityIcons name="close" size={14} color={themeColors.iconColor} />
                           </TouchableOpacity>
                         </View>
                       ))}
@@ -251,28 +319,40 @@ export default function BookmarksScreen() {
                       style={styles.addTagButton}
                       onPress={() => setExpandedCardId(expandedCardId === item.id ? null : item.id)}
                     >
-                      <MaterialCommunityIcons name="plus" size={20} color="#336699" />
+                      <MaterialCommunityIcons name="plus" size={20} color={themeColors.iconColor} />
                     </TouchableOpacity>
                   </View>
                 </View>
-                <TouchableOpacity onPress={() => toggleBookmark(item.id)} style={styles.starButton}>
+                <TouchableOpacity onPress={() => {
+  toggleBookmark(item.id);
+  const updatedTags = { ...tagsById };
+  const removedTags = updatedTags[item.id] || [];
+  delete updatedTags[item.id];
+  setTagsById(updatedTags);
+  AsyncStorage.setItem('tagsById', JSON.stringify(updatedTags));
+
+  const remainingTags = Object.values(updatedTags).flat();
+  const cleanedGlobalTags = globalTags.filter(tag => remainingTags.includes(tag));
+  setGlobalTags(cleanedGlobalTags);
+  AsyncStorage.setItem('globalTags', JSON.stringify(cleanedGlobalTags));
+}} style={styles.starButton}>
                   <MaterialCommunityIcons
                     name={bookmarks.includes(item.id) ? 'bookmark' : 'bookmark-outline'} // ⭐ ADDED this for filled/outline icon
                     size={26}
-                    color="#336699"
+                    color={themeColors.iconColor}
                   />
                 </TouchableOpacity>
               </View>
             </TouchableOpacity>
 
             {expandedCardId === item.id && (
-              <View style={styles.tagDropdownCard}>
+              <View style={[styles.tagDropdownCard, themeStyles.card]}>
                 <TextInput
                   value={newTag}
                   onChangeText={setNewTag}
                   placeholder="Enter a new tag"
-                  placeholderTextColor="#999"
-                  style={styles.tagInput}
+                  placeholderTextColor={themeColors.textColor}
+                  style={[styles.tagInput, themeStyles.card, {color: themeColors.textColor}]}
                   onSubmitEditing={() => handleAddTag(item.id)}
                   returnKeyType="done"
                 />
@@ -323,7 +403,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'white',
-    borderRadius: 12,
+    borderRadius: 10,
     borderWidth: 1,
     borderColor: '#ccc',
     paddingHorizontal: 12,
@@ -333,7 +413,7 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     fontSize: 16,
-    paddingVertical: 10,
+    paddingVertical: 12,
     color: '#333',
   },
   medicineCard: {
@@ -342,11 +422,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginVertical: 6,
     marginHorizontal: 4,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 8,
-    elevation: 5
+    elevation: 3
   },
   cardContent: {
     flexDirection: 'row',
@@ -372,7 +448,7 @@ const styles = StyleSheet.create({
   addTagButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 10,
+    marginTop: 0,
   },
   addTagText: {
     marginLeft: 6,
@@ -384,7 +460,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
     backgroundColor: '#f5faff',
     padding: 10,
-    borderRadius: 12,
+    borderRadius: 10,
     borderWidth: 1,
     borderColor: '#cce0ff',
   },
@@ -392,7 +468,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     paddingVertical: 8,
     paddingHorizontal: 12,
-    borderRadius: 12,
+    borderRadius: 10,
     fontSize: 14,
     borderWidth: 1,
     borderColor: '#ccc',
@@ -425,37 +501,33 @@ const styles = StyleSheet.create({
   },
   tagDropdownCard: {
     backgroundColor: '#fff',
-    padding: 14,
-    borderRadius: 12,
-    marginTop: 4,
-    marginBottom: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.1,
-    shadowRadius: 12,
-    elevation: 2,
+    padding: 7,
+    borderRadius: 10,
+    marginVertical: 6,
+    marginHorizontal: 4,
+    elevation: 3
   },
   tagList: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 6,
-    marginTop: 8,
+    marginTop: 0,
   },
   tagRow: {
     flexDirection: 'row',
     alignItems: 'center',
     flexWrap: 'wrap',
-    marginTop: 10,
+    marginTop: 5,
   },
   tagPill: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#e0efff',
-    borderRadius: 12,
+    borderRadius: 10,
     paddingHorizontal: 10,
     paddingVertical: 4,
     marginRight: 6,
-    marginTop: 4,
+    marginTop: 0,
   },
   tagPillText: {
     fontSize: 12,
@@ -465,35 +537,30 @@ const styles = StyleSheet.create({
   dropdownTagList: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginTop: 12,
+    marginTop: 7,
   },
   dropdownTagPill: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: '#e9f2ff',
-    borderRadius: 12,
+    backgroundColor: '#e0efff',
+    borderRadius: 10,
     paddingHorizontal: 10,
     paddingVertical: 4,
     marginRight: 6,
-    marginTop: 6,
+    marginTop: 0,
   },
   dropdownTagText: {
     fontSize: 12,
     color: '#336699',
-    fontWeight: '500',
+    marginRight: 6,
   },
   dropdownPanel: {
     backgroundColor: 'white',
-    borderRadius: 12,
+    borderRadius: 10,
     paddingTop: 0,         
     paddingBottom: 0,      
     overflow: 'hidden',    
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 5,
+    elevation: 3,
     marginTop: 6,
     marginBottom: 6,
     marginHorizontal: 4
@@ -505,7 +572,6 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderBottomColor: '#eee',
-    borderBottomWidth: 1,
   },
   dropdownItemText: {
     fontSize: 16,
@@ -515,7 +581,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#d6eaff',
-    borderRadius: 12,
+    borderRadius: 10,
     paddingHorizontal: 10,
     paddingVertical: 4,
     marginRight: 6,
@@ -531,10 +597,16 @@ const styles = StyleSheet.create({
     marginTop: 40,
     marginBottom: 20,
   },
-  
   pageTitleText: {
     fontSize: 40,
     color: '#336699',
   },
-  
+  emptyBookmarksText: {
+    marginTop: 5,
+    fontSize: 20,
+    color: '#336699',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    paddingHorizontal: 5, 
+  }
 });

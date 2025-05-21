@@ -5,6 +5,7 @@ import { MaterialCommunityIcons, Ionicons} from '@expo/vector-icons';
 import { useBookmarks } from '../../context/bookmarks_context';
 import { useFocusEffect } from '@react-navigation/native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useTheme } from '../../context/theme_context'
 
 export default function DetailsScreen() {
   const [medicines, setMedicines] = useState<any[]>([]);
@@ -16,6 +17,7 @@ export default function DetailsScreen() {
   const [showDropdown, setShowDropdown] = useState(false);
   const [sortBy, setSortBy] = useState<'name' | 'company'>('name');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+  const { theme, setTheme, textSize, setTextSize, themeStyles, themeColors } = useTheme();
 
 
   useEffect(() => {
@@ -65,75 +67,86 @@ export default function DetailsScreen() {
   
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, themeStyles.container]}>
       {/* Pill Icon Header */}
       <View style={styles.pageTitleWrapper}>
-            <Text style={styles.pageTitleText}>All Medicines</Text> 
+            <Text style={[styles.pageTitleText, themeStyles.text]}>All Medicines</Text> 
         </View>
 
   <View>
-    <View style={styles.searchWrapper}>
+    <View style={[styles.searchWrapper, themeStyles.card]}>
       <TextInput
         ref={searchRef}
-        style={styles.searchInput}
-        placeholder="Search Medicine"
-        placeholderTextColor="#888"
+        style={[styles.searchInput, themeStyles.text]}
+        placeholder="Search Medicines"
+        placeholderTextColor={themeColors.transparentTextColor}
         value={searchQuery}
         onChangeText={setSearchQuery}
       />
       <TouchableOpacity onPress={() => setShowDropdown(!showDropdown)}>
-        <Ionicons name="chevron-expand-sharp" size={24} color="#336699" />
+        <Ionicons name="chevron-expand-sharp" size={24} color={themeColors.iconColor} />
       </TouchableOpacity>
     </View>
 
-    {showDropdown && (
-  <View style={styles.dropdownPanel}>
+{showDropdown && (
+  <View style={[styles.dropdownPanel, themeStyles.card]}>
     {[
       { label: 'Name', key: 'name' },
       { label: 'Manufacturer', key: 'company' },
-    ].map(({ label, key }) => (
-      <View key={key} style={styles.dropdownItemRow}>
-        <TouchableOpacity
-          style={{ flex: 1 }}
-          onPress={() => {
-            setSortBy(key as 'name' | 'company');
-            setSortDirection('asc');
-            setShowDropdown(false);
-          }}
-        >
-          <Text
-            style={[
-              styles.dropdownItemText,
-              sortBy === key && { fontWeight: 'bold' },
-            ]}
-          >
-            {label}
-          </Text>
-        </TouchableOpacity>
+    ].map(({ label, key }, index, arr) => {
+      const isLast = index === arr.length - 1;
 
-        <TouchableOpacity
-          onPress={() => {
-            if (sortBy === key) {
-              setSortDirection(prev => (prev === 'asc' ? 'desc' : 'asc'));
-            } else {
-              setSortBy(key as 'name' | 'company');
-              setSortDirection('desc');
-            }
-            setShowDropdown(false);
-          }}
+      return (
+        <View
+          key={key}
+          style={[
+            styles.dropdownItemRow,
+            !isLast && { borderBottomWidth: 1, borderBottomColor: '#ccc' }
+          ]}
         >
-          <MaterialCommunityIcons
-            name={
-              sortBy === key && sortDirection === 'desc'
-                ? 'chevron-down'
-                : 'chevron-up'
-            }
-            size={20}
-            color="#336699"
-          />
-        </TouchableOpacity>
-      </View>
-    ))}
+          <TouchableOpacity
+            style={{ flex: 1 }}
+            onPress={() => {
+              setSortBy(key as 'name' | 'company');
+              setSortDirection('asc');
+              setShowDropdown(false);
+            }}
+          >
+            <Text
+              style={[
+                styles.dropdownItemText,
+                themeStyles.text,
+                sortBy === key && { fontWeight: 'bold' },
+              ]}
+            >
+              {label}
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => {
+              if (sortBy === key) {
+                setSortDirection(prev => (prev === 'asc' ? 'desc' : 'asc'));
+              } else {
+                setSortBy(key as 'name' | 'company');
+                setSortDirection('desc');
+              }
+              setShowDropdown(false);
+            }}
+          >
+            <MaterialCommunityIcons
+              name={
+                sortBy === key && sortDirection === 'desc'
+                  ? 'chevron-down'
+                  : 'chevron-up'
+              }
+              size={20}
+              color={themeColors.iconColor}
+            />
+          </TouchableOpacity>
+        </View>
+      );
+    })}
   </View>
 )}
 
@@ -145,15 +158,21 @@ export default function DetailsScreen() {
   keyExtractor={(item) => item.id.toString()}
   renderItem={({ item }) => (
     <TouchableOpacity
-      style={styles.medicineCard}
+      style={[styles.medicineCard, themeStyles.card]}
       onPress={() => {router.push(`/medicine_info?barcode=${encodeURIComponent(item.barcode)}` as const)}}
     >
       <View style={styles.cardContent}>
         <View style={{ flex: 1 }}>
-          <Text style={styles.medicineName}>{item.product_name}</Text>
-          <Text style={styles.medicineCompany}>{item.company}</Text>
-          <Text style={styles.medicineDosage}>
-            {item.ingredients?.map((ing: { ingredient: string; dosage?: string }) => `${ing.ingredient} ${ing.dosage || 'N/A'}`).join(',\n') || 'N/A'}
+          <Text style={[styles.medicineName, themeStyles.text]}>{item.product_name}</Text>
+          <Text style={[styles.medicineCompany, themeStyles.bodyText]}>{item.company}</Text>
+          <Text style={[styles.medicineDosage, themeStyles.bodyText]}>
+            {item.ingredients
+              ?.slice()
+              .sort((a: { ingredient: string }, b: { ingredient: string }) => 
+                  a.ingredient.localeCompare(b.ingredient)
+                )
+              .map((ing: { ingredient: string; dosage?: string }) => `${ing.ingredient} ${ing.dosage || 'N/A'}`)
+              .join(',\n') || 'N/A'}
           </Text>
         </View>
 
@@ -164,7 +183,7 @@ export default function DetailsScreen() {
           <MaterialCommunityIcons
             name={bookmarks.includes(item.id) ? 'bookmark' : 'bookmark-outline'}
             size={26}
-            color="#336699"
+            color={themeColors.iconColor}
           />
         </TouchableOpacity>
       </View>
@@ -179,7 +198,8 @@ export default function DetailsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    paddingLeft: 20,
+    paddingRight: 20,
     paddingTop: 40,
     backgroundColor: '#f0f8ff',
   },
@@ -198,11 +218,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginVertical: 6,
     marginHorizontal: 4,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 8,
-    elevation: 5
+    elevation: 3
   },
   cardContent: {
     flexDirection: 'row',
@@ -234,7 +250,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'white',
-    borderRadius: 12,
+    borderRadius: 10,
     borderWidth: 1,
     borderColor: '#ccc',
     paddingHorizontal: 12,
@@ -244,20 +260,16 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     fontSize: 16,
-    paddingVertical: 10,
+    paddingVertical: 12,
     color: '#333',
   },
   dropdownPanel: {
     backgroundColor: 'white',
-    borderRadius: 12,
+    borderRadius: 10,
     paddingTop: 0,         
     paddingBottom: 0,      
     overflow: 'hidden',    
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 5,
+    elevation: 3,
     marginTop: 6,
     marginBottom: 6,
     marginHorizontal: 4
@@ -269,7 +281,6 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderBottomColor: '#eee',
-    borderBottomWidth: 1,
   },
   dropdownItemText: {
     fontSize: 16,

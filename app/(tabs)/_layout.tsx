@@ -1,16 +1,20 @@
 import { Tabs } from 'expo-router';
 import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import { BookmarkProvider } from '../../context/bookmarks_context';
+import { useTheme } from '../../context/theme_context'
 
 export default function TabLayout() {
+  const { theme, setTheme, textSize, setTextSize, themeStyles, themeColors } = useTheme();
   return (
     <BookmarkProvider>
       <Tabs
         screenOptions={{
           tabBarStyle: { height: 70 },
           tabBarLabelStyle: { fontSize: 12, marginTop: 3 },
-          tabBarActiveTintColor: '#336699',
-          tabBarInactiveTintColor: '#99CCFF',
+          tabBarActiveTintColor: themeColors.light,
+          tabBarInactiveTintColor: themeColors.dark,
+          tabBarActiveBackgroundColor: themeColors.medLight,
+          tabBarInactiveBackgroundColor: themeColors.medLight,
           tabBarLabelPosition: 'below-icon'
         }}
       >
@@ -31,7 +35,7 @@ export default function TabLayout() {
         <Tabs.Screen
           name="medicine"
           options={{
-            title: 'Medicine',
+            title: 'Medicines',
             headerShown: false,
             tabBarIcon: ({ color, focused }) => (
               <Ionicons
@@ -69,6 +73,48 @@ export default function TabLayout() {
               />
             )
           }}
+        />
+        <Tabs.Screen
+        name="about_us"
+        options={({
+          href: null,
+          headerShown: false,
+        })}
+        />
+        <Tabs.Screen
+        name="appearance"
+        options={({
+          href: null,
+          headerShown: false,
+        })}
+        />
+        <Tabs.Screen
+        name="permissions"
+        options={({
+          href: null,
+          headerShown: false,
+        })}
+        />
+        <Tabs.Screen
+        name="recall_history"
+        options={({
+          href: null,
+          headerShown: false,
+        })}
+        />
+        <Tabs.Screen
+        name="privacy_policy"
+        options={({
+          href: null,
+          headerShown: false,
+        })}
+        />
+        <Tabs.Screen
+        name="medicine_info"
+        options={({
+          href: null,
+          headerShown: false,
+        })}
         />
       </Tabs>
     </BookmarkProvider>

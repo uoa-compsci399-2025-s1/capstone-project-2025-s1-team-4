@@ -4,23 +4,25 @@ import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useBookmarks } from '../../context/bookmarks_context';
 import { Alert } from 'react-native';
+import { useTheme } from '../../context/theme_context'
 
 export default function SettingsScreen() {
   const router = useRouter();
   const { setBookmarks } = useBookmarks();
+  const { themeStyles, textSize, themeColors } = useTheme();
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={[styles.container, themeStyles.container]}>
         <View style={styles.pageTitleWrapper}>
-      <Text style={styles.pageTitleText}>Settings</Text> 
+      <Text style={[styles.pageTitleText, themeStyles.text]}>Settings</Text> 
       </View>
       {/* App Settings */}
-      <Text style={styles.sectionHeader}>App Settings</Text>
-      <View style={styles.settingCard}>
+      <Text style={[styles.sectionHeader, themeStyles.text]}>App Settings</Text>
+      <View style={[styles.settingCard, themeStyles.card]}>
         {[
-          { label: 'Appearance', route: '/(settings_pages)/appearance' },
-          { label: 'Notification History', route: '/(settings_pages)/notification_history' },
-          { label: 'Permissions', route: '/(settings_pages)/permissions' },
+          { label: 'Appearance', route: '/appearance' },
+          { label: 'Recall History', route: '/recall_history' },
+          { label: 'Permissions', route: '/permissions' },
           {
             label: 'Clear Bookmarks',
             onPress: () =>
@@ -57,20 +59,20 @@ export default function SettingsScreen() {
                 isLast && { borderBottomWidth: 0 },
               ]}
             >
-              <Text style={styles.settingText}>{item.label}</Text>
-              <Feather name="chevron-right" size={20} color="#336699" />
+              <Text style={[styles.settingText, themeStyles.text]}>{item.label}</Text>
+              <Feather name="chevron-right" size={20} color={themeColors.iconColor} />
             </TouchableOpacity>
           );
         })}
       </View>
 
       {/* About Section */}
-      <Text style={styles.sectionHeader}>About</Text>
-      <View style={styles.settingCard}>
+      <Text style={[styles.sectionHeader, themeStyles.text]}>About</Text>
+      <View style={[styles.settingCard, themeStyles.card]}>
         {[
-          { label: 'About Us', route: '/(settings_pages)/about_us' },
-          { label: 'Privacy Policy', route: '/(settings_pages)/privacy_policy' },
-          { label: 'App Version', right: <Text style={styles.settingValue}>v1.0.0</Text> },
+          { label: 'About Us', route: '/about_us' },
+          { label: 'Privacy Policy', route: '/privacy_policy' },
+          { label: 'App Version', right: <Text style={[styles.settingValue, themeStyles.text]}>v1.0.0</Text> },
         ].map((item, index, arr) => {
           const isLast = index === arr.length - 1;
           const isPressable = !!item.route;
@@ -86,9 +88,9 @@ export default function SettingsScreen() {
                 isLast && { borderBottomWidth: 0 },
               ]}
             >
-              <Text style={styles.settingText}>{item.label}</Text>
+              <Text style={[styles.settingText, themeStyles.text]}>{item.label}</Text>
               {item.right ?? (
-                isPressable && <Feather name="chevron-right" size={20} color="#336699" />
+                isPressable && <Feather name="chevron-right" size={20} color={themeColors.iconColor} />
               )}
             </TouchableOpacity>
           );
@@ -123,15 +125,11 @@ const styles = StyleSheet.create({
   },
   settingCard: {
     backgroundColor: '#fff',
-    borderRadius: 12,
-    paddingVertical: 4,
+    borderRadius: 10,
+    paddingVertical: 0,
     paddingHorizontal: 12,
     marginBottom: 30,
-    shadowColor: '#000',
-    shadowOpacity: 0.05,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 12,
-    elevation: 2,
+    elevation: 3,
   },
   settingRow: {
     flexDirection: 'row',
