@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, FlatList, Linking } from 'rea
 import { useTheme } from '../../context/theme_context';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { API_BASE_URL } from '../../config';
 
 type Recall = {
   brand_name: string;
@@ -18,7 +19,7 @@ const NotificationsScreen = () => {
   const [recalls, setRecalls] = useState<Recall[]>([]);
 
   useEffect(() => {
-    fetch('http://192.168.1.69:5000/recalls') // Replace with your backend IP on a device
+    fetch(`${API_BASE_URL}/recalls`) 
       .then(res => res.json())
       .then(data => setRecalls(data))
       .catch(err => console.error('Error fetching recalls:', err));
