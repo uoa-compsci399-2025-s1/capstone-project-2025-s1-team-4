@@ -14,7 +14,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Haptics from 'expo-haptics';
 
 const PermissionsScreen = () => {
-  const { themeStyles, textSize } = useTheme();
+  const { themeStyles, textSize, themeColors } = useTheme();
   const router = useRouter();
   const [cameraEnabled, setCameraEnabled] = useState(false);
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
@@ -58,51 +58,47 @@ const PermissionsScreen = () => {
   return (
     <View style={[styles.container, themeStyles.container]}>
       <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-        <Ionicons name="arrow-back" size={40} color="#336699" />
+        <Ionicons name="arrow-back" size={40} color={themeColors.iconColor} />
       </TouchableOpacity>
 
       <View style={styles.pageTitleWrapper}>
         <Text style={[styles.pageTitleText, themeStyles.text]}>Permissions</Text>
       </View>
 
-      <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
-        <TouchableOpacity
-          style={[styles.permissionCard, themeStyles.card]}
-          activeOpacity={0.8}
-          onPress={() => handleToggle('camera', !cameraEnabled)}
-        >
-          <Text style={[styles.permissionLabel, themeStyles.text]}>Camera</Text>
-          <Switch
-            value={cameraEnabled}
-            onValueChange={(val) => handleToggle('camera', val)}
-            thumbColor={cameraEnabled ? '#fff' : '#fff'}
-            trackColor={{ false: '#ccc', true: '#336699' }}
-            pointerEvents="none"
-          />
-        </TouchableOpacity>
-      </Animated.View>
+      <TouchableOpacity
+        style={[styles.permissionCard, themeStyles.card]}
+        activeOpacity={0.8}
+        onPress={() => handleToggle('camera', !cameraEnabled)}
+      >
+        <Text style={[styles.permissionLabel, themeStyles.text]}>Camera</Text>
+        <Switch
+          value={cameraEnabled}
+          onValueChange={(val) => handleToggle('camera', val)}
+          thumbColor={cameraEnabled ? themeColors.dark : themeColors.dark}
+          trackColor={{ false: themeColors.light, true: themeColors.dark }}
+          pointerEvents="none"
+        />
+      </TouchableOpacity>
 
       <Text style={[styles.bodyText, themeStyles.text, { fontSize: textSize }]}>
         Camera must be enabled to scan barcodes, although MediDex is still useable without camera access through manual searching.
         To revoke camera permissions from MediDex, update permissions in your device settings.
       </Text>
 
-      <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
-        <TouchableOpacity
-          style={[styles.permissionCard, themeStyles.card]}
-          activeOpacity={0.8}
-          onPress={() => handleToggle('notifications', !notificationsEnabled)}
-        >
-          <Text style={[styles.permissionLabel, themeStyles.text]}>Notifications</Text>
-          <Switch
-            value={notificationsEnabled}
-            onValueChange={(val) => handleToggle('notifications', val)}
-            thumbColor={notificationsEnabled ? '#fff' : '#fff'}
-            trackColor={{ false: '#ccc', true: '#336699' }}
-            pointerEvents="none"
-          />
-        </TouchableOpacity>
-      </Animated.View>
+      <TouchableOpacity
+        style={[styles.permissionCard, themeStyles.card]}
+        activeOpacity={0.8}
+        onPress={() => handleToggle('notifications', !notificationsEnabled)}
+      >
+        <Text style={[styles.permissionLabel, themeStyles.text]}>Notifications</Text>
+        <Switch
+          value={notificationsEnabled}
+          onValueChange={(val) => handleToggle('notifications', val)}
+          thumbColor={notificationsEnabled ? themeColors.dark : themeColors.dark}
+          trackColor={{ false: themeColors.light, true: themeColors.dark }}
+          pointerEvents="none"
+        />
+      </TouchableOpacity>
 
       <Text style={[styles.bodyText, themeStyles.text, { fontSize: textSize }]}>
         MediDex will only notify you if there is a medicine recall. To revoke notification access, update your device settings.

@@ -6,7 +6,7 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 
 const AppearanceTab = () => {
-  const { theme, setTheme, textSize, setTextSize, themeStyles } = useTheme();
+  const { theme, setTheme, textSize, setTextSize, themeStyles, themeColors } = useTheme();
   const router = useRouter();
 
   return (
@@ -16,7 +16,7 @@ const AppearanceTab = () => {
       <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
         <Ionicons name="arrow-back" 
         size={40} 
-        color="#336699" />
+        color={themeColors.iconColor} />
       </TouchableOpacity>
 
       {/* Page Header */}
@@ -50,7 +50,7 @@ const AppearanceTab = () => {
               <Text
                 style={[
                   styles.settingText, themeStyles.text,
-                  isSelected && { fontWeight: 'bold', color: '#336699' }
+                  isSelected && { fontWeight: 'bold', color: themeColors.textColor }
                 ]}
               >
                 {mode.charAt(0).toUpperCase() + mode.slice(1)}
@@ -58,7 +58,7 @@ const AppearanceTab = () => {
               <Ionicons
                 name="checkmark-sharp"
                 size={18}
-                color={isSelected ? '#336699' : 'transparent'}
+                color={isSelected ? themeColors.iconColor : 'transparent'}
               />
             </TouchableOpacity>
           );
@@ -83,8 +83,9 @@ const AppearanceTab = () => {
       step={1}
       value={textSize}
       onValueChange={setTextSize}
-      minimumTrackTintColor="#336699"
-      maximumTrackTintColor="000000"
+      thumbTintColor={themeColors.med}
+      minimumTrackTintColor={themeColors.light}
+      maximumTrackTintColor={themeColors.dark}
     />
   </View>
 </View>

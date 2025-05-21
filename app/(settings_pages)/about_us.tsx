@@ -5,7 +5,7 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 
 const AboutUsScreen = () => {
-  const { themeStyles, textSize } = useTheme();
+  const { themeStyles, textSize, themeColors } = useTheme();
   const router = useRouter();
 
   return (
@@ -13,7 +13,7 @@ const AboutUsScreen = () => {
       
       {/* Back Arrow */}
       <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-        <Ionicons name="arrow-back" size={40} color="#336699" />
+        <Ionicons name="arrow-back" size={40} color={themeColors.iconColor} />
       </TouchableOpacity>
 
       {/* Page Title */}

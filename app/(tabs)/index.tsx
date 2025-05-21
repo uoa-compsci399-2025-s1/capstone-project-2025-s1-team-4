@@ -27,6 +27,7 @@ export default function Index() {
   const [scanning, setScanning] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [cameraAllowed, setCameraAllowed] = useState(false);
+  const { theme, setTheme, textSize, setTextSize, themeStyles, themeColors } = useTheme();
 
   useFocusEffect(
     useCallback(() => {
@@ -78,19 +79,19 @@ export default function Index() {
   
 
   return (
-  <View style={styles.container}>
+  <View style={[styles.container, themeStyles.container]}>
     {/* Pill Icon Header */}
     <View style={styles.header}>
-      <Ionicons name="medkit" size={36} color="#336699" />
+      <Ionicons name="medkit" size={36} color={themeColors.iconColor} />
     </View>
 
     {/* Search Box */}
     <TouchableOpacity
-      style={styles.searchInput}
+      style={[styles.searchInput, themeStyles.card]}
       onPress={() => router.push({ pathname: '/medicine', params: { focusSearch: 'true' } })}
       activeOpacity={0.8}
     >
-      <Text style={styles.searchPlaceholder}>Search Medicine</Text>
+      <Text style={[styles.searchPlaceholder, themeStyles.transparentText]}>Search Medicines</Text>
     </TouchableOpacity>
 
     {/* Barcode Scanner Icon */}
@@ -107,8 +108,8 @@ export default function Index() {
     }}
     style={styles.barcodeWrapper}
   >
-    <MaterialCommunityIcons name="barcode-scan" size={300} color="#336699" />
-    <Text style={styles.scanText}>
+    <MaterialCommunityIcons name="barcode-scan" size={300} color={themeColors.iconColor} />
+    <Text style={[styles.scanText, themeStyles.text]}>
       Tap the scanner icon to scan a barcode, or use the search box above to search by name.
     </Text>
   </TouchableOpacity>

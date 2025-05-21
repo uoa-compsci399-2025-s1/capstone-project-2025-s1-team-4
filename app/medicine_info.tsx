@@ -4,6 +4,7 @@ import { API_BASE_URL } from '../config';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Linking } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { useTheme } from '../context/theme_context';
 
 export default function MedicineInfo() {
   const router = useRouter();
@@ -15,6 +16,7 @@ export default function MedicineInfo() {
   const [medicineData, setMedicineData] = useState<any>(null); // Product name, company, active ingredients, dosage
   const [cmiData, setCmiData] = useState<any>(null); 
   const [expandedSections, setExpandedSections] = useState<string[]>([]);
+  const { theme, setTheme, textSize, setTextSize, themeStyles, themeColors } = useTheme();
 
   // Dropdown section expanding + collapsing behaviour 
   const toggleSection = (key: string) => {
@@ -79,23 +81,23 @@ export default function MedicineInfo() {
   }, [barcodeStr, medicineId]);
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView contentContainerStyle={[styles.container, themeStyles.container]}>
 
       {/* Back button to home page */}
       {<TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-        <Ionicons name="arrow-back" size={40} color="#336699" />
+        <Ionicons name="arrow-back" size={40} color={themeColors.iconColor} />
       </TouchableOpacity>}
 
       {/* Display the medicine name and company */}
       {medicineData ? (
         <>
-          <Text style={styles.header}>{medicineData.product_name}</Text>
-          <Text style={styles.subheader}>Manufacturer: {medicineData.company}</Text>
+          <Text style={[styles.header, themeStyles.text]}>{medicineData.product_name}</Text>
+          <Text style={[styles.subheader, themeStyles.text]}>Manufacturer: {medicineData.company}</Text>
 
           {/* Display the active ingredients and dosage */}
           {medicineData.ingredients && medicineData.ingredients.length > 0 && (
             <View style={styles.activeIngredientsContainer}>
-              <Text style={styles.activeIngredients}>
+              <Text style={[styles.activeIngredients, themeStyles.text]}>
                 Active Ingredients: {medicineData.ingredients?.map((ing: { ingredient: string; dosage?: string }) => `${ing.ingredient} ${ing.dosage || 'N/A'}`).join(',\n') || 'N/A'}
               </Text>
             </View>
@@ -121,13 +123,13 @@ export default function MedicineInfo() {
   
           return (
             <View key={key} style={styles.sectionWrapper}>
-              <View style={styles.sectionCard}>
+              <View style={[styles.sectionCard, themeStyles.card]}>
                 <TouchableOpacity onPress={() => toggleSection(key)} style={styles.sectionHeader}>
-                  <Text style={styles.title}>{sectionTitle}</Text>
+                  <Text style={[styles.title, themeStyles.text]}>{sectionTitle}</Text>
                   <MaterialCommunityIcons
                     name={isExpanded ? 'chevron-up' : 'chevron-down'}
                     size={24}
-                    color="#336699"
+                    color={themeColors.iconColor}
                   />
                 </TouchableOpacity>
 
@@ -137,7 +139,7 @@ export default function MedicineInfo() {
                       <Text style={[styles.body, styles.link]}>{String(value)}</Text>
                     </TouchableOpacity>
                   ) : (
-                    <Text style={styles.body}>{String(value)}</Text>
+                    <Text style={[styles.body, themeStyles.bodyText]}>{String(value)}</Text>
                   )
                 )}
               </View>

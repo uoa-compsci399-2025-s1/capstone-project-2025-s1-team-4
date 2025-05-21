@@ -9,7 +9,7 @@ import { useTheme } from '../../context/theme_context'
 export default function SettingsScreen() {
   const router = useRouter();
   const { setBookmarks } = useBookmarks();
-  const { themeStyles, textSize } = useTheme();
+  const { themeStyles, textSize, themeColors } = useTheme();
 
   return (
     <ScrollView style={[styles.container, themeStyles.container]}>
@@ -60,7 +60,7 @@ export default function SettingsScreen() {
               ]}
             >
               <Text style={[styles.settingText, themeStyles.text]}>{item.label}</Text>
-              <Feather name="chevron-right" size={20} color="#336699" />
+              <Feather name="chevron-right" size={20} color={themeColors.iconColor} />
             </TouchableOpacity>
           );
         })}
@@ -90,7 +90,7 @@ export default function SettingsScreen() {
             >
               <Text style={[styles.settingText, themeStyles.text]}>{item.label}</Text>
               {item.right ?? (
-                isPressable && <Feather name="chevron-right" size={20} color="#336699" />
+                isPressable && <Feather name="chevron-right" size={20} color={themeColors.iconColor} />
               )}
             </TouchableOpacity>
           );

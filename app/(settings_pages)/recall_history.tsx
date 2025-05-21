@@ -13,7 +13,7 @@ type Recall = {
 };
 
 const NotificationsScreen = () => {
-  const { themeStyles, textSize } = useTheme();
+  const { themeStyles, textSize, themeColors } = useTheme();
   const router = useRouter();
   const [recalls, setRecalls] = useState<Recall[]>([]);
 
@@ -45,7 +45,7 @@ const NotificationsScreen = () => {
     <View style={[styles.container, themeStyles.container]}>
       {/* Back Arrow */}
       <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-        <Ionicons name="arrow-back" size={40} color="#336699" />
+        <Ionicons name="arrow-back" size={40} color={themeColors.iconColor} />
       </TouchableOpacity>
 
       {/* Page Title */}
