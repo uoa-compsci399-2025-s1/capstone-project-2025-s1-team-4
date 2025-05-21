@@ -83,11 +83,6 @@ export default function MedicineInfo() {
   return (
     <ScrollView contentContainerStyle={[styles.container, themeStyles.container]}>
 
-      {/* Back button to home page */}
-      {<TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-        <Ionicons name="arrow-back" size={40} color={themeColors.iconColor} />
-      </TouchableOpacity>}
-
       {/* Display the medicine name and company */}
       {medicineData ? (
         <>
