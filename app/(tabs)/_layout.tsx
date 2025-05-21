@@ -3,19 +3,21 @@ import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import { BookmarkProvider } from '../../context/bookmarks_context';
 import { useTheme } from '../../context/theme_context'
 
+
+
 export default function TabLayout() {
   const { theme, setTheme, textSize, setTextSize, themeStyles, themeColors } = useTheme();
   return (
     <BookmarkProvider>
       <Tabs
         screenOptions={{
-          tabBarStyle: { height: 70 },
+          tabBarStyle: { height: 70, flex: 0.1 },
           tabBarLabelStyle: { fontSize: 12, marginTop: 3 },
           tabBarActiveTintColor: themeColors.light,
           tabBarInactiveTintColor: themeColors.dark,
           tabBarActiveBackgroundColor: themeColors.medLight,
           tabBarInactiveBackgroundColor: themeColors.medLight,
-          tabBarLabelPosition: 'below-icon'
+          tabBarLabelPosition: 'below-icon',
         }}
       >
         <Tabs.Screen

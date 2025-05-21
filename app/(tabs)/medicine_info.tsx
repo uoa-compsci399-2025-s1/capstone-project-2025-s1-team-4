@@ -92,12 +92,12 @@ export default function MedicineInfo() {
       {medicineData ? (
         <>
           <Text style={[styles.header, themeStyles.text]}>{medicineData.product_name}</Text>
-          <Text style={[styles.subheader, themeStyles.text]}>Manufacturer: {medicineData.company}</Text>
+          <Text style={[styles.subheader, themeStyles.text, { fontSize: textSize - 1}]}>Manufacturer: {medicineData.company}</Text>
 
           {/* Display the active ingredients and dosage */}
           {medicineData.ingredients && medicineData.ingredients.length > 0 && (
             <View style={styles.activeIngredientsContainer}>
-              <Text style={[styles.activeIngredients, themeStyles.text]}>
+              <Text style={[styles.activeIngredients, themeStyles.text, { fontSize: textSize - 3}]}>
                 Active Ingredients: {medicineData.ingredients?.map((ing: { ingredient: string; dosage?: string }) => `${ing.ingredient} ${ing.dosage || 'N/A'}`).join(',\n') || 'N/A'}
               </Text>
             </View>
@@ -125,7 +125,7 @@ export default function MedicineInfo() {
             <View key={key} style={styles.sectionWrapper}>
               <View style={[styles.sectionCard, themeStyles.card]}>
                 <TouchableOpacity onPress={() => toggleSection(key)} style={styles.sectionHeader}>
-                  <Text style={[styles.title, themeStyles.text]}>{sectionTitle}</Text>
+                  <Text style={[styles.title, themeStyles.text, { fontSize: textSize }]}>{sectionTitle}</Text>
                   <MaterialCommunityIcons
                     name={isExpanded ? 'chevron-up' : 'chevron-down'}
                     size={24}
@@ -139,7 +139,7 @@ export default function MedicineInfo() {
                       <Text style={[styles.body, styles.link]}>{String(value)}</Text>
                     </TouchableOpacity>
                   ) : (
-                    <Text style={[styles.body, themeStyles.bodyText]}>{String(value)}</Text>
+                    <Text style={[styles.body, themeStyles.bodyText, { fontSize: textSize - 2}]}>{String(value)}</Text>
                   )
                 )}
               </View>

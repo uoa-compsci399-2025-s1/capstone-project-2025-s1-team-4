@@ -14,8 +14,8 @@ function InnerLayout() {
         }}
       >
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="medicine_info" options={{ headerShown: false }} />
-        <Stack.Screen name="(settings_pages)" options={{ headerShown: false }} />
+        {/* <Stack.Screen name="medicine_info" options={{ headerShown: false }} />
+        <Stack.Screen name="(settings_pages)" options={{ headerShown: false }} /> */}
       </Stack>
       <StatusBar style={theme === 'dark' ? 'light' : 'dark'} />
     </>

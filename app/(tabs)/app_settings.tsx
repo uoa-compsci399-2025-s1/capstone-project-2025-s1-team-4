@@ -17,7 +17,7 @@ export default function SettingsScreen() {
       <Text style={[styles.pageTitleText, themeStyles.text]}>Settings</Text> 
       </View>
       {/* App Settings */}
-      <Text style={[styles.sectionHeader, themeStyles.text]}>App Settings</Text>
+      <Text style={[styles.sectionHeader, themeStyles.text, { fontSize: textSize + 4}]}>App Settings</Text>
       <View style={[styles.settingCard, themeStyles.card]}>
         {[
           { label: 'Appearance', route: '/appearance' },
@@ -59,7 +59,7 @@ export default function SettingsScreen() {
                 isLast && { borderBottomWidth: 0 },
               ]}
             >
-              <Text style={[styles.settingText, themeStyles.text]}>{item.label}</Text>
+              <Text style={[styles.settingText, themeStyles.text, { fontSize: textSize }]}>{item.label}</Text>
               <Feather name="chevron-right" size={20} color={themeColors.iconColor} />
             </TouchableOpacity>
           );
@@ -67,12 +67,12 @@ export default function SettingsScreen() {
       </View>
 
       {/* About Section */}
-      <Text style={[styles.sectionHeader, themeStyles.text]}>About</Text>
+      <Text style={[styles.sectionHeader, themeStyles.text, { fontSize: textSize + 4}]}>About</Text>
       <View style={[styles.settingCard, themeStyles.card]}>
         {[
           { label: 'About Us', route: '/about_us' },
           { label: 'Privacy Policy', route: '/privacy_policy' },
-          { label: 'App Version', right: <Text style={[styles.settingValue, themeStyles.text]}>v1.0.0</Text> },
+          { label: 'App Version', right: <Text style={[styles.settingValue, themeStyles.text, { fontSize: textSize }]}>v1.0.0</Text> },
         ].map((item, index, arr) => {
           const isLast = index === arr.length - 1;
           const isPressable = !!item.route;
@@ -88,7 +88,7 @@ export default function SettingsScreen() {
                 isLast && { borderBottomWidth: 0 },
               ]}
             >
-              <Text style={[styles.settingText, themeStyles.text]}>{item.label}</Text>
+              <Text style={[styles.settingText, themeStyles.text, { fontSize: textSize }]}>{item.label}</Text>
               {item.right ?? (
                 isPressable && <Feather name="chevron-right" size={20} color={themeColors.iconColor} />
               )}

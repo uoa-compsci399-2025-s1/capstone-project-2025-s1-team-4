@@ -70,7 +70,7 @@ const PermissionsScreen = () => {
         activeOpacity={0.8}
         onPress={() => handleToggle('camera', !cameraEnabled)}
       >
-        <Text style={[styles.permissionLabel, themeStyles.text]}>Camera</Text>
+        <Text style={[styles.permissionLabel, themeStyles.text, { fontSize: textSize }]}>Camera</Text>
         <Switch
           value={cameraEnabled}
           onValueChange={(val) => handleToggle('camera', val)}
@@ -90,7 +90,7 @@ const PermissionsScreen = () => {
         activeOpacity={0.8}
         onPress={() => handleToggle('notifications', !notificationsEnabled)}
       >
-        <Text style={[styles.permissionLabel, themeStyles.text]}>Notifications</Text>
+        <Text style={[styles.permissionLabel, themeStyles.text, { fontSize: textSize }]}>Notifications</Text>
         <Switch
           value={notificationsEnabled}
           onValueChange={(val) => handleToggle('notifications', val)}

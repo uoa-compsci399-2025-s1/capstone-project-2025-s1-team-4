@@ -168,7 +168,7 @@ export default function BookmarksScreen() {
 
         <View style={[styles.searchWrapper, themeStyles.card]}>
           <TextInput
-            style={[styles.searchInput, themeStyles.text]}
+            style={[styles.searchInput, themeStyles.text, { fontSize: textSize }]}
             placeholder="Search Bookmarks"
             placeholderTextColor={themeColors.transparentTextColor}
             value={searchQuery}
@@ -223,6 +223,7 @@ export default function BookmarksScreen() {
               style={[
                 styles.dropdownItemText,
                 themeStyles.text,
+                { fontSize: textSize },
                 sortBy === key && { fontWeight: 'bold' }
               ]}
             >
@@ -260,7 +261,7 @@ export default function BookmarksScreen() {
       
 {sortedBookmarks.length === 0 && (
   <View style={{ flex: 0, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 0, marginTop: 25 }}>
-    <Text style={[styles.emptyBookmarksText, themeStyles.text]}>
+    <Text style={[styles.emptyBookmarksText, themeStyles.text, { fontSize: textSize + 2}]}>
       Add a bookmark by selecting the bookmark icon on the right of each medicine card.
     </Text>
   </View>
@@ -278,9 +279,9 @@ export default function BookmarksScreen() {
             >
               <View style={styles.cardContent}>
                 <View style={{ flex: 1 }}>
-                  <Text style={[styles.medicineName, themeStyles.text]}>{item.product_name}</Text>
-                  <Text style={[styles.medicineCompany, themeStyles.bodyText]}>{item.company}</Text>
-                  <Text style={[styles.medicineDosage, themeStyles.bodyText]}>
+                  <Text style={[styles.medicineName, themeStyles.text, { fontSize: textSize + 4}]}>{item.product_name}</Text>
+                  <Text style={[styles.medicineCompany, themeStyles.bodyText, { fontSize: textSize - 1 }]}>{item.company}</Text>
+                  <Text style={[styles.medicineDosage, themeStyles.bodyText, { fontSize: textSize - 4}]}>
                       {item.ingredients?.map((ing: { ingredient: string; dosage?: string }) => `${ing.ingredient} ${ing.dosage || 'N/A'}`).join(',\n') || 'N/A'}
                   </Text>
                   <View style={styles.tagRow}>
@@ -352,7 +353,7 @@ export default function BookmarksScreen() {
                   onChangeText={setNewTag}
                   placeholder="Enter a new tag"
                   placeholderTextColor={themeColors.textColor}
-                  style={[styles.tagInput, themeStyles.card, {color: themeColors.textColor}]}
+                  style={[styles.tagInput, themeStyles.card, {color: themeColors.textColor}, { fontSize: textSize - 2 }]}
                   onSubmitEditing={() => handleAddTag(item.id)}
                   returnKeyType="done"
                 />

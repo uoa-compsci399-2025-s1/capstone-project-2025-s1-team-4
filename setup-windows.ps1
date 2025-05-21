@@ -46,10 +46,11 @@ Write-Host "Generated config.ts with BASE_UPI_URL: $baseUpiUrl"
 
 # Setup Expo
 Write-Host "Installing Expo dependencies..."
-npm install expo@^52.0.0
+npm install expo@latest
 npm install expo-module-scripts
 npx expo install expo-status-bar
 npm install @react-native-community/slider
+npm install @react-native-async-storage/async-storage
 
 # Run the Expo app
 Write-Host "Starting Expo app..."

@@ -77,7 +77,7 @@ export default function DetailsScreen() {
     <View style={[styles.searchWrapper, themeStyles.card]}>
       <TextInput
         ref={searchRef}
-        style={[styles.searchInput, themeStyles.text]}
+        style={[styles.searchInput, themeStyles.text, { fontSize: textSize}]}
         placeholder="Search Medicines"
         placeholderTextColor={themeColors.transparentTextColor}
         value={searchQuery}
@@ -116,6 +116,7 @@ export default function DetailsScreen() {
               style={[
                 styles.dropdownItemText,
                 themeStyles.text,
+                { fontSize: textSize },
                 sortBy === key && { fontWeight: 'bold' },
               ]}
             >
@@ -163,9 +164,9 @@ export default function DetailsScreen() {
     >
       <View style={styles.cardContent}>
         <View style={{ flex: 1 }}>
-          <Text style={[styles.medicineName, themeStyles.text]}>{item.product_name}</Text>
-          <Text style={[styles.medicineCompany, themeStyles.bodyText]}>{item.company}</Text>
-          <Text style={[styles.medicineDosage, themeStyles.bodyText]}>
+          <Text style={[styles.medicineName, themeStyles.text, { fontSize: textSize + 4}]}>{item.product_name}</Text>
+          <Text style={[styles.medicineCompany, themeStyles.bodyText, { fontSize: textSize - 1}]}>{item.company}</Text>
+          <Text style={[styles.medicineDosage, themeStyles.bodyText, { fontSize: textSize - 4 }]}>
             {item.ingredients
               ?.slice()
               .sort((a: { ingredient: string }, b: { ingredient: string }) => 

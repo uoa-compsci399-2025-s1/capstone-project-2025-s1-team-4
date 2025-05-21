@@ -91,7 +91,7 @@ export default function Index() {
       onPress={() => router.push({ pathname: '/medicine', params: { focusSearch: 'true' } })}
       activeOpacity={0.8}
     >
-      <Text style={[styles.searchPlaceholder, themeStyles.transparentText]}>Search Medicines</Text>
+      <Text style={[styles.searchPlaceholder, themeStyles.transparentText, { fontSize: textSize }]}>Search Medicines</Text>
     </TouchableOpacity>
 
     {/* Barcode Scanner Icon */}

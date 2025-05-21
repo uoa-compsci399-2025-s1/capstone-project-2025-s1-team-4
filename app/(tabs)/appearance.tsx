@@ -49,8 +49,10 @@ const AppearanceTab = () => {
             >
               <Text
                 style={[
-                  styles.settingText, themeStyles.text,
-                  isSelected && { fontWeight: 'bold', color: themeColors.textColor }
+                  styles.settingText, 
+                  themeStyles.text,
+                  { fontSize: textSize },
+                  isSelected && { fontWeight: 'bold', color: themeColors.textColor, fontSize: textSize }
                 ]}
               >
                 {mode.charAt(0).toUpperCase() + mode.slice(1)}

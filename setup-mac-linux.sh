@@ -51,10 +51,11 @@ echo "Generated config.ts with BASE_UPI_URL: $baseUpiUrl"
 
 # Setup Expo dependencies
 echo "Installing Expo dependencies..."
-npm install expo@^52.0.0
+npm install expo@latest
 npm install expo-module-scripts
 npx expo install expo-status-bar
 npm install @react-native-community/slider
+npm install @react-native-async-storage/async-storage
 
 # Run the Expo app
 echo "Starting Expo app..."
