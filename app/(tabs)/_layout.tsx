@@ -74,6 +74,48 @@ export default function TabLayout() {
             )
           }}
         />
+        <Tabs.Screen
+        name="about_us"
+        options={({
+          href: null,
+          headerShown: false,
+        })}
+        />
+        <Tabs.Screen
+        name="appearance"
+        options={({
+          href: null,
+          headerShown: false,
+        })}
+        />
+        <Tabs.Screen
+        name="permissions"
+        options={({
+          href: null,
+          headerShown: false,
+        })}
+        />
+        <Tabs.Screen
+        name="recall_history"
+        options={({
+          href: null,
+          headerShown: false,
+        })}
+        />
+        <Tabs.Screen
+        name="privacy_policy"
+        options={({
+          href: null,
+          headerShown: false,
+        })}
+        />
+        <Tabs.Screen
+        name="medicine_info"
+        options={({
+          href: null,
+          headerShown: false,
+        })}
+        />
       </Tabs>
     </BookmarkProvider>
   );

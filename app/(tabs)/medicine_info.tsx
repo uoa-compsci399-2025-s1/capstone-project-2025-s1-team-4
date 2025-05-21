@@ -1,10 +1,10 @@
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { useEffect, useState } from 'react';
-import { API_BASE_URL } from '../config';
+import { API_BASE_URL } from '../../config';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Linking } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
-import { useTheme } from '../context/theme_context';
+import { useTheme } from '../../context/theme_context';
 
 export default function MedicineInfo() {
   const router = useRouter();
