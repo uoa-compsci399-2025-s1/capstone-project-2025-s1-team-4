@@ -4,4 +4,4 @@ COPY . /app
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 EXPOSE 5000
-CMD python ./server.py
+CMD ["gunicorn", "-b", "0.0.0.0:5000", "server:app"]
