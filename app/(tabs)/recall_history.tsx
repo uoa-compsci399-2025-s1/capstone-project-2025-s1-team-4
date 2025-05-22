@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, FlatList, Linking } from 'rea
 import { useTheme } from '../../context/theme_context';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { API_BASE_URL } from '../../config';
 
 type Recall = {
   brand_name: string;
@@ -18,7 +19,7 @@ const NotificationsScreen = () => {
   const [recalls, setRecalls] = useState<Recall[]>([]);
 
   useEffect(() => {
-    fetch('http://192.168.1.69:5000/recalls') // Replace with your backend IP on a device
+    fetch(`${API_BASE_URL}/recalls`) 
       .then(res => res.json())
       .then(data => setRecalls(data))
       .catch(err => console.error('Error fetching recalls:', err));
@@ -43,10 +44,6 @@ const NotificationsScreen = () => {
 
   return (
     <View style={[styles.container, themeStyles.container]}>
-      {/* Back Arrow */}
-      <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-        <Ionicons name="arrow-back" size={40} color={themeColors.iconColor} />
-      </TouchableOpacity>
 
       {/* Page Title */}
       <View style={styles.pageTitleWrapper}>
@@ -55,13 +52,19 @@ const NotificationsScreen = () => {
         </Text>
       </View>
 
-      {/* Recall Cards */}
-      <FlatList
-        data={recalls}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={renderRecall}
-        contentContainerStyle={styles.listContent}
-      />
+      {!recalls || recalls.length === 0 ? (
+  <View style={styles.loadingRecalls}>
+    <Text style={styles.brandName}>Loading recalls...</Text>
+  </View>
+) : (
+  <FlatList
+    data={recalls}
+    keyExtractor={(item) => item.id.toString()}
+    renderItem={renderRecall}
+    contentContainerStyle={styles.listContent}
+  />
+)}
+
     </View>
   );
 };
@@ -114,6 +117,11 @@ const styles = StyleSheet.create({
   tap: {
     textDecorationLine: 'underline',
     marginBottom: 0, 
+  },
+  loadingRecalls: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
 });
 

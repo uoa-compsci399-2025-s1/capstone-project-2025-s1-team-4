@@ -10,11 +10,6 @@ const PrivacyPolicyScreen = () => {
 
   return (
     <View style={[styles.container, themeStyles.container]}>
-      
-      {/* Back Arrow */}
-      <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-        <Ionicons name="arrow-back" size={40} color={themeColors.iconColor} />
-      </TouchableOpacity>
 
       {/* Page Title */}
       <View style={styles.pageTitleWrapper}>

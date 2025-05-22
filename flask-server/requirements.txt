@@ -4,3 +4,4 @@ SQLAlchemy
 pytest
 flask_cors
 selenium
+gunicorn

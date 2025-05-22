@@ -57,9 +57,6 @@ const PermissionsScreen = () => {
 
   return (
     <View style={[styles.container, themeStyles.container]}>
-      <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-        <Ionicons name="arrow-back" size={40} color={themeColors.iconColor} />
-      </TouchableOpacity>
 
       <View style={styles.pageTitleWrapper}>
         <Text style={[styles.pageTitleText, themeStyles.text]}>Permissions</Text>
