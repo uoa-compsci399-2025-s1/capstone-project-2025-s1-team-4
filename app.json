@@ -9,7 +9,13 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "icon": {
+        "light": "./assets/icons/iso-logo-light.png",
+        "dark": "./assets/icons/iso-logo-dark.png",
+        "tinted": "./assets/icons/iso-logo-tinted.png"
+
+      }
     },
     "android": {
       "adaptiveIcon": {
