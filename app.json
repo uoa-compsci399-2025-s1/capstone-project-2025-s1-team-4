@@ -13,13 +13,13 @@
       "icon": {
         "light": "./assets/icons/iso-logo-light.png",
         "dark": "./assets/icons/iso-logo-dark.png",
-        "tinted": "./assets/icons/iso-logo-tinted.png"
-
+        "tinted": "./assets/icons/iso-logo-tinted.png",
       }
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/icons/adaptive-icon.png",
+        "monochromeImage": "./assets/icons/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
       "permissions": [
