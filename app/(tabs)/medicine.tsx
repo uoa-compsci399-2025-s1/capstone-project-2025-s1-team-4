@@ -35,7 +35,7 @@ export default function DetailsScreen() {
 
   useFocusEffect(
     useCallback(() => {
-      let timeout: NodeJS.Timeout;
+      let timeout: number;
   
       if (focusSearch === 'true') {
         timeout = setTimeout(() => {
@@ -76,7 +76,7 @@ export default function DetailsScreen() {
     {/* Loading medicines message when server is slow */}
       {!medicines || medicines.length === 0 ? (
         <View style={styles.loadingMedicines}>
-      <Text style={styles.medicineName}>Loading medicines...</Text>
+      <Text style={[styles.medicineName, themeStyles.text]}>Loading medicines...</Text>
       </View>
     ) : (
       <View style={{ flex: 1 }}>
