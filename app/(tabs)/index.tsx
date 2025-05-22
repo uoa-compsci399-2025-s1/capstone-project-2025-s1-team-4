@@ -85,10 +85,10 @@ export default function Index() {
   <View style={[styles.container, themeStyles.container]}>
     {/* Logo Icon Header */}
     <Image source={require('../../assets/icons/ios-logo-light.png')} style={{ 
-      width: 110,
-      height: 110,
+      width: 90,
+      height: 90,
       marginBottom: 50,
-      marginTop: 0,
+      marginTop: 10,
       borderRadius: 10
       }} />
 
@@ -115,7 +115,15 @@ export default function Index() {
     }}
     style={styles.barcodeWrapper}
   >
-    <MaterialCommunityIcons name="barcode-scan" size={300} color={themeColors.iconColor} />
+    <View style={{ marginTop: 20, marginBottom: 20, paddingTop: 20, paddingBottom: 20, width: 250 }}>
+      <MaterialCommunityIcons
+        name="barcode-scan"
+        size={230} // Controls the icon size
+        color={themeColors.iconColor}
+        style={{ alignSelf: 'center' }} // Optional: center icon within the View
+      />
+    </View>
+
     <Text style={[styles.scanText, themeStyles.text]}>
       Tap the scanner icon to scan a barcode, or use the search box above to search by name.
     </Text>
@@ -157,7 +165,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f0f8ff',
     padding: 11,
-    paddingTop: 97,
+    paddingTop: 50,
     alignItems: 'center',
   },
   header: {
@@ -178,14 +186,14 @@ const styles = StyleSheet.create({
   },
   searchInput: {
     backgroundColor: 'white',
-    paddingVertical: 10,
+    paddingVertical: 13,
     paddingHorizontal: 16,
-    borderRadius: 12,
+    borderRadius: 15,
     borderWidth: 1,
     borderColor: '#ccc',
-    fontSize: 20,
+    fontSize: 23,
     marginBottom: 12,
-    marginTop: 0,
+    marginTop: 12,
     width: '95%', 
     alignSelf: 'center', 
   },
@@ -196,9 +204,9 @@ const styles = StyleSheet.create({
     marginTop: 16,
     fontSize: 20,
     color: '#336699',
-    fontWeight: 'medium',
+    fontWeight: '400',
     textAlign: 'center',
-    paddingHorizontal: 20, 
+    paddingHorizontal: 15, 
   },
   cameraContainer: {
     width: '90%',

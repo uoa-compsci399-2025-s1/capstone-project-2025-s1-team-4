@@ -45,7 +45,7 @@
           "image": "./assets/icons/splash-icon-dark.png",
           
           "imageWidth": 200,
-          "resizeMode": "contain",
+          "resizeMode": "cover",
           "backgroundColor": "#212B42",
 
           "dark": {
