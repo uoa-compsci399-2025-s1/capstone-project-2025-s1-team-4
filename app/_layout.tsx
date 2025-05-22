@@ -2,6 +2,7 @@ import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { ThemeProvider, useTheme } from '../context/theme_context';
 
+
 function InnerLayout() {
   const { theme } = useTheme();
 

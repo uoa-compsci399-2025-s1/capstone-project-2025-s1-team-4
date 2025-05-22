@@ -9,6 +9,9 @@ import { useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert } from 'react-native';
 import { useTheme } from '../../context/theme_context'
+import {Image } from 'react-native';
+import Slider from '@react-native-assets/slider'; 
+
 
 type Medicine = {
   id: number;
@@ -80,7 +83,7 @@ export default function Index() {
 
   return (
   <View style={[styles.container, themeStyles.container]}>
-    {/* Pill Icon Header */}
+    {/* Logo Icon Header */}
     <View style={styles.header}>
       <Ionicons name="medkit" size={36} color={themeColors.iconColor} />
     </View>
@@ -189,14 +192,14 @@ const styles = StyleSheet.create({
     marginTop: 16,
     fontSize: 20,
     color: '#336699',
-    fontWeight: 'bold',
+    fontWeight: 'medium',
     textAlign: 'center',
     paddingHorizontal: 20, 
   },
   cameraContainer: {
     width: '90%',
     height: 300,
-    marginTop: 20,
+    marginTop: 50,
     borderRadius: 16,
     overflow: 'hidden',
     backgroundColor: '#000',

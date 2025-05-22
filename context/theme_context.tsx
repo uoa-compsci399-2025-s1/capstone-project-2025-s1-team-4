@@ -99,20 +99,20 @@ const lightColors: ThemeColors = {
 };
 
 const darkTheme: ThemeStyles = StyleSheet.create({
-  container: { backgroundColor: '#343635' },
+  container: { backgroundColor: '#2a3348' },
   text: { color: '#eeeeee' },
-  transparentText: {color: '#575757' },
+  transparentText: {color: '#eeeeee' },
   card: { backgroundColor: '#8d8d8d' }, 
-  bodyText: { color: '#343635'},
+  bodyText: { color: '#eeeeee'},
 });
 
 const darkColors: ThemeColors = {
   textColor: '#eeeeee',
   iconColor: '#eeeeee',
-  dark: '#3f3f3f',
+  dark: '#eeeeee',
   med: '#aaaaaa',
-  medLight: '#cccccc',
+  medLight: '#2a3348',
   light: '#eeeeee',
-  transparentTextColor: '#575757',
+  transparentTextColor: '#eeeeee',
 };
 
