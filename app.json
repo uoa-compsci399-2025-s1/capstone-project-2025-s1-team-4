@@ -11,9 +11,9 @@
     "ios": {
       "supportsTablet": true,
       "icon": {
-        "light": "./assets/icons/iso-logo-light.png",
-        "dark": "./assets/icons/iso-logo-dark.png",
-        "tinted": "./assets/icons/iso-logo-tinted.png",
+        "light": "./assets/icons/ios-logo-light.png",
+        "dark": "./assets/icons/ios-logo-dark.png",
+        "tinted": "./assets/icons/ios-logo-tinted.png"
       }
     },
     "android": {
@@ -41,10 +41,16 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
+          "image": "./assets/icons/splash-icon-dark.png",
+          
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
+          "backgroundColor": "#212B42",
+
+          "dark": {
+            "image": "./assets/splash-icon-light.png",
+            "backgroundColor": "#000000"
+          }
         }
       ],
       [
