@@ -84,9 +84,13 @@ export default function Index() {
   return (
   <View style={[styles.container, themeStyles.container]}>
     {/* Logo Icon Header */}
-    <View style={styles.header}>
-      <Ionicons name="medkit" size={36} color={themeColors.iconColor} />
-    </View>
+    <Image source={require('../../assets/icons/ios-logo-light.png')} style={{ 
+      width: 110,
+      height: 110,
+      marginBottom: 50,
+      marginTop: 0,
+      borderRadius: 10
+      }} />
 
     {/* Search Box */}
     <TouchableOpacity
