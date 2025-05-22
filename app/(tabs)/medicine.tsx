@@ -1,11 +1,11 @@
-import { View, Text, StyleSheet, FlatList, TextInput, TouchableOpacity } from 'react-native';
-import { useEffect, useState, useRef, useCallback } from 'react';
-import { API_BASE_URL } from '../../config'; 
-import { MaterialCommunityIcons, Ionicons} from '@expo/vector-icons';
-import { useBookmarks } from '../../context/bookmarks_context';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useTheme } from '../../context/theme_context'
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { API_BASE_URL } from '../../config';
+import { useBookmarks } from '../../context/bookmarks_context';
+import { useTheme } from '../../context/theme_context';
 
 export default function DetailsScreen() {
   const [medicines, setMedicines] = useState<any[]>([]);
