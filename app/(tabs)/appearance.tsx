@@ -1,9 +1,9 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Switch } from 'react-native';
-import Slider from '@react-native-assets/slider'; 
-import { useTheme } from '../../context/theme_context';
-import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import Slider from '@react-native-assets/slider';
+import { useRouter } from 'expo-router';
+import React from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useTheme } from '../../context/theme_context';
 
 const AppearanceTab = () => {
   const { theme, setTheme, textSize, setTextSize, themeStyles, themeColors } = useTheme();
@@ -46,7 +46,7 @@ const AppearanceTab = () => {
                   styles.settingText, 
                   themeStyles.text,
                   { fontSize: textSize },
-                  isSelected && { fontWeight: 'bold', color: themeColors.textColor, fontSize: textSize }
+                  isSelected && { fontWeight: 'bold', color: themeColors.iconColor, fontSize: textSize }
                 ]}
               >
                 {mode.charAt(0).toUpperCase() + mode.slice(1)}

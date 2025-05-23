@@ -1,16 +1,12 @@
-import { Text, View, StyleSheet, TextInput, TouchableOpacity } from "react-native";
-import { useRouter } from 'expo-router';
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
-import { useState } from 'react';
-import { API_BASE_URL } from '../../config'; 
-import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
-import { useCallback } from 'react';
-import { useFocusEffect } from '@react-navigation/native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Alert } from 'react-native';
-import { useTheme } from '../../context/theme_context'
-import {Image } from 'react-native';
-import Slider from '@react-native-assets/slider'; 
+import { useFocusEffect } from '@react-navigation/native';
+import { CameraType, CameraView, useCameraPermissions } from 'expo-camera';
+import { useRouter } from 'expo-router';
+import { useCallback, useState } from 'react';
+import { Alert, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { API_BASE_URL } from '../../config';
+import { useTheme } from '../../context/theme_context';
 
 
 type Medicine = {
@@ -201,7 +197,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   scanText: {
-    marginTop: 16,
+    marginTop: 0,
     fontSize: 20,
     color: '#336699',
     fontWeight: '400',

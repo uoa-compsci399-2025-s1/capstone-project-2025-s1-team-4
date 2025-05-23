@@ -10,6 +10,7 @@ import { useTheme } from '../../context/theme_context';
 export default function DetailsScreen() {
   const [medicines, setMedicines] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [loading, setLoading] = useState(true);
   const { bookmarks, toggleBookmark } = useBookmarks(); 
   const searchRef = useRef<TextInput>(null);
   const { focusSearch } = useLocalSearchParams();
@@ -17,20 +18,25 @@ export default function DetailsScreen() {
   const [showDropdown, setShowDropdown] = useState(false);
   const [sortBy, setSortBy] = useState<'name' | 'company'>('name');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
-  const { theme, setTheme, textSize, setTextSize, themeStyles, themeColors } = useTheme();
+  const {textSize, themeStyles, themeColors } = useTheme();
 
 
   useEffect(() => {
+    setLoading(true);
     fetch(`${API_BASE_URL}/all_medicines`)
       .then((res) => {
         console.log("Fetch status:", res.status);
         return res.json();
       })
       .then((data) => {
+        setLoading(false);
         console.log("Fetched data:", data);
         setMedicines(data);
       })
-      .catch((err) => console.error('Failed to fetch medicines:', err));
+      .catch((err) => {
+        console.error('Failed to fetch medicines:', err);
+        setLoading(false);
+      });
   }, []);
 
   useFocusEffect(
@@ -66,159 +72,168 @@ export default function DetailsScreen() {
   });
   
 
-  return (
-    <View style={[styles.container, themeStyles.container]}>
-      {/* Pill Icon Header */}
-      <View style={styles.pageTitleWrapper}>
-            <Text style={[styles.pageTitleText, themeStyles.text]}>All Medicines</Text> 
-      </View>
-
-    {/* Loading medicines message when server is slow */}
-      {!medicines || medicines.length === 0 ? (
-        <View style={styles.loadingMedicines}>
-      <Text style={[styles.medicineName, themeStyles.text]}>Loading medicines...</Text>
-      </View>
-    ) : (
-      <View style={{ flex: 1 }}>
-      {medicines.map((medicine) => (
-        <Text key={medicine.id} style={styles.medicineName}>
-          {medicine.name}
-        </Text>
-      ))}
-    </View>
-    )}
-
-  <View>
-    <View style={[styles.searchWrapper, themeStyles.card]}>
-      <TextInput
-        ref={searchRef}
-        style={[styles.searchInput, themeStyles.text, { fontSize: textSize}]}
-        placeholder="Search Medicines"
-        placeholderTextColor={themeColors.transparentTextColor}
-        value={searchQuery}
-        onChangeText={setSearchQuery}
-      />
-      <TouchableOpacity onPress={() => setShowDropdown(!showDropdown)}>
-        <Ionicons name="chevron-expand-sharp" size={24} color={themeColors.iconColor} />
-      </TouchableOpacity>
+ return (
+  <View style={[styles.container, themeStyles.container]}>
+    {/* Page Header */}
+    <View style={styles.pageTitleWrapper}>
+      <Text style={[styles.pageTitleText, themeStyles.text]}>All Medicines</Text>
     </View>
 
-
-{showDropdown && (
-  <View style={[styles.dropdownPanel, themeStyles.card]}>
-    {[
-      { label: 'Name', key: 'name' },
-      { label: 'Manufacturer', key: 'company' },
-    ].map(({ label, key }, index, arr) => {
-      const isLast = index === arr.length - 1;
-
-      return (
-        <View
-          key={key}
-          style={[
-            styles.dropdownItemRow,
-            !isLast && { borderBottomWidth: 1, borderBottomColor: '#ccc' }
-          ]}
-        >
-          <TouchableOpacity
-            style={{ flex: 1 }}
-            onPress={() => {
-              setSortBy(key as 'name' | 'company');
-              setSortDirection('asc');
-              setShowDropdown(false);
-            }}
-          >
-            <Text
-              style={[
-                styles.dropdownItemText,
-                themeStyles.text,
-                { fontSize: textSize },
-                sortBy === key && { fontWeight: 'bold' },
-              ]}
-            >
-              {label}
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() => {
-              if (sortBy === key) {
-                setSortDirection(prev => (prev === 'asc' ? 'desc' : 'asc'));
-              } else {
-                setSortBy(key as 'name' | 'company');
-                setSortDirection('desc');
-              }
-              setShowDropdown(false);
-            }}
-          >
-            <MaterialCommunityIcons
-              name={
-                sortBy === key && sortDirection === 'desc'
-                  ? 'chevron-down'
-                  : 'chevron-up'
-              }
-              size={20}
-              color={themeColors.iconColor}
-            />
-          </TouchableOpacity>
-        </View>
-      );
-    })}
-  </View>
-
-  
-)}
-
-  </View>
-
-
-  <FlatList
-  data={sortedMedicines}
-  keyExtractor={(item) => item.id.toString()}
-  renderItem={({ item }) => (
-    <TouchableOpacity
-      style={[styles.medicineCard, themeStyles.card]}
-      onPress={() => {router.push(`/medicine_info?barcode=${encodeURIComponent(item.barcode)}` as const)}}
-    >
-      <View style={styles.cardContent}>
-        <View style={{ flex: 1 }}>
-          <Text style={[styles.medicineName, themeStyles.text, { fontSize: textSize + 4}]}>{item.product_name}</Text>
-          <Text style={[styles.medicineCompany, themeStyles.bodyText, { fontSize: textSize - 1}]}>{item.company}</Text>
-          <Text style={[styles.medicineDosage, themeStyles.bodyText, { fontSize: textSize - 4 }]}>
-            {item.ingredients
-              ?.slice()
-              .sort((a: { ingredient: string }, b: { ingredient: string }) => 
-                  a.ingredient.localeCompare(b.ingredient)
-                )
-              .map((ing: { ingredient: string; dosage?: string }) => `${ing.ingredient} ${ing.dosage || 'N/A'}`)
-              .join(',\n') || 'N/A'}
-          </Text>
-        </View>
-
-        <TouchableOpacity
-          onPress={() => toggleBookmark(item.id)}
-          style={styles.starButton}
-        >
-          <MaterialCommunityIcons
-            name={bookmarks.includes(item.id) ? 'bookmark' : 'bookmark-outline'}
-            size={26}
-            color={themeColors.iconColor}
-          />
+    {/* Search Input */}
+    <View>
+      <View style={[styles.searchWrapper, themeStyles.card]}>
+        <TextInput
+          ref={searchRef}
+          style={[styles.searchInput, themeStyles.bodyText, { fontSize: textSize }]}
+          placeholder="Search Medicines"
+          placeholderTextColor={themeColors.transparentTextColor}
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+        />
+        <TouchableOpacity onPress={() => setShowDropdown(!showDropdown)}>
+          <Ionicons name="chevron-expand-sharp" size={24} color={themeColors.iconColor} />
         </TouchableOpacity>
       </View>
-    </TouchableOpacity>
-  )}
-/>
 
-</View>
-  )
+      {/* Dropdown for sorting */}
+      {showDropdown && (
+        <View style={[styles.dropdownPanel, themeStyles.card]}>
+          {[{ label: 'Name', key: 'name' }, { label: 'Manufacturer', key: 'company' }].map(
+            ({ label, key }, index, arr) => {
+              const isLast = index === arr.length - 1;
+              return (
+                <View
+                  key={key}
+                  style={[
+                    styles.dropdownItemRow,
+                    !isLast && { borderBottomWidth: 1, borderBottomColor: '#ccc' },
+                  ]}
+                >
+                  <TouchableOpacity
+                    style={{ flex: 1 }}
+                    onPress={() => {
+                      setSortBy(key as 'name' | 'company');
+                      setSortDirection('asc');
+                      setShowDropdown(false);
+                    }}
+                  >
+                    <Text
+                      style={[
+                        styles.dropdownItemText,
+                        themeStyles.text,
+                        { fontSize: textSize },
+                        sortBy === key && { fontWeight: 'bold' },
+                      ]}
+                    >
+                      {label}
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => {
+                      if (sortBy === key) {
+                        setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+                      } else {
+                        setSortBy(key as 'name' | 'company');
+                        setSortDirection('desc');
+                      }
+                      setShowDropdown(false);
+                    }}
+                  >
+                    <MaterialCommunityIcons
+                      name={
+                        sortBy === key && sortDirection === 'desc'
+                          ? 'chevron-down'
+                          : 'chevron-up'
+                      }
+                      size={20}
+                      color={themeColors.iconColor}
+                    />
+                  </TouchableOpacity>
+                </View>
+              );
+            }
+          )}
+        </View>
+      )}
+    </View>
+
+    {/* Medicine List or Loading */}
+    <FlatList
+      data={sortedMedicines}
+      keyExtractor={(item) => item.id.toString()}
+      ListEmptyComponent={() => (
+        <View style={styles.loadingMedicines}>
+          <Text style={[styles.medicineName, themeStyles.text]}>
+            {loading ? "Loading medicines..." : "No Results Found"}
+          </Text>
+        </View>
+      )}
+      renderItem={({ item }) => (
+        <TouchableOpacity
+          style={[styles.medicineCard, themeStyles.card]}
+          onPress={() =>
+            router.push(`/medicine_info?barcode=${encodeURIComponent(item.barcode)}` as const)
+          }
+        >
+          <View style={styles.cardContent}>
+            <View style={{ flex: 1 }}>
+              <Text
+                style={[
+                  styles.medicineName,
+                  themeStyles.text,
+                  { fontSize: textSize + 4 },
+                ]}
+              >
+                {item.product_name}
+              </Text>
+              <Text
+                style={[
+                  styles.medicineCompany,
+                  themeStyles.text,
+                  { fontSize: textSize - 1 },
+                ]}
+              >
+                {item.company}
+              </Text>
+              <Text
+                style={[
+                  styles.medicineDosage,
+                  themeStyles.bodyText,
+                  { fontSize: textSize - 4 },
+                ]}
+              >
+                {item.ingredients
+                  ?.slice()
+                  .sort((a: { ingredient: string }, b: { ingredient: string }) =>
+                    a.ingredient.localeCompare(b.ingredient)
+                  )
+                  .map(
+                    (ing: { ingredient: string; dosage?: string }) =>
+                      `${ing.ingredient} ${ing.dosage || 'N/A'}`
+                  )
+                  .join(',\n') || 'N/A'}
+              </Text>
+            </View>
+
+            <TouchableOpacity onPress={() => toggleBookmark(item.id)} style={styles.starButton}>
+              <MaterialCommunityIcons
+                name={bookmarks.includes(item.id) ? 'bookmark' : 'bookmark-outline'}
+                size={26}
+                color={themeColors.iconColor}
+              />
+            </TouchableOpacity>
+          </View>
+        </TouchableOpacity>
+      )}
+    />
+  </View>
+);
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingLeft: 20,
-    paddingRight: 20,
+    paddingHorizontal: 15, 
     paddingTop: 40,
     backgroundColor: '#f0f8ff',
   },
@@ -236,7 +251,7 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 10,
     marginVertical: 6,
-    marginHorizontal: 4,
+    marginHorizontal: 5,
     elevation: 3
   },
   cardContent: {
@@ -291,7 +306,7 @@ const styles = StyleSheet.create({
     elevation: 3,
     marginTop: 6,
     marginBottom: 6,
-    marginHorizontal: 4
+    marginHorizontal: 5
   },
   dropdownItemRow: {
     flexDirection: 'row',

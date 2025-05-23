@@ -1,9 +1,9 @@
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
-import { useEffect, useState } from 'react';
-import { API_BASE_URL } from '../../config';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useFocusEffect } from '@react-navigation/native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { Linking } from 'react-native';
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import React, { useEffect, useState } from 'react';
+import { Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { API_BASE_URL } from '../../config';
 import { useTheme } from '../../context/theme_context';
 
 export default function MedicineInfo() {
@@ -46,6 +46,14 @@ export default function MedicineInfo() {
     return sectionMap[key] || key.toUpperCase();
   };
 
+  useFocusEffect(
+    React.useCallback(() => {
+      return () => {
+        setExpandedSections([]);
+      };
+    }, [])
+  );
+
   useEffect(() => {
     const queryParam = barcodeStr 
       ? `barcode=${encodeURIComponent(barcodeStr)}`
@@ -81,69 +89,91 @@ export default function MedicineInfo() {
   }, [barcodeStr, medicineId]);
 
   return (
-    <ScrollView contentContainerStyle={[styles.container, themeStyles.container]}>
+  <>
+    {!medicineData || !cmiData ? (
+      <View style={[styles.loadingWrapper, themeStyles.container]}>
+        {!medicineData && (
+          <Text style={[styles.subheader, { textAlign: 'center', color: themeColors.textColor, fontSize: 20 }]}>
+            Loading Medicine Data...
+          </Text>
+        )}
+        {!cmiData && (
+          <Text style={[styles.subheader, { textAlign: 'center', color: themeColors.textColor, fontSize: 20 }]}>
+            Loading CMI data...
+          </Text>
+        )}
+      </View>
+    ) : (
+      <ScrollView contentContainerStyle={[styles.container, themeStyles.container]}>
+        {/* Display the medicine name and company */}
+        <Text style={[styles.header, themeStyles.text]}>{medicineData.product_name}</Text>
+        <Text style={[styles.subheader, themeStyles.text, { fontSize: textSize - 1 }]}>
+          Manufacturer: {medicineData.company}
+        </Text>
 
-      {/* Display the medicine name and company */}
-      {medicineData ? (
-        <>
-          <Text style={[styles.header, themeStyles.text]}>{medicineData.product_name}</Text>
-          <Text style={[styles.subheader, themeStyles.text, { fontSize: textSize - 1}]}>Manufacturer: {medicineData.company}</Text>
+        {/* Active ingredients */}
+        {medicineData.ingredients && medicineData.ingredients.length > 0 && (
+          <View style={styles.activeIngredientsContainer}>
+            <Text style={[styles.activeIngredients, themeStyles.text, { fontSize: textSize - 3 }]}>
+              Active Ingredients:{' '}
+              {medicineData.ingredients
+                .map((ing: { ingredient: string; dosage?: string }) =>
+                  `${ing.ingredient} ${ing.dosage || 'N/A'}`
+                )
+                .join(',\n') || 'N/A'}
+            </Text>
+          </View>
+        )}
 
-          {/* Display the active ingredients and dosage */}
-          {medicineData.ingredients && medicineData.ingredients.length > 0 && (
-            <View style={styles.activeIngredientsContainer}>
-              <Text style={[styles.activeIngredients, themeStyles.text, { fontSize: textSize - 3}]}>
-                Active Ingredients: {medicineData.ingredients?.map((ing: { ingredient: string; dosage?: string }) => `${ing.ingredient} ${ing.dosage || 'N/A'}`).join(',\n') || 'N/A'}
-              </Text>
-            </View>
-          )}
-        </>
-      ) : (
-        <Text style={styles.body}>Loading medicine information...</Text>
-      )}
-  
-      {!cmiData ? (
-        <Text style={styles.body}>Loading CMI data...</Text>
-      ) : (
-        Object.entries(cmiData.cmi_sheet)
-        .filter(([key]) => key !== '0')
-        .map(([key, value]) => {
-          const isExpanded = expandedSections.includes(key);
-          const sectionTitle = getSectionTitle(key, cmiData.medicine_name); // helper function
+        {/* CMI Data */}
+        {Object.entries(cmiData.cmi_sheet)
+          .filter(([key]) => key !== '0')
+          .map(([key, value]) => {
+            const isExpanded = expandedSections.includes(key);
+            const sectionTitle = getSectionTitle(key, cmiData.medicine_name);
 
-          // Link is clickable and opens 
-          const handleLinkClick = (url: string) => {
-            Linking.openURL(url);
-          };
-  
-          return (
-            <View key={key} style={styles.sectionWrapper}>
-              <View style={[styles.sectionCard, themeStyles.card]}>
-                <TouchableOpacity onPress={() => toggleSection(key)} style={styles.sectionHeader}>
-                  <Text style={[styles.title, themeStyles.text, { fontSize: textSize }]}>{sectionTitle}</Text>
-                  <MaterialCommunityIcons
-                    name={isExpanded ? 'chevron-up' : 'chevron-down'}
-                    size={24}
-                    color={themeColors.iconColor}
-                  />
-                </TouchableOpacity>
+            return (
+              <View key={key} style={styles.sectionWrapper}>
+                <View style={[styles.sectionCard, themeStyles.card]}>
+                  <TouchableOpacity
+                    onPress={() => toggleSection(key)}
+                    style={styles.sectionHeader}
+                  >
+                    <Text style={[styles.title, themeStyles.text, { fontSize: textSize }]}>
+                      {sectionTitle}
+                    </Text>
+                    <MaterialCommunityIcons
+                      name={isExpanded ? 'chevron-up' : 'chevron-down'}
+                      size={24}
+                      color={themeColors.iconColor}
+                    />
+                  </TouchableOpacity>
 
-                {isExpanded && (
-                  key === '12' || key === '1' ? (
-                    <TouchableOpacity onPress={() => handleLinkClick(String(value))}>
-                      <Text style={[styles.body, styles.link]}>{String(value)}</Text>
-                    </TouchableOpacity>
-                  ) : (
-                    <Text style={[styles.body, themeStyles.bodyText, { fontSize: textSize - 2}]}>{String(value)}</Text>
-                  )
-                )}
+                  {isExpanded && (
+                    key === '12' || key === '1' ? (
+                      <TouchableOpacity onPress={() => Linking.openURL(String(value))}>
+                        <Text style={[styles.body, styles.link]}>{String(value)}</Text>
+                      </TouchableOpacity>
+                    ) : (
+                      <Text
+                        style={[
+                          styles.body,
+                          themeStyles.bodyText,
+                          { fontSize: textSize - 2 }
+                        ]}
+                      >
+                        {String(value)}
+                      </Text>
+                    )
+                  )}
+                </View>
               </View>
-            </View>
-          );
-        })
-      )}
-    </ScrollView>
-  );
+            );
+          })}
+      </ScrollView>
+    )}
+  </>
+);
 }
 
 const styles = StyleSheet.create({
@@ -197,9 +227,11 @@ const styles = StyleSheet.create({
   },
 
   sectionHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between', 
-    alignItems: 'center',       
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  flexWrap: 'wrap',            
+  gap: 6,                       
   },
 
   link: {
@@ -228,4 +260,10 @@ const styles = StyleSheet.create({
     shadowRadius: 12,
     elevation: 3,
   },
+
+  loadingWrapper: {
+  flex: 1,
+  justifyContent: 'center',
+  alignItems: 'center',
+}
 });
