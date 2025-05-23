@@ -93,13 +93,25 @@ export default function MedicineInfo() {
     {!medicineData || !cmiData ? (
       <View style={[styles.loadingWrapper, themeStyles.container]}>
         {!medicineData && (
-          <Text style={[styles.subheader, { textAlign: 'center', color: themeColors.textColor, fontSize: 20 }]}>
+          <Text
+            style={[
+              styles.subheader,
+              themeStyles.text,
+              { textAlign: 'center', fontSize: 20 }
+            ]}
+          >
             Loading Medicine Data...
           </Text>
         )}
         {!cmiData && (
-          <Text style={[styles.subheader, { textAlign: 'center', color: themeColors.textColor, fontSize: 20 }]}>
-            Loading CMI data...
+          <Text
+            style={[
+              styles.subheader,
+              themeStyles.text,
+              { textAlign: 'center', fontSize: 20 }
+            ]}
+          >
+            Loading CMI Data...
           </Text>
         )}
       </View>
