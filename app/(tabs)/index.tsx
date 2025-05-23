@@ -85,7 +85,7 @@ export default function Index() {
   <View style={[styles.container, themeStyles.container]}>
     {/* Logo Icon Header */}
     <Image source={require('../../assets/icons/ios-logo-light.png')} style={{ 
-      width: 90,
+      width: 95,
       height: 90,
       marginBottom: 50,
       marginTop: 10,
