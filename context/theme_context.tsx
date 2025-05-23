@@ -101,7 +101,7 @@ const lightColors: ThemeColors = {
 const darkTheme: ThemeStyles = StyleSheet.create({
   container: { backgroundColor: '#1A2130' },       
   text: { color: '#c5e1fa'},                      
-  transparentText: { color: '#f0f8ff' },
+  transparentText: { color: '#ffffff' },
   card: { backgroundColor: '#5B6174' },         
   bodyText: { color: '#ffffff' },
 });
@@ -113,6 +113,6 @@ const darkColors: ThemeColors = {
   med: '#c5e1fa',
   medLight: '#5B6174',
   light: '#c5e1fa',
-  transparentTextColor: '#c5e1fa',
+  transparentTextColor: '#ffffff',
 };
 

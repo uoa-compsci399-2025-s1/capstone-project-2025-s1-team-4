@@ -84,7 +84,7 @@ export default function DetailsScreen() {
       <View style={[styles.searchWrapper, themeStyles.card]}>
         <TextInput
           ref={searchRef}
-          style={[styles.searchInput, themeStyles.bodyText, { fontSize: textSize }]}
+          style={[styles.searchInput, themeStyles.transparentText, { fontSize: textSize }]}
           placeholder="Search Medicines"
           placeholderTextColor={themeColors.transparentTextColor}
           value={searchQuery}
