@@ -72,8 +72,8 @@ const PermissionsScreen = () => {
           onValueChange={(val) => handleToggle('camera', val)}
           thumbColor="#ffffff"
           trackColor={{
-            false: theme === 'dark' ? '#444' : '#ccc',
-            true: '#F0F8FF',
+            false: theme === 'dark' ? '#444' : '#adadad',
+            true: theme === 'dark' ? '#002c59' : '#336699',
           }}
           pointerEvents="none"
         />
@@ -94,7 +94,10 @@ const PermissionsScreen = () => {
           value={notificationsEnabled}
           onValueChange={(val) => handleToggle('notifications', val)}
           thumbColor="#ffffff"
-          trackColor={{ false: '#ccc', true: '#336699' }}
+          trackColor={{
+            false: theme === 'dark' ? '#444' : '#adadad',
+            true: theme === 'dark' ? '#002c59' : '#336699',
+          }}
           pointerEvents="none"
         />
       </TouchableOpacity>
