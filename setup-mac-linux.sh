@@ -54,7 +54,8 @@ echo "Installing Expo dependencies..."
 npm install expo@latest
 npm install expo-module-scripts
 npx expo install expo-status-bar
-npm install @react-native-community/slider
+npm install @react-navigation/native
+npm install @react-native-assets/slider
 npm install @react-native-async-storage/async-storage
 
 # Run the Expo app

@@ -59,9 +59,9 @@ export const API_BASE_URL = "http://IPADDRESS:PORT";
    npm install expo@latest
    npm install expo-module-scripts
    npx expo install expo-status-bar
-   npm install @react-native-community/slider
    npm install @react-native-async-storage/async-storage
    npm install @react-navigation/native
+   npm install @react-native-assets/slider
    ```
 
 3. Start the app
