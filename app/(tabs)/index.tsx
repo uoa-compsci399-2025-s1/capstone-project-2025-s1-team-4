@@ -80,13 +80,20 @@ export default function Index() {
   return (
   <View style={[styles.container, themeStyles.container]}>
     {/* Logo Icon Header */}
-    <Image source={require('../../assets/icons/mediDex-light.png')} style={{ 
-      width: '85%', //110
-      height: '15%', //100
-      marginBottom: 50,
-      marginTop: 10,
-      borderRadius: 10
-      }} />
+    <Image
+      source={
+        theme === 'dark'
+          ? require('../../assets/icons/mediDex-dark.png')
+          : require('../../assets/icons/mediDex-light.png')
+      }
+      style={{
+        width: '85%',
+        height: '15%',
+        marginBottom: 0,
+        marginTop: 10,
+        borderRadius: 10,
+      }}
+    />
 
     {/* Search Box */}
     <TouchableOpacity
@@ -147,16 +154,6 @@ export default function Index() {
 }
 
 const styles = StyleSheet.create({
-  searchWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'white',
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    paddingHorizontal: 12,
-    marginBottom: 10,
-  },
   container: {
     flex: 1,
     backgroundColor: '#f0f8ff',
@@ -164,32 +161,16 @@ const styles = StyleSheet.create({
     paddingTop: 50,
     alignItems: 'center',
   },
-  header: {
-    marginBottom: 20,
-  },
-  searchBox: {
-    backgroundColor: 'white',
-    borderRadius: 12,
-    width: 360,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
-    elevation: 3,
-    marginBottom: 20,
-  },
   searchInput: {
     backgroundColor: 'white',
     paddingVertical: 13,
     paddingHorizontal: 16,
-    borderRadius: 15,
+    borderRadius: 10,
     borderWidth: 1,
     borderColor: '#ccc',
     fontSize: 23,
-    marginBottom: 12,
-    marginTop: 12,
+    marginBottom: 0,
+    marginTop: 0,
     width: '95%', 
     alignSelf: 'center', 
   },
@@ -202,7 +183,7 @@ const styles = StyleSheet.create({
     color: '#336699',
     fontWeight: '400',
     textAlign: 'center',
-    paddingHorizontal: 15, 
+    paddingHorizontal: 0, 
   },
   cameraContainer: {
     width: '90%',
