@@ -102,7 +102,7 @@ const darkTheme: ThemeStyles = StyleSheet.create({
   container: { backgroundColor: '#212B42' },
   text: { color: '#eeeeee' },
   transparentText: {color: '#eeeeee' },
-  card: { backgroundColor: '#333333' }, //#535353 o #333333
+  card: { backgroundColor: '#535353' }, //#535353 o #333333
   bodyText: { color: '#eeeeee'},
 });
 
