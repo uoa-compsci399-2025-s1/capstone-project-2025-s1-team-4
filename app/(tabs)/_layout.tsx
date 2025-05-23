@@ -5,13 +5,14 @@ import { useTheme } from '../../context/theme_context'
 
 
 
+
 export default function TabLayout() {
   const { theme, setTheme, textSize, setTextSize, themeStyles, themeColors } = useTheme();
   return (
     <BookmarkProvider>
       <Tabs
         screenOptions={{
-          tabBarStyle: { height: 70, flex: 0.1 },
+          tabBarStyle: { height: 70, flex: 0.1},
           tabBarLabelStyle: { fontSize: 12, marginTop: 3 },
           tabBarActiveTintColor: themeColors.light,
           tabBarInactiveTintColor: themeColors.dark,

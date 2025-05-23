@@ -83,7 +83,7 @@ const lightTheme:
   ThemeStyles = StyleSheet.create({
   container: { backgroundColor: '#f0f8ff' },
   text: { color: '#336699' },
-  transparentText: {color: '#88add1' },
+  transparentText: {color: '#336699' },
   card: { backgroundColor: '#ffffff' }, 
   bodyText: { color: '#333'},
 });
@@ -91,28 +91,28 @@ const lightTheme:
 const lightColors: ThemeColors = {
   textColor: '#336699',
   iconColor: '#336699',
-  dark: '#99CCFF',
+  dark: '#656565',
   med: '#336699',
   medLight: '#fff',
   light: '#336699',
-  transparentTextColor: '#88add1',
+  transparentTextColor: '#336699',
 };
 
 const darkTheme: ThemeStyles = StyleSheet.create({
-  container: { backgroundColor: '#343635' },
+  container: { backgroundColor: '#1a2130' },
   text: { color: '#eeeeee' },
-  transparentText: {color: '#575757' },
-  card: { backgroundColor: '#8d8d8d' }, 
-  bodyText: { color: '#343635'},
+  transparentText: {color: '#eeeeee' },
+  card: { backgroundColor: '#5b6174' }, //#535353 o #333333
+  bodyText: { color: '#eeeeee'},
 });
 
 const darkColors: ThemeColors = {
   textColor: '#eeeeee',
   iconColor: '#eeeeee',
-  dark: '#3f3f3f',
+  dark: '#c7c7c7',
   med: '#aaaaaa',
-  medLight: '#cccccc',
+  medLight: '#5b6174',
   light: '#eeeeee',
-  transparentTextColor: '#575757',
+  transparentTextColor: '#eeeeee',
 };
 

@@ -9,6 +9,9 @@ import { useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert } from 'react-native';
 import { useTheme } from '../../context/theme_context'
+import {Image } from 'react-native';
+import Slider from '@react-native-assets/slider'; 
+
 
 type Medicine = {
   id: number;
@@ -80,10 +83,14 @@ export default function Index() {
 
   return (
   <View style={[styles.container, themeStyles.container]}>
-    {/* Pill Icon Header */}
-    <View style={styles.header}>
-      <Ionicons name="medkit" size={36} color={themeColors.iconColor} />
-    </View>
+    {/* Logo Icon Header */}
+    <Image source={require('../../assets/icons/mediDex-light.png')} style={{ 
+      width: '85%', //110
+      height: '15%', //100
+      marginBottom: 50,
+      marginTop: 10,
+      borderRadius: 10
+      }} />
 
     {/* Search Box */}
     <TouchableOpacity
@@ -108,7 +115,15 @@ export default function Index() {
     }}
     style={styles.barcodeWrapper}
   >
-    <MaterialCommunityIcons name="barcode-scan" size={300} color={themeColors.iconColor} />
+    <View style={{ marginTop: 20, marginBottom: 20, paddingTop: 20, paddingBottom: 20, width: 250 }}>
+      <MaterialCommunityIcons
+        name="barcode-scan"
+        size={230} // Controls the icon size
+        color={themeColors.iconColor}
+        style={{ alignSelf: 'center' }} // Optional: center icon within the View
+      />
+    </View>
+
     <Text style={[styles.scanText, themeStyles.text]}>
       Tap the scanner icon to scan a barcode, or use the search box above to search by name.
     </Text>
@@ -150,7 +165,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f0f8ff',
     padding: 11,
-    paddingTop: 97,
+    paddingTop: 50,
     alignItems: 'center',
   },
   header: {
@@ -171,14 +186,14 @@ const styles = StyleSheet.create({
   },
   searchInput: {
     backgroundColor: 'white',
-    paddingVertical: 10,
+    paddingVertical: 13,
     paddingHorizontal: 16,
-    borderRadius: 12,
+    borderRadius: 15,
     borderWidth: 1,
     borderColor: '#ccc',
-    fontSize: 20,
+    fontSize: 23,
     marginBottom: 12,
-    marginTop: 0,
+    marginTop: 12,
     width: '95%', 
     alignSelf: 'center', 
   },
@@ -189,14 +204,14 @@ const styles = StyleSheet.create({
     marginTop: 16,
     fontSize: 20,
     color: '#336699',
-    fontWeight: 'bold',
+    fontWeight: '400',
     textAlign: 'center',
-    paddingHorizontal: 20, 
+    paddingHorizontal: 15, 
   },
   cameraContainer: {
     width: '90%',
     height: 300,
-    marginTop: 20,
+    marginTop: 50,
     borderRadius: 16,
     overflow: 'hidden',
     backgroundColor: '#000',
