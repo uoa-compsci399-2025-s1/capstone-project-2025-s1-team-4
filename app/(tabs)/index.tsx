@@ -8,6 +8,7 @@ import { Alert, Image, StyleSheet, Text, TouchableOpacity, View } from "react-na
 import { API_BASE_URL } from '../../config';
 import { useTheme } from '../../context/theme_context';
 
+
 type Medicine = {
   id: number;
   name: string;
@@ -196,7 +197,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   scanText: {
-    marginTop: 16,
+    marginTop: 0,
     fontSize: 20,
     color: '#336699',
     fontWeight: '400',
