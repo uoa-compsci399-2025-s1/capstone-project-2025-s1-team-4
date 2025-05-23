@@ -1,20 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Switch,
-  Platform,
-} from 'react-native';
-import { useTheme } from '../../context/theme_context';
-import { useRouter } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Haptics from 'expo-haptics';
+import { useRouter } from 'expo-router';
+import React, { useEffect, useState } from 'react';
+import {
+  Platform,
+  StyleSheet,
+  Switch,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { useTheme } from '../../context/theme_context';
 
 const PermissionsScreen = () => {
-  const { themeStyles, textSize, themeColors } = useTheme();
+  const { themeStyles, textSize, theme } = useTheme();
   const router = useRouter();
   const [cameraEnabled, setCameraEnabled] = useState(false);
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
@@ -71,8 +70,11 @@ const PermissionsScreen = () => {
         <Switch
           value={cameraEnabled}
           onValueChange={(val) => handleToggle('camera', val)}
-          thumbColor={cameraEnabled ? themeColors.dark : themeColors.dark}
-          trackColor={{ false: themeColors.light, true: themeColors.dark }}
+          thumbColor="#ffffff"
+          trackColor={{
+            false: theme === 'dark' ? '#444' : '#ccc',
+            true: '#F0F8FF',
+          }}
           pointerEvents="none"
         />
       </TouchableOpacity>
@@ -91,8 +93,8 @@ const PermissionsScreen = () => {
         <Switch
           value={notificationsEnabled}
           onValueChange={(val) => handleToggle('notifications', val)}
-          thumbColor={notificationsEnabled ? themeColors.dark : themeColors.dark}
-          trackColor={{ false: themeColors.light, true: themeColors.dark }}
+          thumbColor="#ffffff"
+          trackColor={{ false: '#ccc', true: '#336699' }}
           pointerEvents="none"
         />
       </TouchableOpacity>

@@ -1,11 +1,11 @@
-import { View, Text, StyleSheet, FlatList, TextInput, TouchableOpacity } from 'react-native';
-import { useState, useEffect } from 'react';
-import { useBookmarks } from '../../context/bookmarks_context';
-import { API_BASE_URL } from '../../config';
-import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useTheme } from '../../context/theme_context'
+import { useRouter } from 'expo-router';
+import { useEffect, useState } from 'react';
+import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { API_BASE_URL } from '../../config';
+import { useBookmarks } from '../../context/bookmarks_context';
+import { useTheme } from '../../context/theme_context';
 
 export default function BookmarksScreen() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -19,7 +19,7 @@ export default function BookmarksScreen() {
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
   const [showDropdown, setShowDropdown] = useState(false);
   const [filteredTags, setFilteredTags] = useState<string[]>([]);
-  const { theme, setTheme, textSize, setTextSize, themeStyles, themeColors } = useTheme();
+  const {textSize, themeStyles, themeColors } = useTheme();
   const router = useRouter();
 
   useEffect(() => {
@@ -168,7 +168,7 @@ export default function BookmarksScreen() {
 
         <View style={[styles.searchWrapper, themeStyles.card]}>
           <TextInput
-            style={[styles.searchInput, themeStyles.text, { fontSize: textSize }]}
+            style={[styles.searchInput, themeStyles.bodyText, { fontSize: textSize }]}
             placeholder="Search Bookmarks"
             placeholderTextColor={themeColors.transparentTextColor}
             value={searchQuery}
@@ -280,7 +280,7 @@ export default function BookmarksScreen() {
               <View style={styles.cardContent}>
                 <View style={{ flex: 1 }}>
                   <Text style={[styles.medicineName, themeStyles.text, { fontSize: textSize + 4}]}>{item.product_name}</Text>
-                  <Text style={[styles.medicineCompany, themeStyles.bodyText, { fontSize: textSize - 1 }]}>{item.company}</Text>
+                  <Text style={[styles.medicineCompany, themeStyles.text, { fontSize: textSize - 1 }]}>{item.company}</Text>
                   <Text style={[styles.medicineDosage, themeStyles.bodyText, { fontSize: textSize - 4}]}>
                       {item.ingredients?.map((ing: { ingredient: string; dosage?: string }) => `${ing.ingredient} ${ing.dosage || 'N/A'}`).join(',\n') || 'N/A'}
                   </Text>
@@ -352,8 +352,8 @@ export default function BookmarksScreen() {
                   value={newTag}
                   onChangeText={setNewTag}
                   placeholder="Enter a new tag"
-                  placeholderTextColor={themeColors.textColor}
-                  style={[styles.tagInput, themeStyles.card, {color: themeColors.textColor}, { fontSize: textSize - 2 }]}
+                  placeholderTextColor={themeColors.transparentTextColor}
+                  style={[styles.tagInput, themeStyles.card, {color: themeColors.dark}, { fontSize: textSize - 2 }]}
                   onSubmitEditing={() => handleAddTag(item.id)}
                   returnKeyType="done"
                 />
@@ -396,7 +396,7 @@ export default function BookmarksScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 20, 
+    paddingHorizontal: 15, 
     paddingTop: 40,
     backgroundColor: '#f0f8ff',
   },
@@ -422,7 +422,7 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 10,
     marginVertical: 6,
-    marginHorizontal: 4,
+    marginHorizontal: 5,
     elevation: 3
   },
   cardContent: {
@@ -523,7 +523,7 @@ const styles = StyleSheet.create({
   tagPill: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#e0efff',
+    backgroundColor: '#d6eaff',
     borderRadius: 10,
     paddingHorizontal: 10,
     paddingVertical: 4,
@@ -543,7 +543,7 @@ const styles = StyleSheet.create({
   dropdownTagPill: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#e0efff',
+    backgroundColor: '#d6eaff',
     borderRadius: 10,
     paddingHorizontal: 10,
     paddingVertical: 4,
@@ -586,7 +586,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 4,
     marginRight: 6,
-    marginTop: 4,
+    marginTop: 0,
+    marginBottom: 4,
+    marginLeft: 5,
   },
   filterTagText: {
     fontSize: 12,

@@ -1,6 +1,6 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { StyleSheet, useColorScheme } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type ThemeType = 'light' | 'dark' | 'system';
 
@@ -91,28 +91,28 @@ const lightTheme:
 const lightColors: ThemeColors = {
   textColor: '#336699',
   iconColor: '#336699',
-  dark: '#656565',
+  dark: '#4f4f4f',
   med: '#336699',
   medLight: '#fff',
   light: '#336699',
-  transparentTextColor: '#336699',
+  transparentTextColor: '#ababab',
 };
 
 const darkTheme: ThemeStyles = StyleSheet.create({
-  container: { backgroundColor: '#1a2130' },
-  text: { color: '#eeeeee' },
-  transparentText: {color: '#eeeeee' },
-  card: { backgroundColor: '#5b6174' }, //#535353 o #333333
-  bodyText: { color: '#eeeeee'},
+  container: { backgroundColor: '#1A2130' },       
+  text: { color: '#c5e1fa'},                      
+  transparentText: { color: '#f0f8ff' },
+  card: { backgroundColor: '#5B6174' },         
+  bodyText: { color: '#ffffff' },
 });
 
 const darkColors: ThemeColors = {
-  textColor: '#eeeeee',
-  iconColor: '#eeeeee',
-  dark: '#c7c7c7',
-  med: '#aaaaaa',
-  medLight: '#5b6174',
-  light: '#eeeeee',
-  transparentTextColor: '#eeeeee',
+  textColor: '##c5e1fa',
+  iconColor: '#c5e1fa',
+  dark: '#ffffff',
+  med: '#c5e1fa',
+  medLight: '#5B6174',
+  light: '#c5e1fa',
+  transparentTextColor: '#c5e1fa',
 };
 

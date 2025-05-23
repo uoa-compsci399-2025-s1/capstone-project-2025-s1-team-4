@@ -92,7 +92,7 @@ export default function DetailsScreen() {
     <View style={[styles.searchWrapper, themeStyles.card]}>
       <TextInput
         ref={searchRef}
-        style={[styles.searchInput, themeStyles.text, { fontSize: textSize}]}
+        style={[styles.searchInput, themeStyles.bodyText, { fontSize: textSize}]}
         placeholder="Search Medicines"
         placeholderTextColor={themeColors.transparentTextColor}
         value={searchQuery}
@@ -183,7 +183,7 @@ export default function DetailsScreen() {
       <View style={styles.cardContent}>
         <View style={{ flex: 1 }}>
           <Text style={[styles.medicineName, themeStyles.text, { fontSize: textSize + 4}]}>{item.product_name}</Text>
-          <Text style={[styles.medicineCompany, themeStyles.bodyText, { fontSize: textSize - 1}]}>{item.company}</Text>
+          <Text style={[styles.medicineCompany, themeStyles.text, { fontSize: textSize - 1}]}>{item.company}</Text>
           <Text style={[styles.medicineDosage, themeStyles.bodyText, { fontSize: textSize - 4 }]}>
             {item.ingredients
               ?.slice()
@@ -217,8 +217,7 @@ export default function DetailsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingLeft: 20,
-    paddingRight: 20,
+    paddingHorizontal: 15, 
     paddingTop: 40,
     backgroundColor: '#f0f8ff',
   },
@@ -236,7 +235,7 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 10,
     marginVertical: 6,
-    marginHorizontal: 4,
+    marginHorizontal: 5,
     elevation: 3
   },
   cardContent: {
