@@ -85,7 +85,7 @@ const lightTheme:
   text: { color: '#336699' },
   transparentText: {color: '#336699' },
   card: { backgroundColor: '#ffffff' }, 
-  bodyText: { color: '#333'},
+  bodyText: { color: '#4a4a4a'},
 });
 
 const lightColors: ThemeColors = {

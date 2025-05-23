@@ -260,8 +260,8 @@ export default function BookmarksScreen() {
 
       
 {sortedBookmarks.length === 0 && (
-  <View style={{ flex: 0, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 0, marginTop: 25 }}>
-    <Text style={[styles.emptyBookmarksText, themeStyles.text, { fontSize: textSize + 2}]}>
+  <View style={{ marginTop: 2, paddingHorizontal: 20, alignItems: 'center' }}>
+    <Text style={[styles.emptyBookmarksText, themeStyles.text, { fontSize: textSize + 2, textAlign: 'center' }]}>
       Add a bookmark by selecting the bookmark icon on the right of each medicine card.
     </Text>
   </View>
@@ -275,7 +275,7 @@ export default function BookmarksScreen() {
           <View>
             <TouchableOpacity
               style={[styles.medicineCard, themeStyles.card]}
-              onPress={() => router.push(`/medicine_info?barcode=${encodeURIComponent(item.barcode)}`)} // ⭐ ADDED THIS
+              onPress={() => router.push(`/medicine_info?barcode=${encodeURIComponent(item.barcode)}`)} 
             >
               <View style={styles.cardContent}>
                 <View style={{ flex: 1 }}>
@@ -474,6 +474,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ccc',
     color: '#333',
+    width: '100%',
+    alignSelf: 'center'
   },
   starButton: {
     paddingHorizontal: 8,
@@ -505,7 +507,7 @@ const styles = StyleSheet.create({
     padding: 7,
     borderRadius: 10,
     marginVertical: 6,
-    marginHorizontal: 4,
+    marginHorizontal: 5,
     elevation: 3
   },
   tagList: {
@@ -547,7 +549,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingHorizontal: 10,
     paddingVertical: 4,
-    marginRight: 6,
+    marginRight: 9,
     marginTop: 0,
   },
   dropdownTagText: {
@@ -564,7 +566,7 @@ const styles = StyleSheet.create({
     elevation: 3,
     marginTop: 6,
     marginBottom: 6,
-    marginHorizontal: 4
+    marginHorizontal: 5
   },
   dropdownItemRow: {
     flexDirection: 'row',
@@ -605,11 +607,10 @@ const styles = StyleSheet.create({
     color: '#336699',
   },
   emptyBookmarksText: {
-    marginTop: 5,
     fontSize: 20,
     color: '#336699',
     fontWeight: 'bold',
     textAlign: 'center',
-    paddingHorizontal: 5, 
+    paddingHorizontal: 0, 
   }
 });
