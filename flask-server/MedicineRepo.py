@@ -1,13 +1,7 @@
-# Implement data repository (database)
-# Each function should take in as parameter (cursor) where we execute SQL commands
-
 from IMedicineRepo import AbstractRepository
 from collections import defaultdict
-
-# Recalls
 from get_recalls import get_recalls, format_recalls
 
-"""Helper functions"""
 def group_medicines_with_ingredients(rows):
     grouped = {}
 
@@ -28,7 +22,6 @@ def group_medicines_with_ingredients(rows):
                 "barcode": barcode,
                 "ingredients": []
             }
-
         grouped[medicine_id]["ingredients"].append({
             "ingredient": ingredient,
             "dosage": dosage
@@ -37,164 +30,140 @@ def group_medicines_with_ingredients(rows):
     return list(grouped.values())
 
 
-"""Repository"""
 class MedicineRepo(AbstractRepository):
     def __init__(self, connection):
         self.connection = connection
         self.cursor = connection.cursor()
 
-    # Get all medicines alphabetically for the browsing pages 
-    # return = medicine_id, product_name, company, cmi_sheet, barcode, 
     def get_medicines(self):
-        self.cursor.execute("""SELECT 
-            m.id,
-            m.product_name,
-            m.company,
-            m.cmi_sheet,
-            m.barcode,
-            i.name,
-            mi.dosage
+        self.cursor.execute("""
+            SELECT 
+                m.id,
+                m.product_name,
+                m.company,
+                m.cmi_sheet,
+                m.barcode,
+                i.name,
+                mi.dosage
             FROM medicine m
             JOIN medicine_ingredients mi ON m.id = mi.medicine_id
-            JOIN ingredients i ON i.id = mi.ingredient_id""")
+            JOIN ingredients i ON i.id = mi.ingredient_id
+        """)
         rows = self.cursor.fetchall()
         return group_medicines_with_ingredients(rows)
 
-    # When someone clicks on a medicine and visits the detail page 
     def get_medicine_by_id(self, id):
-        self.cursor.execute("""SELECT 
-            m.id,
-            m.product_name,
-            m.company,
-            m.cmi_sheet,
-            m.barcode,
-            i.name,
-            mi.dosage
+        self.cursor.execute("""
+            SELECT 
+                m.id,
+                m.product_name,
+                m.company,
+                m.cmi_sheet,
+                m.barcode,
+                i.name,
+                mi.dosage
             FROM medicine m
             JOIN medicine_ingredients mi ON m.id = mi.medicine_id
             JOIN ingredients i ON i.id = mi.ingredient_id 
-            WHERE m.id = ?""", (id,))
+            WHERE m.id = %s
+        """, (id,))
         rows = self.cursor.fetchall()
+        return None if not rows else group_medicines_with_ingredients(rows)
 
-        if not rows:
-            return None
-        return group_medicines_with_ingredients(rows)
-
-    # Used when someone scans a barcode 
-    def get_medicine_by_barcode(self, barcode): 
-        self.cursor.execute("""SELECT 
-            m.id,
-            m.product_name,
-            m.company,
-            m.cmi_sheet,
-            m.barcode,
-            i.name,
-            mi.dosage
+    def get_medicine_by_barcode(self, barcode):
+        self.cursor.execute("""
+            SELECT 
+                m.id,
+                m.product_name,
+                m.company,
+                m.cmi_sheet,
+                m.barcode,
+                i.name,
+                mi.dosage
             FROM medicine m
             JOIN medicine_ingredients mi ON m.id = mi.medicine_id
             JOIN ingredients i ON i.id = mi.ingredient_id 
-            WHERE m.barcode = ?""", (barcode,))
+            WHERE m.barcode = %s
+        """, (barcode,))
         rows = self.cursor.fetchall()
-        if not rows:
-            return None
-        return group_medicines_with_ingredients(rows)
+        return None if not rows else group_medicines_with_ingredients(rows)
 
-    # Used when someone like searching for a medicine 
     def search_medicine_by_name(self, string):
-        self.cursor.execute("""SELECT 
-            m.id,
-            m.product_name,
-            m.company,
-            m.cmi_sheet,
-            m.barcode,
-            i.name,
-            mi.dosage
+        self.cursor.execute("""
+            SELECT 
+                m.id,
+                m.product_name,
+                m.company,
+                m.cmi_sheet,
+                m.barcode,
+                i.name,
+                mi.dosage
             FROM medicine m
             JOIN medicine_ingredients mi ON m.id = mi.medicine_id
-            JOIN ingredients i ON i.id = mi.ingredient_id  WHERE m.product_name LIKE ? ORDER BY product_name ASC""", (f"%{string}%",))
+            JOIN ingredients i ON i.id = mi.ingredient_id  
+            WHERE m.product_name ILIKE %s
+            ORDER BY m.product_name ASC
+        """, (f"%{string}%",))
         rows = self.cursor.fetchall()
-        if not rows:
-            return None
-        return group_medicines_with_ingredients(rows)
+        return None if not rows else group_medicines_with_ingredients(rows)
 
     def get_cmi_sheet_by_medicine_id(self, id):
         self.cursor.execute("""
-        SELECT c.* 
-        FROM cmi_sheet c 
-        JOIN medicine m ON m.cmi_sheet = c.id 
-        WHERE m.id = ?
+            SELECT c.* 
+            FROM cmi_sheet c 
+            JOIN medicine m ON m.cmi_sheet = c.id 
+            WHERE m.id = %s
         """, (id,))
         return self.cursor.fetchone()
-    
+
     def get_cmi_sheet_by_barcode(self, barcode):
         self.cursor.execute("""
-        SELECT c.* 
-        FROM cmi_sheet c 
-        JOIN medicine m ON m.cmi_sheet = c.id 
-        WHERE m.barcode = ?
+            SELECT c.* 
+            FROM cmi_sheet c 
+            JOIN medicine m ON m.cmi_sheet = c.id 
+            WHERE m.barcode = %s
         """, (barcode,))
         return self.cursor.fetchone()
 
-
     def get_ingredients_by_medicine_id(self, medicine_id):
         self.cursor.execute("""
-        SELECT i.name, mi.dosage
-        FROM ingredients i
-        JOIN medicine_ingredients mi ON i.id = mi.ingredient_id
-        WHERE mi.medicine_id = ?
+            SELECT i.name, mi.dosage
+            FROM ingredients i
+            JOIN medicine_ingredients mi ON i.id = mi.ingredient_id
+            WHERE mi.medicine_id = %s
         """, (medicine_id,))
         return self.cursor.fetchall()
-    
-    # Get recall information (list of dictionaries)
+
     def get_recalls(self):
         self.cursor.execute("""
             SELECT 
-            r.id,
-            r.date,
-            r.recall_url,
-            r.brand_name,
-            r.recall_action
+                r.id,
+                r.date,
+                r.recall_url,
+                r.brand_name,
+                r.recall_action
             FROM recalls r
-            """)
+        """)
         rows = self.cursor.fetchall()
         headers = ["id", "date", "recall_url", "brand_name", "recall_action"]
         return [dict(zip(headers, row)) for row in rows]
-    
-    # Update recall information (inserting data into database)
+
     def update_recalls(self):
         raw_data = get_recalls()
         if not raw_data:
             return None
-        
         formatted = format_recalls(raw_data)
         inserted_count = 0
 
-        # Extract recall_url for each entry
-        scraped_urls = [row[1] for row in formatted]
-
         for row in formatted:
             self.cursor.execute("""
-                INSERT OR IGNORE INTO recalls (date, recall_url, brand_name, recall_action)
-                VALUES (?, ?, ?, ?)
-                """, row)
-            
+                INSERT INTO recalls (date, recall_url, brand_name, recall_action)
+                VALUES (%s, %s, %s, %s)
+                ON CONFLICT (recall_url) DO NOTHING
+            """, row)
+
             if self.cursor.rowcount > 0:
                 inserted_count += 1
-            
-        # Delete old recalls from over 6 months ago 
-        # If nothing was scraped (no recalls in past 6 months)
-        if not scraped_urls:
-            self.cursor.execute("DELETE FROM recalls")
-        else:
-            self.cursor.execute(f"""
-                DELETE FROM recalls
-                WHERE recall_url NOT IN ({','.join('?' * len(scraped_urls))})
-            """, scraped_urls)
 
         self.connection.commit()
         return inserted_count > 0
-    
-    
-   
-    
-
