@@ -1,5 +1,24 @@
-## Get started
-This first section is to quickly run the application.
+# MediDex
+
+## Project Management Tool
+https://github.com/orgs/uoa-compsci399-2025-s1/projects/39
+
+## Short description of what the project is about
+Write some cool stuff about what this project is about
+
+## 📱 Technologies Used
+
+### 🖥️ Frontend
+- **Framework:** React Native (JavaScript) `v0.79.2`
+- **React Version:** React `v19.0.0`
+- **Development Environment:** Expo `v^53.0.9`
+
+### 🖧 Backend
+- **Server Development:** Python (Flask) `v3.12.4 `
+- **Database:** PostgreSQL `v17.5` (hosted on Neon) `https://neon.tech/`
+- **Database Access:** Python (using SQL veries via psycopg2)
+- **Containerization:** Docker `v28.0.4`
+- **Server Deployment:** Render `https://render.com/`
 
 ## To get the application side (Expo) to run:
 ### Quick configuration before starting the app
