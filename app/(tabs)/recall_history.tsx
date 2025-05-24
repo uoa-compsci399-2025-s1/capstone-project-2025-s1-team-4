@@ -52,7 +52,13 @@ const NotificationsScreen = () => {
 
     {!recalls || recalls.length === 0 ? (
       <View style={styles.loadingWrapper}>
-        <Text style={[styles.brandName, themeStyles.text]}>
+        <Text
+          style={[
+            styles.brandName,
+            themeStyles.text,
+            { fontStyle: 'italic' }
+          ]}
+        >
           Loading recalls...
         </Text>
       </View>

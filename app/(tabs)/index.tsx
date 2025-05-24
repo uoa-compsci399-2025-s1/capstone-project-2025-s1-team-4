@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f0f8ff',
     padding: 11,
-    paddingTop: 50,
+    paddingTop: 70,
     alignItems: 'center',
   },
   searchInput: {
@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     fontSize: 23,
     marginBottom: 0,
-    marginTop: 0,
+    marginTop: 40,
     width: '95%', 
     alignSelf: 'center', 
   },
