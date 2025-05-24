@@ -87,11 +87,14 @@ export default function Index() {
           : require('../../assets/icons/mediDex-light.png')
       }
       style={{
-        width: '85%',
+        width: '95%',
         height: '15%',
-        marginBottom: 0,
+        minHeight: 150,
+        maxHeight: 150,
+        marginBottom: 10,
         marginTop: 10,
         borderRadius: 10,
+        resizeMode: 'contain'
       }}
     />
 

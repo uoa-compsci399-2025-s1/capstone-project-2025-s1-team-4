@@ -3,8 +3,8 @@
     "name": "MediDex",
     "slug": "MediDex",
     "version": "1.0.0",
+    "icon": "./assets/images/splashIconLight.png",
     "orientation": "portrait",
-    "icon": "./assets/icons/mediDex-light.png",
     "scheme": "MediDex",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -39,21 +39,6 @@
     },
     "plugins": [
       "expo-router",
-      [
-        "expo-splash-screen",
-        {
-          "image": "./assets/icons/splash-icon-dark.png",
-          
-          "imageWidth": 200,
-          "resizeMode": "cover",
-          "backgroundColor": "#212B42",
-
-          "dark": {
-            "image": "./assets/splash-icon-light.png",
-            "backgroundColor": "#000000"
-          }
-        }
-      ],
       [
         "expo-camera",
         {
