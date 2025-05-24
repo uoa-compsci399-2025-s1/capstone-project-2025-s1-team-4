@@ -1,84 +1,27 @@
 ## Get started
 This first section is to quickly run the application.
-If you are a developer for this project, please scroll down to the **For developers** section.
-
-# To run the application
-### For windows users:
-In your terminal, ensure that you are in the project directory. Then enter the following command in the terminal:
-
-```shell
-.\setup-windows.ps1
-```
-
-If you are getting permission errors, you can temporarily bypass them by doing the following:
-
-```shell
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-```
-
-Then try the first command again.
-
-### For mac or linux users
-COMING SOON
-
-
-# For developers
-### To allow the flask server to run:
-**Windows**
-```shell
-$ cd <project directory>
-$ py -3 -m venv venv
-$ venv\Scripts\activate
-$ pip install -r requirements.txt
-```
-
-**MacOS**
-```shell
-$ cd <project directory>
-$ python3 -m venv venv
-$ source venv/bin/activate
-$ pip install -r requirements.txt
-```
-
-If new dependencies are required, please add them to the requirements.txt file.
 
 ## To get the application side (Expo) to run:
 ### Quick configuration before starting the app
-Create a **config.ts** file where you will initialize the url where the API's will be called. This should be your computers IP address:port number. Write it like so:
-
-export const API_BASE_URL = "http://IPADDRESS:PORT";
 
 1. Install node.js (LTS version):
    
    https://nodejs.org/en
    
 
-2. Install dependencies (in powershell/VSCode terminal)
+2. Install dependencies (in powershell/VSCode terminal) while in project directory
 
    ```
-   npm install expo@latest
-   npm install expo-module-scripts
-   npx expo install expo-status-bar
-   npm install @react-native-async-storage/async-storage
-   npm install @react-navigation/native
-   npm install @react-native-assets/slider
+   npm install
    ```
 
-3. Run the backend API server 
-
-   ```
-    cd capstone-project-2025-s1-team-4/flask-server
-    On Windows run: py server.py
-    On macOS/Linux run: python3 server.py
-   ```
-
-4. Start the frontend React Native app (in a new terminal)
+3. Start the frontend React Native app 
 
    ```
     npx expo start
    ```
 
-5. Install Expo Go on Android, then (making sure your PC and phone are both using the same network) scan the QR code in Expo Go and scan some stuff!
+4. Install Expo Go on Android, then (making sure your PC and phone are both using the same network) scan the QR code in Expo Go and scan some stuff!
 
 In the output, you'll find options to open the app in a
 
