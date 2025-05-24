@@ -64,7 +64,15 @@ export const API_BASE_URL = "http://IPADDRESS:PORT";
    npm install @react-native-assets/slider
    ```
 
-3. Start the app
+3. Run the backend API server 
+
+   ```
+    cd capstone-project-2025-s1-team-4/flask-server
+    On Windows run: py server.py
+    On macOS/Linux run: python3 server.py
+   ```
+
+4. Start the frontend React Native app (in a new terminal)
 
    ```
     npx expo start
