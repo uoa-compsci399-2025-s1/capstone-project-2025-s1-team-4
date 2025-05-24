@@ -165,8 +165,12 @@ class MedicineRepo(AbstractRepository):
         raw_data = get_recalls()
         if not raw_data:
             return None
+        
         formatted = format_recalls(raw_data)
         inserted_count = 0
+
+        # Extract recall_url for each entry
+        scraped_urls = [row[1] for row in formatted]
 
         for row in formatted:
             self.cursor.execute("""
@@ -177,8 +181,19 @@ class MedicineRepo(AbstractRepository):
             if self.cursor.rowcount > 0:
                 inserted_count += 1
             
-        self.connection.commit()            
+        # Delete old recalls from over 6 months ago 
+        # If nothing was scraped (no recalls in past 6 months)
+        if not scraped_urls:
+            self.cursor.execute("DELETE FROM recalls")
+        else:
+            self.cursor.execute(f"""
+                DELETE FROM recalls
+                WHERE recall_url NOT IN ({','.join('?' * len(scraped_urls))})
+            """, scraped_urls)
+
+        self.connection.commit()
         return inserted_count > 0
+    
     
    
     

@@ -10,7 +10,7 @@ def home():
     return make_response("<h3>Server is running.</h3>", 200)
 
 '''
-API to recieve all medicines in the database
+API to receive all medicines in the database
 '''
 @blueprint.route('/all_medicines', methods=['GET'])
 def all_medicines():
@@ -104,10 +104,22 @@ def get_cmi_sheet():
     
     return jsonify({'cmi_sheet': data})
 
-'''API to recieve all medicines in the database'''
+'''API to return all recalled medicines in the database'''
 @blueprint.route('/recalls', methods=['GET'])
 def recalls():
     repo = get_repo()
     recalls = repo.get_recalls()
     return jsonify(recalls)
 
+'''API to update database with new recalled medicine'''    
+@blueprint.route('/recalls/update', methods=['GET','POST'])
+def update_recalls_DB():
+    repo = get_repo()
+    try:
+        updated = repo.update_recalls()
+        if updated:
+            return jsonify({'status': 'success', 'message': 'Database updated with new recall entries.'}), 200
+        else:
+            return jsonify({'status': 'no_change', 'message': 'No new recalls found to update.'}), 200
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500

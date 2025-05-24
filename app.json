@@ -3,17 +3,24 @@
     "name": "MediDex",
     "slug": "MediDex",
     "version": "1.0.0",
+    "icon": "./assets/images/splashIconLight.png",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
     "scheme": "MediDex",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "icon": {
+        "light": "./assets/icons/ios-logo-light.png",
+        "dark": "./assets/icons/ios-logo-dark.png",
+        "tinted": "./assets/icons/ios-logo-tinted.png"
+      }
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/icons/adaptive-icon.png",
+        "monochromeImage": "./assets/icons/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
       "permissions": [
@@ -32,15 +39,6 @@
     },
     "plugins": [
       "expo-router",
-      [
-        "expo-splash-screen",
-        {
-          "image": "./assets/images/splash-icon.png",
-          "imageWidth": 200,
-          "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
-        }
-      ],
       [
         "expo-camera",
         {

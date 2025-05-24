@@ -1,14 +1,13 @@
-import { Text, View, StyleSheet, TextInput, TouchableOpacity } from "react-native";
-import { useRouter } from 'expo-router';
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
-import { useState } from 'react';
-import { API_BASE_URL } from '../../config'; 
-import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
-import { useCallback } from 'react';
-import { useFocusEffect } from '@react-navigation/native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Alert } from 'react-native';
-import { useTheme } from '../../context/theme_context'
+import { useFocusEffect } from '@react-navigation/native';
+import { CameraType, CameraView, useCameraPermissions } from 'expo-camera';
+import { useRouter } from 'expo-router';
+import { useCallback, useState } from 'react';
+import { Alert, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { API_BASE_URL } from '../../config';
+import { useTheme } from '../../context/theme_context';
+
 
 type Medicine = {
   id: number;
@@ -80,10 +79,24 @@ export default function Index() {
 
   return (
   <View style={[styles.container, themeStyles.container]}>
-    {/* Pill Icon Header */}
-    <View style={styles.header}>
-      <Ionicons name="medkit" size={36} color={themeColors.iconColor} />
-    </View>
+    {/* Logo Icon Header */}
+    <Image
+      source={
+        theme === 'dark'
+          ? require('../../assets/icons/mediDex-dark.png')
+          : require('../../assets/icons/mediDex-light.png')
+      }
+      style={{
+        width: '95%',
+        height: '15%',
+        minHeight: 150,
+        maxHeight: 150,
+        marginBottom: 10,
+        marginTop: 0,
+        borderRadius: 10,
+        resizeMode: 'contain'
+      }}
+    />
 
     {/* Search Box */}
     <TouchableOpacity
@@ -108,7 +121,15 @@ export default function Index() {
     }}
     style={styles.barcodeWrapper}
   >
-    <MaterialCommunityIcons name="barcode-scan" size={300} color={themeColors.iconColor} />
+    <View style={{ marginTop: 20, marginBottom: 20, paddingTop: 10, paddingBottom: 10, width: 250 }}>
+      <MaterialCommunityIcons
+        name="barcode-scan"
+        size={230} // Controls the icon size
+        color={themeColors.iconColor}
+        style={{ alignSelf: 'center' }} // Optional: center icon within the View
+      />
+    </View>
+
     <Text style={[styles.scanText, themeStyles.text]}>
       Tap the scanner icon to scan a barcode, or use the search box above to search by name.
     </Text>
@@ -136,49 +157,23 @@ export default function Index() {
 }
 
 const styles = StyleSheet.create({
-  searchWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'white',
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    paddingHorizontal: 12,
-    marginBottom: 10,
-  },
   container: {
     flex: 1,
     backgroundColor: '#f0f8ff',
     padding: 11,
-    paddingTop: 97,
+    paddingTop: 50,
     alignItems: 'center',
-  },
-  header: {
-    marginBottom: 20,
-  },
-  searchBox: {
-    backgroundColor: 'white',
-    borderRadius: 12,
-    width: 360,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
-    elevation: 3,
-    marginBottom: 20,
   },
   searchInput: {
     backgroundColor: 'white',
-    paddingVertical: 10,
+    paddingVertical: 13,
     paddingHorizontal: 16,
-    borderRadius: 12,
+    borderRadius: 10,
     borderWidth: 1,
     borderColor: '#ccc',
-    fontSize: 20,
-    marginBottom: 12,
-    marginTop: 0,
+    fontSize: 23,
+    marginBottom: 0,
+    marginTop: 10,
     width: '95%', 
     alignSelf: 'center', 
   },
@@ -186,17 +181,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   scanText: {
-    marginTop: 16,
+    marginTop: 0,
     fontSize: 20,
     color: '#336699',
-    fontWeight: 'bold',
+    fontWeight: '400',
     textAlign: 'center',
-    paddingHorizontal: 20, 
+    paddingHorizontal: 0, 
   },
   cameraContainer: {
     width: '90%',
     height: 300,
-    marginTop: 20,
+    marginTop: 50,
     borderRadius: 16,
     overflow: 'hidden',
     backgroundColor: '#000',

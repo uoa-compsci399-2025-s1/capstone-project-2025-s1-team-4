@@ -1,6 +1,8 @@
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import { useState, useEffect } from 'react';
 import { ThemeProvider, useTheme } from '../context/theme_context';
+import SplashScreen from '../app/(tabs)/splash_page';
 
 function InnerLayout() {
   const { theme } = useTheme();
@@ -14,8 +16,6 @@ function InnerLayout() {
         }}
       >
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        {/* <Stack.Screen name="medicine_info" options={{ headerShown: false }} />
-        <Stack.Screen name="(settings_pages)" options={{ headerShown: false }} /> */}
       </Stack>
       <StatusBar style={theme === 'dark' ? 'light' : 'dark'} />
     </>
@@ -23,9 +23,16 @@ function InnerLayout() {
 }
 
 export default function RootLayout() {
+  const [isReady, setIsReady] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsReady(true), 3000);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <ThemeProvider>
-      <InnerLayout />
+      {isReady ? <InnerLayout /> : <SplashScreen />}
     </ThemeProvider>
   );
 }
