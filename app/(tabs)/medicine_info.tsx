@@ -168,7 +168,9 @@ export default function MedicineInfo() {
                   {isExpanded && (
                     key === '12' || key === '1' ? (
                       <TouchableOpacity onPress={() => Linking.openURL(String(value))}>
-                        <Text style={[styles.body, styles.link]}>{String(value)}</Text>
+                        <Text style={[styles.body, styles.link,
+                          { color: themeColors.textColor }  
+                        ]}>{String(value)}</Text>
                       </TouchableOpacity>
                     ) : (
                       <Text
@@ -256,7 +258,6 @@ chevronContainer: {
 },
 
   link: {
-    color: 'blue',
     textDecorationLine: 'underline',
   },
 
