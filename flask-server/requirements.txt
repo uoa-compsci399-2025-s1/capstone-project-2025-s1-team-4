@@ -5,3 +5,5 @@ pytest
 flask_cors
 selenium
 gunicorn
+psycopg2-binary
+python-dotenv

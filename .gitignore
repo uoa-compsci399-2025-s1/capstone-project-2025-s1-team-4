@@ -40,6 +40,8 @@ yarn-error.log*
 # Python virtual environemtn
 venv/
 __pycache__
+flask-server/.env
+
 
 # Android:
 /android
