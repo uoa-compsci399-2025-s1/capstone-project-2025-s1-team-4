@@ -1,12 +1,15 @@
 from flask import g
 import psycopg2
 from MedicineRepo import MedicineRepo
+from dotenv import load_dotenv
+import os
+
+load_dotenv() # Get environment variables from .env
 
 def get_db():
     if 'db' not in g:
-        g.db = psycopg2.connect(
-            "postgresql://neondb_owner:npg_IcM0jz5sEYhZ@ep-orange-shape-a88281lz-pooler.eastus2.azure.neon.tech/neondb?sslmode=require"
-        )
+        DATABASE_URL = os.getenv("DATABASE_URL")
+        g.db = psycopg2.connect(DATABASE_URL)
     return g.db
 
 def get_repo():
