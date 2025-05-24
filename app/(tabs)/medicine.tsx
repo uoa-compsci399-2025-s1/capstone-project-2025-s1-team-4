@@ -163,8 +163,14 @@ export default function DetailsScreen() {
       keyExtractor={(item) => item.id.toString()}
       ListEmptyComponent={() => (
         <View style={styles.loadingMedicines}>
-          <Text style={[styles.medicineName, themeStyles.text]}>
-            {loading ? "Loading medicines..." : "No Results Found"}
+          <Text
+            style={[
+              styles.medicineName,
+              themeStyles.text,
+              loading && { fontStyle: 'italic' } 
+            ]}
+          >
+            {loading ? 'Loading medicines...' : 'No Results Found'}
           </Text>
         </View>
       )}

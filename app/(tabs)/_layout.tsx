@@ -117,6 +117,13 @@ export default function TabLayout() {
           headerShown: false,
         })}
         />
+      <Tabs.Screen
+        name="splash_page"
+        options={({
+          href: null,
+          headerShown: false,
+        })}
+        />
       </Tabs>
     </BookmarkProvider>
   );

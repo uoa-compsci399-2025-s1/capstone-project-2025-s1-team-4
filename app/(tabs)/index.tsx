@@ -87,11 +87,14 @@ export default function Index() {
           : require('../../assets/icons/mediDex-light.png')
       }
       style={{
-        width: '85%',
+        width: '95%',
         height: '15%',
-        marginBottom: 0,
-        marginTop: 10,
+        minHeight: 150,
+        maxHeight: 150,
+        marginBottom: 10,
+        marginTop: 0,
         borderRadius: 10,
+        resizeMode: 'contain'
       }}
     />
 
@@ -118,7 +121,7 @@ export default function Index() {
     }}
     style={styles.barcodeWrapper}
   >
-    <View style={{ marginTop: 20, marginBottom: 20, paddingTop: 20, paddingBottom: 20, width: 250 }}>
+    <View style={{ marginTop: 20, marginBottom: 20, paddingTop: 10, paddingBottom: 10, width: 250 }}>
       <MaterialCommunityIcons
         name="barcode-scan"
         size={230} // Controls the icon size
@@ -170,7 +173,7 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     fontSize: 23,
     marginBottom: 0,
-    marginTop: 0,
+    marginTop: 10,
     width: '95%', 
     alignSelf: 'center', 
   },
