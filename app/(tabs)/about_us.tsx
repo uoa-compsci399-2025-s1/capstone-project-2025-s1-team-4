@@ -1,8 +1,7 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { useTheme } from '../../context/theme_context';
 import { useRouter } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
+import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { useTheme } from '../../context/theme_context';
 
 const AboutUsScreen = () => {
   const { themeStyles, textSize, themeColors } = useTheme();
@@ -21,7 +20,7 @@ const AboutUsScreen = () => {
 
       {/* Page Content Placeholder */}
       <Text style={[styles.bodyText, themeStyles.text, { fontSize: textSize }]}>
-        insert jargon here
+      We are Six Degrees of Computation — a team of motivated and knowledgeable students with diverse backgrounds and experiences. Through Medidex, we aim to streamline access to medical information for prescription and over-the-counter medicines in Aotearoa New Zealand, by presenting information from reliable and regulated sources, such as MedSafe, in an accessible, user-friendly and convenient way to all Kiwis. 
       </Text>
     </View>
   );
