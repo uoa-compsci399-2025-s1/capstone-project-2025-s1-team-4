@@ -16,7 +16,7 @@ export default function MedicineInfo() {
   const [medicineData, setMedicineData] = useState<any>(null); // Product name, company, active ingredients, dosage
   const [cmiData, setCmiData] = useState<any>(null); 
   const [expandedSections, setExpandedSections] = useState<string[]>([]);
-  const { theme, setTheme, textSize, setTextSize, themeStyles, themeColors } = useTheme();
+  const { textSize, themeStyles, themeColors } = useTheme();
 
   // Dropdown section expanding + collapsing behaviour 
   const toggleSection = (key: string) => {
