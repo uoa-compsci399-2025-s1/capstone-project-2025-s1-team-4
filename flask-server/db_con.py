@@ -1,11 +1,12 @@
 from flask import g
-import sqlite3
+import psycopg2
 from MedicineRepo import MedicineRepo
 
 def get_db():
     if 'db' not in g:
-        g.db = sqlite3.connect("medicine.db")
-        g.db.execute("PRAGMA foreign_keys = ON")
+        g.db = psycopg2.connect(
+            "postgresql://neondb_owner:npg_IcM0jz5sEYhZ@ep-orange-shape-a88281lz-pooler.eastus2.azure.neon.tech/neondb?sslmode=require"
+        )
     return g.db
 
 def get_repo():

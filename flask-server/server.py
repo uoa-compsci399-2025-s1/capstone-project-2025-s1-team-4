@@ -21,10 +21,11 @@ CORS(app)
 
 
 @app.teardown_appcontext
-def close_db(exception):
+def close_db(error):
     db = g.pop('db', None)
     if db is not None:
         db.close()
+
 
 # Data repository instance
 # repo.repo_instance = MedicineRepo(connection)
@@ -39,12 +40,4 @@ app.register_blueprint(blueprint)
 if __name__ == "__main__":
     # app.run(debug=True) # True for development mode
     app.run(host='0.0.0.0', port=5000, debug=True)
-
-    # initalise database if not existing
-    # Create tables on startup
-    with sqlite3.connect("medicine.db") as conn:
-        from init_db import create_tables
-        conn.execute("PRAGMA foreign_keys = ON")
-        create_tables(conn.cursor())
-        conn.commit()
 
