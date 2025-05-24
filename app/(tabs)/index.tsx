@@ -58,14 +58,17 @@ export default function Index() {
       })
       .then((json) => {
         // Show cmi page
-        router.push(`/medicine_info?barcode=${encodeURIComponent(data)}` as const);
+        
         if (json.found) {
           console.log(json.medicine)
           setMedicineInfo(json.medicine);
           setMessage(null);
+          router.push(`/medicine_info?barcode=${encodeURIComponent(data)}` as const);
         } else {
           setMedicineInfo(null);
           setMessage('Medicine not found');
+          setScannedData(null);
+          setTimeout(() => setMessage(null), 2000);
         }
       })
       .catch((error) => {
@@ -191,7 +194,7 @@ const styles = StyleSheet.create({
   cameraContainer: {
     width: '90%',
     height: 300,
-    marginTop: 50,
+    marginTop: 20,
     borderRadius: 16,
     overflow: 'hidden',
     backgroundColor: '#000',
@@ -201,7 +204,7 @@ const styles = StyleSheet.create({
   },
   infoBox: {
     backgroundColor: '#e6f0ff',
-    marginTop: 20,
+    marginTop: 10,
     padding: 16,
     borderRadius: 10,
     width: '90%',
