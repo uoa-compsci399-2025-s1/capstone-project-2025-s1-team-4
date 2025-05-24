@@ -112,7 +112,7 @@ def recalls():
     return jsonify(recalls)
 
 '''API to update database with new recalls'''    
-@blueprint.route('/recalls/update', methods=['POST'])
+@blueprint.route('/recalls/update', methods=['GET','POST'])
 def update_recalls_DB():
     repo = get_repo()
     try:
