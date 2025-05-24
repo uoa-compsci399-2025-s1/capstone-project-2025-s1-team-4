@@ -107,7 +107,7 @@ const darkTheme: ThemeStyles = StyleSheet.create({
 });
 
 const darkColors: ThemeColors = {
-  textColor: '##c5e1fa',
+  textColor: '#c5e1fa',
   iconColor: '#c5e1fa',
   dark: '#ffffff',
   med: '#c5e1fa',
