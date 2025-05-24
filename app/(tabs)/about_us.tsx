@@ -20,7 +20,7 @@ const AboutUsScreen = () => {
 
       {/* Page Content Placeholder */}
       <Text style={[styles.bodyText, themeStyles.text, { fontSize: textSize }]}>
-      We are Six Degrees of Computation — a team of motivated and knowledgeable students with diverse backgrounds and experiences. Through Medidex, we aim to streamline access to medical information for prescription and over-the-counter medicines in Aotearoa New Zealand, by presenting information from reliable and regulated sources, such as MedSafe, in an accessible, user-friendly and convenient way to all Kiwis. 
+        We are Six Degrees of Computation — a team of motivated and knowledgeable students with diverse backgrounds and experiences. Through MediDex, we aim to streamline access to medical information for prescription and over-the-counter medicines in Aotearoa New Zealand, by presenting information from reliable and regulated sources, such as MedSafe, in an accessible, user-friendly and convenient way to all Kiwis. 
       </Text>
     </View>
   );
