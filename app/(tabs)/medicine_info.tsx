@@ -147,18 +147,22 @@ export default function MedicineInfo() {
             return (
               <View key={key} style={styles.sectionWrapper}>
                 <View style={[styles.sectionCard, themeStyles.card]}>
-                  <TouchableOpacity
-                    onPress={() => toggleSection(key)}
-                    style={styles.sectionHeader}
-                  >
-                    <Text style={[styles.title, themeStyles.text, { fontSize: textSize }]}>
-                      {sectionTitle}
-                    </Text>
-                    <MaterialCommunityIcons
-                      name={isExpanded ? 'chevron-up' : 'chevron-down'}
-                      size={24}
-                      color={themeColors.iconColor}
-                    />
+                  <TouchableOpacity onPress={() => toggleSection(key)} style={styles.sectionHeader}>
+                    <View style={{ flex: 1 }}>
+                      <Text
+                        style={[styles.title, themeStyles.text, { fontSize: textSize }]}
+                        numberOfLines={0} // Allow multiline
+                      >
+                        {sectionTitle}
+                      </Text>
+                    </View>
+                    <View style={styles.chevronContainer}>
+                      <MaterialCommunityIcons
+                        name={isExpanded ? 'chevron-up' : 'chevron-down'}
+                        size={24}
+                        color={themeColors.iconColor}
+                      />
+                    </View>
                   </TouchableOpacity>
 
                   {isExpanded && (
@@ -238,13 +242,18 @@ const styles = StyleSheet.create({
     color: '#336699',
   },
 
-  sectionHeader: {
+sectionHeader: {
   flexDirection: 'row',
+  alignItems: 'stretch',
   justifyContent: 'space-between',
+  gap: 6,
+},
+
+chevronContainer: {
+  justifyContent: 'center',
   alignItems: 'center',
-  flexWrap: 'wrap',            
-  gap: 6,                       
-  },
+  paddingLeft: 8,
+},
 
   link: {
     color: 'blue',
