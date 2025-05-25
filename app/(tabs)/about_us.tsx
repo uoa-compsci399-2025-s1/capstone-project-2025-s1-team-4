@@ -4,15 +4,12 @@ import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useTheme } from '../../context/theme_context';
 
 const AboutUsScreen = () => {
-  const { themeStyles, textSize, themeColors } = useTheme();
-  const router = useRouter();
+  const { themeStyles, textSize } = useTheme()
 
   return (
     <View style={[styles.container, themeStyles.container]}>
       <View style={styles.pageTitleWrapper}>
-        <Text style={[styles.pageTitleText, themeStyles.text]}>
-          About Us
-        </Text>
+        <Text style={[styles.pageTitleText, themeStyles.text]}>About Us</Text>
       </View>
 
       <ScrollView style={{paddingTop: 10}}>
@@ -80,8 +77,8 @@ const AboutUsScreen = () => {
         </View>
       </ScrollView>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -98,7 +95,7 @@ const styles = StyleSheet.create({
   pageTitleWrapper: {
     alignItems: 'center',
     marginTop: 60,
-    marginBottom: 23,
+    marginBottom: 23
   },
   pageTitleText: {
     fontSize: 40,
@@ -137,4 +134,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AboutUsScreen;
+export default AboutUsScreen

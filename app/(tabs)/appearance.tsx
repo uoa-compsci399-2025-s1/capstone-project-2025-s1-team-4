@@ -1,35 +1,26 @@
-import { Ionicons } from '@expo/vector-icons';
-import Slider from '@react-native-assets/slider';
-import { useRouter } from 'expo-router';
-import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useTheme } from '../../context/theme_context';
+import { Ionicons } from '@expo/vector-icons'
+import Slider from '@react-native-assets/slider'
+import React from 'react'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { useTheme } from '../../context/theme_context'
 
-const AppearanceTab = () => {
-  const { theme, setTheme, textSize, setTextSize, themeStyles, themeColors } = useTheme();
-  const router = useRouter();
+export default function AppearanceTab() {
+  const { theme, setTheme, textSize, setTextSize, themeStyles, themeColors } = useTheme()
 
   return (
     <View style={[styles.container, themeStyles.container]}>
-      
-
-      {/* Page Header */}
       <View style={styles.pageTitleWrapper}>
-        <Text style={[styles.pageTitleText, themeStyles.text]}>
-          Appearance
-        </Text>
+        <Text style={[styles.pageTitleText, themeStyles.text]}>Appearance</Text>
       </View>
 
-      {/* Heading */}
       <Text style={[styles.heading, themeStyles.text, { fontSize: textSize + 4 }]}>
         Theme
       </Text>
 
-      {/* Theme Toggle Options */}
       <View style={[styles.settingCard, themeStyles.card]}>
         {['light', 'dark', 'system'].map((mode, index, arr) => {
-          const isLast = index === arr.length - 1;
-          const isSelected = theme === mode;
+          const isLast = index === arr.length - 1
+          const isSelected = theme === mode
 
           return (
             <TouchableOpacity
@@ -43,10 +34,10 @@ const AppearanceTab = () => {
             >
               <Text
                 style={[
-                  styles.settingText, 
+                  styles.settingText,
                   themeStyles.text,
                   { fontSize: textSize },
-                  isSelected && { fontWeight: 'bold', color: themeColors.iconColor, fontSize: textSize }
+                  isSelected && { fontWeight: 'bold', color: themeColors.iconColor }
                 ]}
               >
                 {mode.charAt(0).toUpperCase() + mode.slice(1)}
@@ -57,108 +48,86 @@ const AppearanceTab = () => {
                 color={isSelected ? themeColors.iconColor : 'transparent'}
               />
             </TouchableOpacity>
-          );
+          )
         })}
       </View>
 
-      {/* Heading */}
       <Text style={[styles.heading, themeStyles.text, { fontSize: textSize + 4 }]}>
         Font Size
       </Text>
 
-{/* Font Slider Card */}
-<View style={[styles.settingCard, themeStyles.card]}>
-  <View style={styles.sliderContent}>
-    <Text style={[styles.label, themeStyles.text, { fontSize: textSize }]}>
-      Font Size: {textSize}
-    </Text>
-    <Slider
-      style={styles.slider}
-      minimumValue={12}
-      maximumValue={24}
-      step={1}
-      value={textSize}
-      onValueChange={setTextSize}
-      thumbTintColor={themeColors.med}
-      minimumTrackTintColor={themeColors.light}
-      maximumTrackTintColor={themeColors.dark}
-    />
-  </View>
-</View>
+      <View style={[styles.settingCard, themeStyles.card]}>
+        <View style={styles.sliderContent}>
+          <Text style={[styles.label, themeStyles.text, { fontSize: textSize }]}>
+            Font Size: {textSize}
+          </Text>
+          <Slider
+            style={styles.slider}
+            minimumValue={12}
+            maximumValue={24}
+            step={1}
+            value={textSize}
+            onValueChange={setTextSize}
+            thumbTintColor={themeColors.med}
+            minimumTrackTintColor={themeColors.light}
+            maximumTrackTintColor={themeColors.dark}
+          />
+        </View>
+      </View>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    backgroundColor: '#f0f8ff', 
-    flexGrow: 1, 
+    backgroundColor: '#f0f8ff',
+    flexGrow: 1
   },
   heading: {
     fontSize: 20,
     fontWeight: 'bold',
     color: '#336699',
     marginBottom: 10,
-    marginTop: -7,
+    marginTop: -7
   },
   label: {
-    flex: 1,
-  },
-  sliderBlock: {
-    marginTop: 10,
+    flex: 1
   },
   slider: {
     width: '100%',
-    height: 40,
+    height: 40
   },
   pageTitleWrapper: {
     alignItems: 'center',
     marginTop: 60,
-    marginBottom: 23,
+    marginBottom: 23
   },
   pageTitleText: {
     fontSize: 40,
-    color: '#336699',
-  },
-  backButton: {
-    position: 'absolute',
-    top: 35,
-    left: 16,
-    zIndex: 1,
-  },
-  themeCard: {
-    backgroundColor: '#fff',
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 10,
-    marginBottom: 30,
-    marginTop: 10,
-    elevation: 3,
+    color: '#336699'
   },
   settingCard: {
     borderRadius: 10,
     paddingVertical: 0,
     paddingHorizontal: 12,
     marginBottom: 30,
-    elevation: 3,
+    elevation: 3
   },
-settingRow: {
+  settingRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: 14,
     marginHorizontal: -12,
-    paddingHorizontal: 12,
+    paddingHorizontal: 12
   },
-settingText: {
+  settingText: {
     fontSize: 17,
-    color: '#336699',
+    color: '#336699'
   },
-sliderContent: {
-  paddingVertical: 8,
-  paddingHorizontal: 4,
-}
-});
-
-export default AppearanceTab;
+  sliderContent: {
+    paddingVertical: 8,
+    paddingHorizontal: 4
+  }
+})

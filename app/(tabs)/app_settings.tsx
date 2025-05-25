@@ -1,81 +1,87 @@
-import { Feather } from '@expo/vector-icons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useRouter } from 'expo-router';
-import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useBookmarks } from '../../context/bookmarks_context';
-import { useTheme } from '../../context/theme_context';
+import { Feather } from '@expo/vector-icons'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useRouter } from 'expo-router'
+import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { useBookmarks } from '../../context/bookmarks_context'
+import { useTheme } from '../../context/theme_context'
 
 export default function SettingsScreen() {
-  const router = useRouter();
-  const { setBookmarks } = useBookmarks();
-  const { themeStyles, textSize, themeColors } = useTheme();
+  const router = useRouter()
+  const { setBookmarks } = useBookmarks()
+  const { themeStyles, textSize, themeColors } = useTheme()
 
   return (
     <ScrollView style={[styles.container, themeStyles.container]}>
-        <View style={styles.pageTitleWrapper}>
-      <Text style={[styles.pageTitleText, themeStyles.text]}>Settings</Text> 
+      <View style={styles.pageTitleWrapper}>
+        <Text style={[styles.pageTitleText, themeStyles.text]}>Settings</Text>
       </View>
-      {/* App Settings */}
-      <Text style={[styles.sectionHeader, themeStyles.text, { fontSize: textSize + 4}]}>App Settings</Text>
+
+      <Text style={[styles.sectionHeader, themeStyles.text, { fontSize: textSize + 4 }]}>
+        App Settings
+      </Text>
       <View style={[styles.settingCard, themeStyles.card]}>
         {[
           { label: 'Appearance', route: '/appearance' },
-          
           { label: 'Permissions', route: '/permissions' },
           { label: 'Medicine Recalls', route: '/recall_history' },
           {
             label: 'Clear Bookmarks',
             onPress: () =>
-              Alert.alert(
-                'Clear Bookmarks',
-                'Are you sure you want to remove all bookmarks?',
-                [
-                  { text: 'Cancel', style: 'cancel' },
-                  {
-                    text: 'Clear All',
-                    style: 'destructive',
-                    onPress: async () => {
-                      await AsyncStorage.removeItem('bookmarks');
-                      setBookmarks([]);
-                    },
-                  },
-                ]
-              ),
+              Alert.alert('Clear Bookmarks', 'Are you sure you want to remove all bookmarks?', [
+                { text: 'Cancel', style: 'cancel' },
+                {
+                  text: 'Clear All',
+                  style: 'destructive',
+                  onPress: async () => {
+                    await AsyncStorage.removeItem('bookmarks')
+                    setBookmarks([])
+                  }
+                }
+              ])
           }
         ].map((item, index, arr) => {
-          const isLast = index === arr.length - 1;
-          const isPressable = item.route || item.onPress;
+          const isLast = index === arr.length - 1
+          const isPressable = item.route || item.onPress
 
           return (
             <TouchableOpacity
               key={item.label}
               onPress={() => {
-                if (item.route) router.push(item.route as any); 
-                else if (item.onPress) item.onPress();
+                if (item.route) router.push(item.route as any)
+                else if (item.onPress) item.onPress()
               }}
               activeOpacity={isPressable ? 0.6 : 1}
-              style={[
-                styles.settingRow,
-                isLast && { borderBottomWidth: 0 },
-              ]}
+              style={[styles.settingRow, isLast && { borderBottomWidth: 0 }]}
             >
-              <Text style={[styles.settingText, themeStyles.text, { fontSize: textSize }]}>{item.label}</Text>
+              <Text style={[styles.settingText, themeStyles.text, { fontSize: textSize }]}>
+                {item.label}
+              </Text>
               <Feather name="chevron-right" size={20} color={themeColors.iconColor} />
             </TouchableOpacity>
-          );
+          )
         })}
       </View>
 
-      {/* About Section */}
-      <Text style={[styles.sectionHeader, themeStyles.text, { fontSize: textSize + 4}]}>About</Text>
+      <Text style={[styles.sectionHeader, themeStyles.text, { fontSize: textSize + 4 }]}>
+        About
+      </Text>
       <View style={[styles.settingCard, themeStyles.card]}>
         {[
           { label: 'About Us', route: '/about_us' },
           { label: 'Privacy & Legal Information', route: '/privacy_policy' },
-          { label: 'App Version', right: <Text style={[styles.settingValue, themeStyles.text, { fontSize: textSize }]}>v1.0.0</Text> },
+          {
+            label: 'App Version',
+            right: (
+              <Text
+                style={[styles.settingValue, themeStyles.text, { fontSize: textSize }]}
+              >
+                v1.0.0
+              </Text>
+            )
+          }
         ].map((item, index, arr) => {
-          const isLast = index === arr.length - 1;
-          const isPressable = !!item.route;
+          const isLast = index === arr.length - 1
+          const isPressable = !!item.route
 
           return (
             <TouchableOpacity
@@ -83,45 +89,45 @@ export default function SettingsScreen() {
               onPress={item.route ? () => router.push(item.route as any) : undefined}
               activeOpacity={isPressable ? 0.6 : 1}
               disabled={!isPressable}
-              style={[
-                styles.settingRow,
-                isLast && { borderBottomWidth: 0 },
-              ]}
+              style={[styles.settingRow, isLast && { borderBottomWidth: 0 }]}
             >
-              <Text style={[styles.settingText, themeStyles.text, { fontSize: textSize }]}>{item.label}</Text>
-              {item.right ?? (
-                isPressable && <Feather name="chevron-right" size={20} color={themeColors.iconColor} />
-              )}
+              <Text style={[styles.settingText, themeStyles.text, { fontSize: textSize }]}>
+                {item.label}
+              </Text>
+              {item.right ??
+                (isPressable && (
+                  <Feather name="chevron-right" size={20} color={themeColors.iconColor} />
+                ))}
             </TouchableOpacity>
-          );
+          )
         })}
       </View>
     </ScrollView>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
   pageTitleWrapper: {
     alignItems: 'center',
     marginTop: 60,
-    marginBottom: 23,
+    marginBottom: 23
   },
   pageTitleText: {
     fontSize: 40,
-    color: '#336699',
+    color: '#336699'
   },
   container: {
     flex: 1,
     padding: 20,
     paddingTop: 20,
-    backgroundColor: '#f0f8ff',
+    backgroundColor: '#f0f8ff'
   },
   sectionHeader: {
     fontSize: 20,
     fontWeight: 'bold',
     color: '#336699',
     marginBottom: 10,
-    marginTop: -7,
+    marginTop: -7
   },
   settingCard: {
     backgroundColor: '#fff',
@@ -129,7 +135,7 @@ const styles = StyleSheet.create({
     paddingVertical: 0,
     paddingHorizontal: 12,
     marginBottom: 30,
-    elevation: 3,
+    elevation: 3
   },
   settingRow: {
     flexDirection: 'row',
@@ -139,15 +145,15 @@ const styles = StyleSheet.create({
     borderBottomColor: '#eee',
     borderBottomWidth: 1,
     marginHorizontal: -12,
-    paddingHorizontal: 12,
+    paddingHorizontal: 12
   },
   settingText: {
     fontSize: 17,
-    color: '#336699',
+    color: '#336699'
   },
   settingValue: {
     fontSize: 17,
     color: '#336699',
-    fontWeight: 'bold',
-  },
-});
+    fontWeight: 'bold'
+  }
+})

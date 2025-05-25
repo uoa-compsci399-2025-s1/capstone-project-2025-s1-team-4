@@ -1,184 +1,191 @@
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useFocusEffect } from '@react-navigation/native';
-import { CameraType, CameraView, useCameraPermissions } from 'expo-camera';
-import * as Haptics from 'expo-haptics';
-import { useRouter } from 'expo-router';
-import { useCallback, useState, useEffect } from 'react';
-import { Alert, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { API_BASE_URL } from '../../config';
-import { useTheme } from '../../context/theme_context';
-import * as Network from 'expo-network';
-
-
-type Medicine = {
-  id: number;
-  name: string;
-  company: string;
-  dosage: string;
-};
+import { MaterialCommunityIcons } from '@expo/vector-icons'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useFocusEffect } from '@react-navigation/native'
+import { CameraType, CameraView, useCameraPermissions } from 'expo-camera'
+import * as Haptics from 'expo-haptics'
+import * as Network from 'expo-network'
+import { useRouter } from 'expo-router'
+import { useCallback, useEffect, useState } from 'react'
+import { Alert, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { API_BASE_URL } from '../../config'
+import { useTheme } from '../../context/theme_context'
 
 export default function Index() {
-  const router = useRouter();
-  const [cameraVisible, setCameraVisible] = useState(false);
-  const [facing] = useState<CameraType>('back');
-  const [permission, requestPermission] = useCameraPermissions();
-  const [scannedData, setScannedData] = useState<string | null>(null);
-  const [medicineInfo, setMedicineInfo] = useState<any>(null);
-  const [scanning, setScanning] = useState(false);
-  const [message, setMessage] = useState<string | null>(null);
-  const [cameraAllowed, setCameraAllowed] = useState(false);
-  const { theme, setTheme, textSize, setTextSize, themeStyles, themeColors } = useTheme();
-  const [isConnected, setIsConnected] = useState<boolean | null>(null);
+  const router = useRouter()
+  const [cameraVisible, setCameraVisible] = useState(false)
+  const [facing] = useState<CameraType>('back')
+  const [permission] = useCameraPermissions()
+  const [scannedData, setScannedData] = useState<string | null>(null)
+  const [scanning, setScanning] = useState(false)
+  const [message, setMessage] = useState<string | null>(null)
+  const {theme, textSize, themeStyles, themeColors} = useTheme()
+  const [isConnected, setIsConnected] = useState<boolean | null>(null)
 
   useEffect(() => {
-  const checkConnection = async () => {
-    try {
-      const networkState = await Network.getNetworkStateAsync();
-      setIsConnected(networkState.isConnected === true && networkState.isInternetReachable === true);
-    } catch (error) {
-      console.error('Failed to check network status:', error);
-      setIsConnected(false);
+    const checkConnection = async () => {
+      try {
+        const networkState = await Network.getNetworkStateAsync()
+        setIsConnected(
+          networkState.isConnected === true &&
+            networkState.isInternetReachable === true
+        )
+      } catch (error) {
+        console.error('Failed to check network status:', error)
+        setIsConnected(false)
+      }
     }
-  };
 
-  checkConnection();
-}, []);
+    checkConnection()
+  }, [])
 
   useFocusEffect(
     useCallback(() => {
       return () => {
-        setCameraVisible(false);
-        setScannedData(null);
-        setMedicineInfo(null);
-        setMessage(null);
-      };
+        setCameraVisible(false)
+        setScannedData(null)
+        setMessage(null)
+      }
     }, [])
-  );
+  )
 
   async function handleBarcodeScanned({ data }: { data: string }) {
-    if (scanning) return;
-    
-    setScanning(true);
-    setScannedData(data);
-    await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-    
+    if (scanning) return
+
+    setScanning(true)
+    setScannedData(data)
+    await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
+
     fetch(`${API_BASE_URL}/medicine?barcode=${encodeURIComponent(data)}`)
       .then((response) => {
         if (!response.ok) {
           if (response.status === 404) {
-            setMedicineInfo(null);
-            setScannedData(null);
+            setScannedData(null)
           }
-          throw new Error(`HTTP error! Status: ${response.status}`);
+          throw new Error(`HTTP error! Status: ${response.status}`)
         }
-        return response.json();
+        return response.json()
       })
       .then((json) => {
-        // Show cmi page
-        
         if (json.found) {
           console.log(json.medicine)
-          setMedicineInfo(json.medicine);
-          setMessage(null);
-          router.push(`/medicine_info?barcode=${encodeURIComponent(data)}` as const);
+          setMessage(null)
+          router.push(`/medicine_info?barcode=${encodeURIComponent(data)}` as const)
         } else {
-          setMedicineInfo(null);
-          setMessage('Medicine not found');
-          setScannedData(null);
-          setTimeout(() => setMessage(null), 2000);
+          setMessage('Medicine not found')
+          setScannedData(null)
+          setTimeout(() => setMessage(null), 2000)
         }
       })
       .catch((error) => {
-        console.error('Fetch error:', error);
+        console.error('Fetch error:', error)
       })
       .finally(() => {
-        setScanning(false);
-      });
+        setScanning(false)
+      })
   }
-  
 
   return (
-  <View style={[styles.container, themeStyles.container]}>
-
-    {/* Logo Icon Header */}
-    <Image
-      source={
-        theme === 'dark'
-          ? require('../../assets/icons/mediDex-dark.png')
-          : require('../../assets/icons/mediDex-light.png')
-      }
-      style={{
-        width: '95%',
-        height: '15%',
-        minHeight: 150,
-        maxHeight: 150,
-        marginBottom: 10,
-        marginTop: 0,
-        borderRadius: 10,
-        resizeMode: 'contain'
-      }}
-    />
-
-    {/* Search Box */}
-    <TouchableOpacity
-      style={[styles.searchInput, themeStyles.card]}
-      onPress={() => router.push({ pathname: '/medicine', params: { focusSearch: 'true' } })}
-      activeOpacity={0.8}
-    >
-      <Text style={[styles.searchPlaceholder, themeStyles.transparentText, { fontSize: textSize }]}>Search Medicines</Text>
-    </TouchableOpacity>
-
-    {/* Barcode Scanner Icon */}
-    {!cameraVisible && isConnected ? (
-  <TouchableOpacity
-    onPress={async () => {
-      const allowed = await AsyncStorage.getItem('cameraEnabled');
-      if (allowed !== 'true') {
-        Alert.alert('Camera Disabled', 'Enable camera usage in Settings > Permissions.');
-        return;
-      }
-
-      setCameraVisible(true);
-    }}
-    style={styles.barcodeWrapper}
-  >
-    <View style={{ marginTop: 20, marginBottom: 20, paddingTop: 10, paddingBottom: 10, width: 250 }}>
-      <MaterialCommunityIcons
-        name="barcode-scan"
-        size={230}
-        color={themeColors.iconColor}
-        style={{ alignSelf: 'center' }}
+    <View style={[styles.container, themeStyles.container]}>
+      <Image
+        source={
+          theme === 'dark'
+            ? require('../../assets/icons/mediDex-dark.png')
+            : require('../../assets/icons/mediDex-light.png')
+        }
+        style={{
+          width: '95%',
+          height: '15%',
+          minHeight: 150,
+          maxHeight: 150,
+          marginBottom: 10,
+          marginTop: 0,
+          borderRadius: 10,
+          resizeMode: 'contain'
+        }}
       />
+
+      <TouchableOpacity
+        style={[styles.searchInput, themeStyles.card]}
+        onPress={() =>
+          router.push({ pathname: '/medicine', params: { focusSearch: 'true' } })
+        }
+        activeOpacity={0.8}
+      >
+        <Text
+          style={[
+            styles.searchPlaceholder,
+            themeStyles.transparentText,
+            { fontSize: textSize }
+          ]}
+        >
+          Search Medicines
+        </Text>
+      </TouchableOpacity>
+
+      {!cameraVisible && isConnected ? (
+        <TouchableOpacity
+          onPress={async () => {
+            const allowed = await AsyncStorage.getItem('cameraEnabled')
+            if (allowed !== 'true') {
+              Alert.alert(
+                'Camera Disabled',
+                'Enable camera usage in Settings > Permissions.'
+              )
+              return
+            }
+            setCameraVisible(true)
+          }}
+          style={styles.barcodeWrapper}
+        >
+          <View
+            style={{
+              marginTop: 20,
+              marginBottom: 20,
+              paddingTop: 10,
+              paddingBottom: 10,
+              width: 250
+            }}
+          >
+            <MaterialCommunityIcons
+              name="barcode-scan"
+              size={230}
+              color={themeColors.iconColor}
+              style={{ alignSelf: 'center' }}
+            />
+          </View>
+          <Text style={[styles.scanText, themeStyles.text]}>
+            Tap the scanner icon to scan a barcode, or use the search box above to search by
+            name.
+          </Text>
+        </TouchableOpacity>
+      ) : (
+        <View style={styles.networkBox}>
+          <Text style={[styles.scanText, themeStyles.text]}>No internet connection</Text>
+        </View>
+      )}
+
+      {/* Camera View */}
+      {cameraVisible && permission?.granted && (
+        <View style={styles.cameraContainer}>
+          <CameraView
+            style={styles.camera}
+            facing={facing}
+            barcodeScannerSettings={{ barcodeTypes: ['ean13'] }}
+            onBarcodeScanned={
+              scannedData || scanning ? undefined : handleBarcodeScanned
+            }
+          />
+        </View>
+      )}
+
+      {/* Message Banner */}
+      {message && (
+        <View style={styles.infoBox}>
+          <Text style={styles.scanText}>{message}</Text>
+        </View>
+      )}
     </View>
-
-    <Text style={[styles.scanText, themeStyles.text]}>
-      Tap the scanner icon to scan a barcode, or use the search box above to search by name.
-    </Text>
-  </TouchableOpacity>
-) : (<View style={styles.networkBox}>
-        <Text style={[styles.scanText, themeStyles.text]}>No internet connection</Text>
-        </View>)}
-    
-
-    {cameraVisible && permission?.granted && (
-      <View style={styles.cameraContainer}>
-        <CameraView
-          style={styles.camera}
-          facing={facing}
-          barcodeScannerSettings={{ barcodeTypes: ['ean13'] }}
-          onBarcodeScanned={scannedData || scanning ? undefined : handleBarcodeScanned}
-        />
-      </View>
-    )}
-
-    {message && (
-      <View style={styles.infoBox}>
-        <Text style={styles.scanText}>{message}</Text>
-      </View>
-    )}
-  </View>
-);
+  )
 }
 
 const styles = StyleSheet.create({
@@ -187,7 +194,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f0f8ff',
     padding: 11,
     paddingTop: 50,
-    alignItems: 'center',
+    alignItems: 'center'
   },
   searchInput: {
     backgroundColor: 'white',
@@ -199,11 +206,11 @@ const styles = StyleSheet.create({
     fontSize: 23,
     marginBottom: 0,
     marginTop: 10,
-    width: '95%', 
-    alignSelf: 'center', 
+    width: '95%',
+    alignSelf: 'center'
   },
   barcodeWrapper: {
-    alignItems: 'center',
+    alignItems: 'center'
   },
   scanText: {
     marginTop: 0,
@@ -211,7 +218,7 @@ const styles = StyleSheet.create({
     color: '#336699',
     fontWeight: '400',
     textAlign: 'center',
-    paddingHorizontal: 0, 
+    paddingHorizontal: 0
   },
   cameraContainer: {
     width: '90%',
@@ -219,10 +226,10 @@ const styles = StyleSheet.create({
     marginTop: 20,
     borderRadius: 16,
     overflow: 'hidden',
-    backgroundColor: '#000',
+    backgroundColor: '#000'
   },
   camera: {
-    flex: 1,
+    flex: 1
   },
   infoBox: {
     backgroundColor: '#e6f0ff',
@@ -230,7 +237,7 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 10,
     width: '90%',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   networkBox: {
     backgroundColor: '#e6f0ff',
@@ -238,11 +245,10 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 10,
     width: '90%',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   searchPlaceholder: {
     color: '#888',
-    fontSize: 16,
-  },
-
-});
+    fontSize: 16
+  }
+})
