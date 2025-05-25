@@ -130,7 +130,7 @@ export default function Index() {
     </TouchableOpacity>
 
     {/* Barcode Scanner Icon */}
-    {!cameraVisible && isConnected ? (
+    {!cameraVisible && (
   <TouchableOpacity
     onPress={async () => {
       const allowed = await AsyncStorage.getItem('cameraEnabled');
@@ -156,12 +156,10 @@ export default function Index() {
       Tap the scanner icon to scan a barcode, or use the search box above to search by name.
     </Text>
   </TouchableOpacity>
-) : (<View style={styles.networkBox}>
-        <Text style={[styles.scanText, themeStyles.text]}>No internet connection</Text>
-        </View>)}
+  )}
     
 
-    {cameraVisible && permission?.granted && (
+    {cameraVisible && permission?.granted && isConnected ? (
       <View style={styles.cameraContainer}>
         <CameraView
           style={styles.camera}
@@ -169,6 +167,10 @@ export default function Index() {
           barcodeScannerSettings={{ barcodeTypes: ['ean13'] }}
           onBarcodeScanned={scannedData || scanning ? undefined : handleBarcodeScanned}
         />
+      </View>
+    ):(
+      <View style={styles.networkBox}>
+        <Text style={[styles.scanText, themeStyles.text]}>No internet connection</Text>
       </View>
     )}
 

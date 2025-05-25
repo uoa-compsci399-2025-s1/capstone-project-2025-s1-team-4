@@ -342,20 +342,21 @@ export default function BookmarksScreen() {
                   </View>
                 </View>
                 <TouchableOpacity onPress={() => {
-  toggleBookmark(item.id);
-  const updatedTags = { ...tagsById };
-  const removedTags = updatedTags[item.id] || [];
-  delete updatedTags[item.id];
-  setTagsById(updatedTags);
-  AsyncStorage.setItem('tagsById', JSON.stringify(updatedTags));
+                  toggleBookmark(item.id);
+                  const updatedTags = { ...tagsById };
+                  const removedTags = updatedTags[item.id] || [];
+                  delete updatedTags[item.id];
+                  setTagsById(updatedTags);
+                  AsyncStorage.setItem('tagsById', JSON.stringify(updatedTags));
 
-  const remainingTags = Object.values(updatedTags).flat();
-  const cleanedGlobalTags = globalTags.filter(tag => remainingTags.includes(tag));
-  setGlobalTags(cleanedGlobalTags);
-  AsyncStorage.setItem('globalTags', JSON.stringify(cleanedGlobalTags));
-}} style={styles.starButton}>
+                  const remainingTags = Object.values(updatedTags).flat();
+                  const cleanedGlobalTags = globalTags.filter(tag => remainingTags.includes(tag));
+                  setGlobalTags(cleanedGlobalTags);
+                  AsyncStorage.setItem('globalTags', JSON.stringify(cleanedGlobalTags));
+                  
+                }} style={styles.starButton}>
                   <MaterialCommunityIcons
-                    name={bookmarks.includes(item.id) ? 'bookmark' : 'bookmark-outline'} // ⭐ ADDED this for filled/outline icon
+                    name={bookmarks.includes(item.id) ? 'bookmark' : 'bookmark-outline'}
                     size={26}
                     color={themeColors.iconColor}
                   />
