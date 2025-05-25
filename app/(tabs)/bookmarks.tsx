@@ -11,7 +11,7 @@ import { useTheme } from '../../context/theme_context';
 export default function BookmarksScreen() {
   const [searchQuery, setSearchQuery] = useState('');
   const [bookmarkedMedicines, setBookmarkedMedicines] = useState<any[]>([]);
-  const { bookmarks, toggleBookmark } = useBookmarks();
+  const {bookmarks, toggleBookmark} = useBookmarks();
   const [expandedCardId, setExpandedCardId] = useState<number | null>(null);
   const [newTag, setNewTag] = useState('');
   const [tagsById, setTagsById] = useState<{ [id: number]: string[] }>({});
@@ -20,7 +20,7 @@ export default function BookmarksScreen() {
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
   const [showDropdown, setShowDropdown] = useState(false);
   const [filteredTags, setFilteredTags] = useState<string[]>([]);
-  const { textSize, themeStyles, themeColors, theme } = useTheme();
+  const {textSize, themeStyles, themeColors, theme} = useTheme();
   const router = useRouter();
   const [isConnected, setIsConnected] = useState<boolean | null>(null);
     
@@ -175,8 +175,7 @@ export default function BookmarksScreen() {
   return (
     <View style={[styles.container, themeStyles.container]}>
       <View>
-        
-      {/* Pill Icon Header */}
+
       <View style={styles.pageTitleWrapper}>
       <Text style={[styles.pageTitleText, themeStyles.text]}>Bookmarks</Text> 
       </View>
@@ -406,12 +405,12 @@ export default function BookmarksScreen() {
           </View>
         )}
       />
-):(
+):
+(
   <View style={styles.networkBox}>
     <Text style={[styles.scanText, themeStyles.text]}>No internet connection</Text>
   </View>
 )}
-
     </View>
   );
 }
@@ -478,12 +477,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 0,
   },
-  addTagText: {
-    marginLeft: 6,
-    fontSize: 14,
-    color: '#336699',
-    fontStyle: 'italic',
-  },
   tagDropdown: {
     marginTop: 8,
     backgroundColor: '#f5faff',
@@ -508,26 +501,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  emptyState: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-  },
-  noBookmarks: {
-    fontSize: 30,
-    fontWeight: 'bold',
-    color: '#336699',
-    textAlign: 'center',
-  },
-  hintText: {
-    fontSize: 14,
-    fontStyle: 'italic',
-    fontFamily: 'sans-serif',
-    color: '#888',
-    textAlign: 'center',
-    marginTop: 6,
   },
   tagDropdownCard: {
     backgroundColor: '#fff',
@@ -577,10 +550,6 @@ const styles = StyleSheet.create({
     marginRight: 9,
     marginTop: 0,
   },
-  dropdownTagText: {
-    fontSize: 12,
-    marginRight: 6,
-  },
   dropdownPanel: {
     backgroundColor: 'white',
     borderRadius: 10,
@@ -614,10 +583,6 @@ const styles = StyleSheet.create({
     marginTop: 0,
     marginBottom: 4,
     marginLeft: 5,
-  },
-  filterTagText: {
-    fontSize: 12,
-    marginRight: 6,
   },
   pageTitleWrapper: {
     alignItems: 'center',
