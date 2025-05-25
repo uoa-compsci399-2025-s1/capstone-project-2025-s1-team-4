@@ -10,7 +10,7 @@ export default function TabLayout() {
     <BookmarkProvider>
       <Tabs
         screenOptions={{
-          tabBarStyle: { height: 70, flex: 0.1},
+          tabBarStyle: { height: 70, flex: 0.1 },
           tabBarLabelStyle: { fontSize: 12, marginTop: 3 },
           tabBarActiveTintColor: themeColors.light,
           tabBarInactiveTintColor: themeColors.dark,
@@ -76,53 +76,53 @@ export default function TabLayout() {
           }}
         />
         <Tabs.Screen
-        name="about_us"
-        options={({
-          href: null,
-          headerShown: false,
-        })}
+          name="about_us"
+          options={({
+            href: null,
+            headerShown: false,
+          })}
         />
         <Tabs.Screen
-        name="appearance"
-        options={({
-          href: null,
-          headerShown: false,
-        })}
+          name="appearance"
+          options={({
+            href: null,
+            headerShown: false,
+          })}
         />
         <Tabs.Screen
-        name="permissions"
-        options={({
-          href: null,
-          headerShown: false,
-        })}
+          name="permissions"
+          options={({
+            href: null,
+            headerShown: false,
+          })}
         />
         <Tabs.Screen
-        name="recall_history"
-        options={({
-          href: null,
-          headerShown: false,
-        })}
+          name="recall_history"
+          options={({
+            href: null,
+            headerShown: false,
+          })}
         />
         <Tabs.Screen
-        name="privacy_policy"
-        options={({
-          href: null,
-          headerShown: false,
-        })}
+          name="privacy_policy"
+          options={({
+            href: null,
+            headerShown: false,
+          })}
         />
         <Tabs.Screen
-        name="medicine_info"
-        options={({
-          href: null,
-          headerShown: false,
-        })}
+          name="medicine_info"
+          options={({
+            href: null,
+            headerShown: false,
+          })}
         />
-      <Tabs.Screen
-        name="splash_page"
-        options={({
-          href: null,
-          headerShown: false,
-        })}
+        <Tabs.Screen
+          name="splash_page"
+          options={({
+            href: null,
+            headerShown: false,
+          })}
         />
       </Tabs>
     </BookmarkProvider>
