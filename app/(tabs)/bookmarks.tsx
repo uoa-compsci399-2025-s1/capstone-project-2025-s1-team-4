@@ -23,20 +23,38 @@ export default function BookmarksScreen() {
   const { textSize, themeStyles, themeColors, theme } = useTheme();
   const router = useRouter();
   const [isConnected, setIsConnected] = useState<boolean | null>(null);
-    
-      useEffect(() => {
-      const checkConnection = async () => {
-        try {
-          const networkState = await Network.getNetworkStateAsync();
-          setIsConnected(networkState.isConnected === true && networkState.isInternetReachable === true);
-        } catch (error) {
-          console.error('Failed to check network status:', error);
-          setIsConnected(false);
-        }
-      };
-    
-      checkConnection();
-    }, []);
+  const [showOfflineCard, setShowOfflineCard] = useState(false);
+
+  useEffect(() => {
+    const checkConnection = async () => {
+      try {
+        const networkState = await Network.getNetworkStateAsync();
+        setIsConnected(networkState.isConnected === true && networkState.isInternetReachable === true);
+      } catch (error) {
+        console.error('Failed to check network status:', error);
+        setIsConnected(false);
+      }
+    };
+
+    checkConnection();
+  }, []);
+
+  useEffect(() => {
+    let timeout: ReturnType<typeof setTimeout> | undefined;
+
+    if (!isConnected) {
+      timeout = setTimeout(() => {
+        setShowOfflineCard(true);
+      }, 1000);
+    } else {
+      setShowOfflineCard(false);
+      if (timeout) clearTimeout(timeout);
+    }
+
+    return () => {
+      if (timeout) clearTimeout(timeout);
+    };
+  }, [isConnected]);
 
   useEffect(() => {
     const fetchBookmarkedMedicines = async () => {
@@ -47,30 +65,30 @@ export default function BookmarksScreen() {
           bookmarks.some((b: any) => b === m.id || b.id === m.id)
         );
         setBookmarkedMedicines(filtered);
-    if (bookmarks.length === 0) {
-      setTagsById({});
-      setGlobalTags([]);
-      AsyncStorage.removeItem('tagsById');
-      AsyncStorage.removeItem('globalTags');
-    }
+        if (bookmarks.length === 0) {
+          setTagsById({});
+          setGlobalTags([]);
+          AsyncStorage.removeItem('tagsById');
+          AsyncStorage.removeItem('globalTags');
+        }
 
       } catch (err) {
         console.error('Failed to load medicines:', err);
       }
     };
-  
+
     const loadTagsFromStorage = async () => {
       try {
         const storedTags = await AsyncStorage.getItem('tagsById');
         const storedGlobal = await AsyncStorage.getItem('globalTags');
-  
+
         if (storedTags) setTagsById(JSON.parse(storedTags));
         if (storedGlobal) setGlobalTags(JSON.parse(storedGlobal));
       } catch (err) {
         console.error('Failed to load saved tags:', err);
       }
     };
-  
+
     fetchBookmarkedMedicines();
     loadTagsFromStorage();
   }, [bookmarks]);
@@ -79,8 +97,8 @@ export default function BookmarksScreen() {
     filteredTags.length === 0
       ? bookmarkedMedicines
       : bookmarkedMedicines.filter((item) =>
-          (tagsById[item.id] || []).some(tag => filteredTags.includes(tag))
-        );
+        (tagsById[item.id] || []).some(tag => filteredTags.includes(tag))
+      );
 
   const filteredBookmarks = tagFilteredBookmarks.filter(item =>
     item.product_name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -89,20 +107,20 @@ export default function BookmarksScreen() {
   const handleAddTag = (id: number) => {
     const tag = newTag.trim();
     if (!tag || (tagsById[id] || []).includes(tag)) return;
-  
+
     const updatedTagsById = {
       ...tagsById,
       [id]: [...(tagsById[id] || []), tag],
     };
     setTagsById(updatedTagsById);
     AsyncStorage.setItem('tagsById', JSON.stringify(updatedTagsById));
-  
+
     const updatedGlobalTags = globalTags.includes(tag)
       ? globalTags
       : [...globalTags, tag];
     setGlobalTags(updatedGlobalTags);
     AsyncStorage.setItem('globalTags', JSON.stringify(updatedGlobalTags));
-  
+
     setNewTag('');
     const remainingGlobalTags = globalTags.filter(
       gTag => !(updatedTagsById[id] || []).includes(gTag)
@@ -111,7 +129,7 @@ export default function BookmarksScreen() {
       setExpandedCardId(null);
     }
     setExpandedCardId(null);
-  };  
+  };
 
   const removeTagGlobally = (tagToRemove: string) => {
     const updated = Object.fromEntries(
@@ -122,12 +140,12 @@ export default function BookmarksScreen() {
     );
     setTagsById(updated);
     AsyncStorage.setItem('tagsById', JSON.stringify(updated));
-  
+
     const updatedGlobal = globalTags.filter(t => t !== tagToRemove);
     setGlobalTags(updatedGlobal);
     AsyncStorage.setItem('globalTags', JSON.stringify(updatedGlobal));
   };
-  
+
 
   const sortedBookmarks = [...filteredBookmarks].sort((a, b) => {
     if (sortBy === 'name') {
@@ -143,27 +161,27 @@ export default function BookmarksScreen() {
     if (sortBy === 'tags') {
       const aTags = tagsById[a.id] || [];
       const bTags = tagsById[b.id] || [];
-    
+
       const aHasTags = aTags.length > 0;
       const bHasTags = bTags.length > 0;
-    
+
       if (aHasTags && !bHasTags) return -1;
       if (!aHasTags && bHasTags) return 1;
-    
+
       if (!aHasTags && !bHasTags) {
         return a.product_name.localeCompare(b.product_name);
       }
-    
+
       const aFirstTag = [...aTags].sort()[0];
       const bFirstTag = [...bTags].sort()[0];
       const tagComparison = aFirstTag.localeCompare(bFirstTag);
-    
+
       if (tagComparison !== 0) return sortDirection === 'asc' ? tagComparison : -tagComparison;
-    
+
       return sortDirection === 'asc'
         ? a.product_name.localeCompare(b.product_name)
         : b.product_name.localeCompare(a.product_name);
-    }    
+    }
     if (sortBy === 'recent') {
       const aIndex = bookmarks.indexOf(a.id);
       const bIndex = bookmarks.indexOf(b.id);
@@ -175,11 +193,11 @@ export default function BookmarksScreen() {
   return (
     <View style={[styles.container, themeStyles.container]}>
       <View>
-        
-      {/* Pill Icon Header */}
-      <View style={styles.pageTitleWrapper}>
-      <Text style={[styles.pageTitleText, themeStyles.text]}>Bookmarks</Text> 
-      </View>
+
+        {/* Pill Icon Header */}
+        <View style={styles.pageTitleWrapper}>
+          <Text style={[styles.pageTitleText, themeStyles.text]}>Bookmarks</Text>
+        </View>
 
 
         <View style={[styles.searchWrapper, themeStyles.card]}>
@@ -209,211 +227,211 @@ export default function BookmarksScreen() {
         )}
 
         {showDropdown && (
-  <View style={[styles.dropdownPanel, themeStyles.card]}>
-    {[
-      { label: 'Recently added', key: 'recent' },
-      { label: 'Name', key: 'name' },
-      { label: 'Manufacturer', key: 'company' },
-      { label: 'Tags', key: 'tags' }
-    ].map(({ label, key }, index, arr) => {
-      const isLast = index === arr.length - 1;
+          <View style={[styles.dropdownPanel, themeStyles.card]}>
+            {[
+              { label: 'Recently added', key: 'recent' },
+              { label: 'Name', key: 'name' },
+              { label: 'Manufacturer', key: 'company' },
+              { label: 'Tags', key: 'tags' }
+            ].map(({ label, key }, index, arr) => {
+              const isLast = index === arr.length - 1;
 
-      return (
-        <View
-          key={key}
-          style={[
-            styles.dropdownItemRow,
-            !isLast && { borderBottomWidth: 1, borderBottomColor: '#ccc' }
-          ]}
-        >
-          <TouchableOpacity
-            style={{ flex: 1 }}
-            activeOpacity={0.7}
-            onPress={() => {
-              setSortBy(key as any);
-              setSortDirection('asc');
-              setShowDropdown(false);
-            }}
-          >
-            <Text
-              style={[
-                styles.dropdownItemText,
-                themeStyles.text,
-                { fontSize: textSize },
-                sortBy === key && { fontWeight: 'bold' }
-              ]}
-            >
-              {label}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              if (sortBy === key) {
-                setSortDirection(prev => (prev === 'asc' ? 'desc' : 'asc'));
-              } else {
-                setSortBy(key as any);
-                setSortDirection('desc');
-              }
-              setShowDropdown(false);
-            }}
-          >
-            <MaterialCommunityIcons
-              name={
-                sortBy === key && sortDirection === 'desc'
-                  ? 'chevron-down'
-                  : 'chevron-up'
-              }
-              size={20}
-              color={themeColors.iconColor}
-            />
-          </TouchableOpacity>
-        </View>
-      );
-    })}
-  </View>
-)}
+              return (
+                <View
+                  key={key}
+                  style={[
+                    styles.dropdownItemRow,
+                    !isLast && { borderBottomWidth: 1, borderBottomColor: '#ccc' }
+                  ]}
+                >
+                  <TouchableOpacity
+                    style={{ flex: 1 }}
+                    activeOpacity={0.7}
+                    onPress={() => {
+                      setSortBy(key as any);
+                      setSortDirection('asc');
+                      setShowDropdown(false);
+                    }}
+                  >
+                    <Text
+                      style={[
+                        styles.dropdownItemText,
+                        themeStyles.text,
+                        { fontSize: textSize },
+                        sortBy === key && { fontWeight: 'bold' }
+                      ]}
+                    >
+                      {label}
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => {
+                      if (sortBy === key) {
+                        setSortDirection(prev => (prev === 'asc' ? 'desc' : 'asc'));
+                      } else {
+                        setSortBy(key as any);
+                        setSortDirection('desc');
+                      }
+                      setShowDropdown(false);
+                    }}
+                  >
+                    <MaterialCommunityIcons
+                      name={
+                        sortBy === key && sortDirection === 'desc'
+                          ? 'chevron-down'
+                          : 'chevron-up'
+                      }
+                      size={20}
+                      color={themeColors.iconColor}
+                    />
+                  </TouchableOpacity>
+                </View>
+              );
+            })}
+          </View>
+        )}
       </View>
-      
-{sortedBookmarks.length === 0 && (
-  <View style={{ marginTop: 2, paddingHorizontal: 20, alignItems: 'center' }}>
-    {isConnected ? (
-      <Text style={[styles.emptyBookmarksText, themeStyles.text, { fontSize: textSize + 2, textAlign: 'center' }]}>
-      Add a bookmark by selecting the bookmark icon on the right of each medicine card.
-    </Text>):
-    (null)}
-  </View>
-)}
 
-{isConnected ? (
-  <FlatList
-        data={sortedBookmarks}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <View>
-            <TouchableOpacity
-              style={[styles.medicineCard, themeStyles.card]}
-              onPress={() => router.push(`/medicine_info?barcode=${encodeURIComponent(item.barcode)}`)} 
-            >
-              <View style={styles.cardContent}>
-                <View style={{ flex: 1 }}>
-                  <Text style={[styles.medicineName, themeStyles.text, { fontSize: textSize + 4}]}>{item.product_name}</Text>
-                  <Text style={[styles.medicineCompany, themeStyles.text, { fontSize: textSize - 1 }]}>{item.company}</Text>
-                  <Text style={[styles.medicineDosage, themeStyles.bodyText, { fontSize: textSize - 4}]}>
+      {sortedBookmarks.length === 0 && (
+        <View style={{ marginTop: 2, paddingHorizontal: 20, alignItems: 'center' }}>
+          {isConnected ? (
+            <Text style={[styles.emptyBookmarksText, themeStyles.text, { fontSize: textSize + 2, textAlign: 'center' }]}>
+              Add a bookmark by selecting the bookmark icon on the right of each medicine card.
+            </Text>) :
+            (null)}
+        </View>
+      )}
+
+      {isConnected ? (
+        <FlatList
+          data={sortedBookmarks}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => (
+            <View>
+              <TouchableOpacity
+                style={[styles.medicineCard, themeStyles.card]}
+                onPress={() => router.push(`/medicine_info?barcode=${encodeURIComponent(item.barcode)}`)}
+              >
+                <View style={styles.cardContent}>
+                  <View style={{ flex: 1 }}>
+                    <Text style={[styles.medicineName, themeStyles.text, { fontSize: textSize + 4 }]}>{item.product_name}</Text>
+                    <Text style={[styles.medicineCompany, themeStyles.text, { fontSize: textSize - 1 }]}>{item.company}</Text>
+                    <Text style={[styles.medicineDosage, themeStyles.bodyText, { fontSize: textSize - 4 }]}>
                       {item.ingredients?.map((ing: { ingredient: string; dosage?: string }) => `${ing.ingredient} ${ing.dosage || 'N/A'}`).join(',\n') || 'N/A'}
-                  </Text>
-                  <View style={styles.tagRow}>
-                    <View style={styles.tagList}>
-                      {[...(tagsById[item.id] || [])].sort().map((tag, index) => (
-                        <View key={index} style={[styles.tagPill, { backgroundColor: theme === 'dark' ? '#2e3b57' : '#d6eaff' }]}>
+                    </Text>
+                    <View style={styles.tagRow}>
+                      <View style={styles.tagList}>
+                        {[...(tagsById[item.id] || [])].sort().map((tag, index) => (
+                          <View key={index} style={[styles.tagPill, { backgroundColor: theme === 'dark' ? '#2e3b57' : '#d6eaff' }]}>
+                            <TouchableOpacity onPress={() => {
+                              if (!filteredTags.includes(tag)) {
+                                setFilteredTags(prev => [...prev, tag]);
+                              }
+                            }}>
+                              <Text style={[styles.tagPillText, themeStyles.text]}>{tag}</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => {
+                              setTagsById(prev => {
+                                const updated = {
+                                  ...prev,
+                                  [item.id]: (prev[item.id] || []).filter(t => t !== tag),
+                                };
+                                AsyncStorage.setItem('tagsById', JSON.stringify(updated));
+                                const tagStillUsed = Object.values(updated).some(tags => tags.includes(tag));
+                                if (!tagStillUsed) {
+                                  removeTagGlobally(tag);
+                                  const updatedGlobal = globalTags.filter(t => t !== tag);
+                                  setGlobalTags(updatedGlobal);
+                                  AsyncStorage.setItem('globalTags', JSON.stringify(updatedGlobal));
+                                  setFilteredTags(prev => prev.filter(t => t !== tag));
+                                }
+                                return updated;
+                              });
+                            }}>
+                              <MaterialCommunityIcons name="close" size={14} color={themeColors.iconColor} />
+                            </TouchableOpacity>
+                          </View>
+                        ))}
+                      </View>
+                      <TouchableOpacity
+                        style={styles.addTagButton}
+                        onPress={() => setExpandedCardId(expandedCardId === item.id ? null : item.id)}
+                      >
+                        <MaterialCommunityIcons name="plus" size={20} color={themeColors.iconColor} />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                  <TouchableOpacity onPress={() => {
+                    toggleBookmark(item.id);
+                    const updatedTags = { ...tagsById };
+                    const removedTags = updatedTags[item.id] || [];
+                    delete updatedTags[item.id];
+                    setTagsById(updatedTags);
+                    AsyncStorage.setItem('tagsById', JSON.stringify(updatedTags));
+
+                    const remainingTags = Object.values(updatedTags).flat();
+                    const cleanedGlobalTags = globalTags.filter(tag => remainingTags.includes(tag));
+                    setGlobalTags(cleanedGlobalTags);
+                    AsyncStorage.setItem('globalTags', JSON.stringify(cleanedGlobalTags));
+
+                  }} style={styles.starButton}>
+                    <MaterialCommunityIcons
+                      name={bookmarks.includes(item.id) ? 'bookmark' : 'bookmark-outline'}
+                      size={26}
+                      color={themeColors.iconColor}
+                    />
+                  </TouchableOpacity>
+                </View>
+              </TouchableOpacity>
+
+              {expandedCardId === item.id && (
+                <View style={[styles.tagDropdownCard, themeStyles.card]}>
+                  <TextInput
+                    value={newTag}
+                    onChangeText={setNewTag}
+                    placeholder="Enter a new tag"
+                    placeholderTextColor={themeColors.transparentTextColor}
+                    style={[styles.tagInput, themeStyles.card, { color: themeColors.dark }, { fontSize: textSize - 2 }]}
+                    onSubmitEditing={() => handleAddTag(item.id)}
+                    returnKeyType="done"
+                  />
+                  <View style={styles.dropdownTagList}>
+                    {[...globalTags]
+                      .filter(tag => !(tagsById[item.id] || []).includes(tag))
+                      .sort()
+                      .map((tag, index) => (
+                        <View key={index} style={[styles.dropdownTagPill, { backgroundColor: theme === 'dark' ? '#2e3b57' : '#d6eaff' }]}>
                           <TouchableOpacity onPress={() => {
-                            if (!filteredTags.includes(tag)) {
-                              setFilteredTags(prev => [...prev, tag]);
-                            }
+                            setTagsById(prev => ({
+                              ...prev,
+                              [item.id]: [...(prev[item.id] || []), tag],
+                            }));
+                            setExpandedCardId(null);
                           }}>
                             <Text style={[styles.tagPillText, themeStyles.text]}>{tag}</Text>
                           </TouchableOpacity>
                           <TouchableOpacity onPress={() => {
-                            setTagsById(prev => {
-                              const updated = {
-                                ...prev,
-                                [item.id]: (prev[item.id] || []).filter(t => t !== tag),
-                              };
-                              AsyncStorage.setItem('tagsById', JSON.stringify(updated));
-                              const tagStillUsed = Object.values(updated).some(tags => tags.includes(tag));
-                              if (!tagStillUsed) {
-                                removeTagGlobally(tag);
-                                const updatedGlobal = globalTags.filter(t => t !== tag);
-                                setGlobalTags(updatedGlobal);
-                                AsyncStorage.setItem('globalTags', JSON.stringify(updatedGlobal));
-                                setFilteredTags(prev => prev.filter(t => t !== tag));
-                              }
-                              return updated;
-                            });
+                            removeTagGlobally(tag);
+                            const remaining = globalTags.filter(t => t !== tag);
+                            if (remaining.length === 0) {
+                              setExpandedCardId(null);
+                            }
                           }}>
-                            <MaterialCommunityIcons name="close" size={14} color={themeColors.iconColor} />
+                            <MaterialCommunityIcons name="close" size={14} color="#336699" />
                           </TouchableOpacity>
                         </View>
                       ))}
-                    </View>
-                    <TouchableOpacity
-                      style={styles.addTagButton}
-                      onPress={() => setExpandedCardId(expandedCardId === item.id ? null : item.id)}
-                    >
-                      <MaterialCommunityIcons name="plus" size={20} color={themeColors.iconColor} />
-                    </TouchableOpacity>
                   </View>
                 </View>
-                <TouchableOpacity onPress={() => {
-                  toggleBookmark(item.id);
-                  const updatedTags = { ...tagsById };
-                  const removedTags = updatedTags[item.id] || [];
-                  delete updatedTags[item.id];
-                  setTagsById(updatedTags);
-                  AsyncStorage.setItem('tagsById', JSON.stringify(updatedTags));
-
-                  const remainingTags = Object.values(updatedTags).flat();
-                  const cleanedGlobalTags = globalTags.filter(tag => remainingTags.includes(tag));
-                  setGlobalTags(cleanedGlobalTags);
-                  AsyncStorage.setItem('globalTags', JSON.stringify(cleanedGlobalTags));
-                  
-                }} style={styles.starButton}>
-                  <MaterialCommunityIcons
-                    name={bookmarks.includes(item.id) ? 'bookmark' : 'bookmark-outline'}
-                    size={26}
-                    color={themeColors.iconColor}
-                  />
-                </TouchableOpacity>
-              </View>
-            </TouchableOpacity>
-
-            {expandedCardId === item.id && (
-              <View style={[styles.tagDropdownCard, themeStyles.card]}>
-                <TextInput
-                  value={newTag}
-                  onChangeText={setNewTag}
-                  placeholder="Enter a new tag"
-                  placeholderTextColor={themeColors.transparentTextColor}
-                  style={[styles.tagInput, themeStyles.card, {color: themeColors.dark}, { fontSize: textSize - 2 }]}
-                  onSubmitEditing={() => handleAddTag(item.id)}
-                  returnKeyType="done"
-                />
-                <View style={styles.dropdownTagList}>
-                  {[...globalTags]
-                    .filter(tag => !(tagsById[item.id] || []).includes(tag))
-                    .sort()
-                    .map((tag, index) => (
-                      <View key={index} style={[styles.dropdownTagPill, { backgroundColor: theme === 'dark' ? '#2e3b57' : '#d6eaff' }]}>
-                        <TouchableOpacity onPress={() => {
-                          setTagsById(prev => ({
-                            ...prev,
-                            [item.id]: [...(prev[item.id] || []), tag],
-                          }));
-                          setExpandedCardId(null);
-                        }}>
-                          <Text style={[styles.tagPillText, themeStyles.text]}>{tag}</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => {
-                          removeTagGlobally(tag);
-                          const remaining = globalTags.filter(t => t !== tag);
-                          if (remaining.length === 0) {
-                            setExpandedCardId(null);
-                          }
-                        }}>
-                          <MaterialCommunityIcons name="close" size={14} color="#336699" />
-                        </TouchableOpacity>
-                      </View>
-                    ))}
-                </View>
-              </View>
-            )}
-          </View>
-        )}
-      />
-):(
-  <View style={[styles.networkBox, themeStyles.card]}>
-    <Text style={[styles.scanText, themeStyles.text]}>No internet connection</Text>
-  </View>
-)}
+              )}
+            </View>
+          )}
+        />
+      ) : showOfflineCard ? (
+        <View style={[styles.networkBox, themeStyles.card]}>
+          <Text style={[styles.scanText, themeStyles.text]}>No internet connection</Text>
+        </View>
+      ) : null}
 
     </View>
   );
@@ -422,7 +440,7 @@ export default function BookmarksScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 15, 
+    paddingHorizontal: 15,
     paddingTop: 40,
     backgroundColor: '#f0f8ff',
   },
@@ -587,9 +605,9 @@ const styles = StyleSheet.create({
   dropdownPanel: {
     backgroundColor: 'white',
     borderRadius: 10,
-    paddingTop: 0,         
-    paddingBottom: 0,      
-    overflow: 'hidden',    
+    paddingTop: 0,
+    paddingBottom: 0,
+    overflow: 'hidden',
     elevation: 3,
     marginTop: 6,
     marginBottom: 6,
@@ -636,9 +654,9 @@ const styles = StyleSheet.create({
     color: '#336699',
     fontWeight: 'bold',
     textAlign: 'center',
-    paddingHorizontal: 0, 
+    paddingHorizontal: 0,
   },
-    networkBox: {
+  networkBox: {
     backgroundColor: '#e6f0ff',
     marginTop: 148,
     padding: 16,
@@ -653,6 +671,6 @@ const styles = StyleSheet.create({
     color: '#336699',
     fontWeight: '400',
     textAlign: 'center',
-    paddingHorizontal: 0, 
+    paddingHorizontal: 0,
   },
 });
