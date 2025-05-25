@@ -15,14 +15,16 @@ const AboutUsScreen = () => {
         {/* About Us Content Inside Card */}
 
       <View style={[styles.infoCard, themeStyles.card]}>
+          <Text style={[styles.subHeaderText, themeStyles.text, { fontSize: textSize + 4 }]}>
+            6 Degrees of Computation
+          </Text>
 
           <Text style={[styles.headerText, themeStyles.text, { fontSize: textSize }]}>
-            1. Who Are We
+            1. Who We Are
           </Text>
 
         <Text style={[styles.bodyText, themeStyles.bodyText, { fontSize: textSize }]}>
-          We are a team of motivated, knowledgeable individuals with diverse backgrounds and experiences, united by our goal to make medical information more accessible to the public.
-          {"\n"} {"\n"}
+          We are a team of motivated, knowledgeable individuals with diverse backgrounds and experiences united by our goal to make medical information more accessible to the public.
         </Text>
 
         <Text style={[styles.headerText, themeStyles.text, { fontSize: textSize }]}>
@@ -30,14 +32,7 @@ const AboutUsScreen = () => {
         </Text>
 
           <Text style={[styles.bodyText, themeStyles.bodyText, { fontSize: textSize }]}>
-            Want to know everything about a medicine but don't know where to start?
-
-            {"\n"} {"\n"}
-            That’s why we designed and developed MediDex to streamline access to medical information on over-the-counter medicines in Aotearoa New Zealand.
-            {"\n"} {"\n"}
-
-            We aim to provide accurate, independent, and comprehensive medicine information right at your fingertips.
-          {"\n"} {"\n"}
+            Want to know everything about a particular medicine but don't know where to start? We designed and developed MediDex to streamline access to medical information on over-the-counter medicines in Aotearoa New Zealand. We aim to provide accurate, independent, and comprehensive medical information at your fingertips.
         </Text>
 
           <Text style={[styles.headerText, themeStyles.text, { fontSize: textSize }]}>
@@ -45,14 +40,7 @@ const AboutUsScreen = () => {
           </Text>
 
           <Text style={[styles.bodyText, themeStyles.bodyText, { fontSize: textSize }]}>
-            We know your time is precious.{"\n"} {"\n"}
-
-          Researching information about a medicine can often feel overwhelming. You often have to dig through pages full of dense, tightly packed text.
-          {"\n"} {"\n"} 
-          MediDex retrieves medicine information right after you scan/enter a medicine's name from the label.
-          {"\n"} {"\n"} 
-          MediDex has categorised and formatted the content clearly and intuitively, so you won’t feel bombarded when looking for what matters most.
-          {"\n"} {"\n"}
+          We know your time is precious. Researching information about a medicine can often feel overwhelming. You must usually dig through pages full of dense, tightly packed text. MediDex retrieves medicine information right after you scan/enter a medicine's name from the label. MediDex has categorised and formatted the content clearly and intuitively, so you won't feel bombarded when looking for what matters most.
         </Text>
 
           <Text style={[styles.headerText, themeStyles.text, { fontSize: textSize }]}>
@@ -60,13 +48,11 @@ const AboutUsScreen = () => {
           </Text>
 
         <Text style={[styles.bodyText, themeStyles.bodyText, { fontSize: textSize }]}>
-          We wanted to create a medium that is accessible, user-friendly and convenient to all Kiwis.{"\n"} {"\n"} 
-          
-          MediDex offers a range of features to make your medicine research journey smoother.
-          Whether you want to save and revisit medicine information, customise the appearance of MediDex to suit your preferences, or receive timely alerts about medicine recalls, 
-          
+          We wanted to create a medium that is accessible, user-friendly and convenient to all Kiwis. MediDex offers a range of features to make your medicine research journey smoother. Whether you want to save and revisit medicine information, customise the appearance of MediDex to suit your preferences, or receive timely alerts about medicine recalls, 
+        <Text style={[styles.headerText, themeStyles.text, { fontSize: textSize, fontStyle: 'italic' }]}>
           {"\n"} 
           {"\n"}MediDex is ready.
+        </Text>
         </Text>
         </View>
       </ScrollView>
@@ -76,7 +62,7 @@ const AboutUsScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    padding: 16,
     backgroundColor: '#f0f8ff',
     flex: 1,
   },
@@ -89,7 +75,7 @@ const styles = StyleSheet.create({
   pageTitleWrapper: {
     alignItems: 'center',
     marginTop: 60,
-    marginBottom: 23
+    marginBottom: 18
   },
   pageTitleText: {
     fontSize: 40,
@@ -116,12 +102,8 @@ const styles = StyleSheet.create({
   },
   infoCard: {
     backgroundColor: '#fff',
-    borderRadius: 12,
+    borderRadius: 10,
     padding: 14,
-    shadowColor: '#000',
-    shadowOpacity: 0.05,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 12,
     elevation: 3,
     marginBottom: 25,
     marginHorizontal: 4

@@ -93,7 +93,7 @@ const PrivacyPolicyScreen = () => {
             Legal Information
           </Text>
 
-          <Text style={[styles.headerText, themeStyles.text, { fontSize: textSize }]}>
+          <Text style={[styles.headerText, themeStyles.text, { fontSize: textSize, fontStyle: 'italic' }]}>
             By using the MediDex application ("the App"), you agree to the following terms and conditions, governed by the laws of New
             Zealand:
           </Text>
@@ -190,7 +190,7 @@ const PrivacyPolicyScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    padding: 16,
     backgroundColor: '#f0f8ff',
     flex: 1,
   },
@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
   pageTitleWrapper: {
     alignItems: 'center',
     marginTop: 60,
-    marginBottom: 23,
+    marginBottom: 18
   },
   pageTitleText: {
     fontSize: 40,
@@ -230,12 +230,8 @@ const styles = StyleSheet.create({
   },
   infoCard: {
     backgroundColor: '#fff',
-    borderRadius: 12,
+    borderRadius: 10,
     padding: 14,
-    shadowColor: '#000',
-    shadowOpacity: 0.05,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 12,
     elevation: 3,
     marginBottom: 25,
     marginHorizontal: 4

@@ -51,12 +51,25 @@ const NotificationsScreen = () => {
     };
   }, [isConnected]);
 
-  useEffect(() => {
-    fetch(`${API_BASE_URL}/recalls`)
-      .then(res => res.json())
-      .then(data => setRecalls(data))
-      .catch(err => console.error('Error fetching recalls:', err));
-  }, []);
+useEffect(() => {
+  fetch(`${API_BASE_URL}/recalls`)
+    .then(res => res.json())
+    .then(data => {
+      // Parse "DD/MM/YYYY" to Date object
+      const parseDate = (str: string): Date => {
+        const [day, month, year] = str.split('/');
+        return new Date(Number(year), Number(month) - 1, Number(day)); // month is 0-indexed
+      };
+
+      const sorted = data.sort((a: Recall, b: Recall) =>
+        parseDate(b.date).getTime() - parseDate(a.date).getTime()
+      );
+
+      setRecalls(sorted);
+    })
+    .catch(err => console.error('Error fetching recalls:', err));
+}, []);
+
 
   const renderRecall = ({ item }: { item: Recall }) => (
     <TouchableOpacity
@@ -123,8 +136,8 @@ const NotificationsScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 10,
-    flexGrow: 1,
+    padding: 0,
+    flex: 1,
   },
   backButton: {
     position: 'absolute',
@@ -134,8 +147,8 @@ const styles = StyleSheet.create({
   },
   pageTitleWrapper: {
     alignItems: 'center',
-    marginTop: 70,
-    marginBottom: 20,
+    marginTop: 79,
+    marginBottom: -3,
   },
   pageTitleText: {
     fontSize: 40,
