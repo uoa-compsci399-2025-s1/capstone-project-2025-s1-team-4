@@ -168,11 +168,11 @@ export default function Index() {
           onBarcodeScanned={scannedData || scanning ? undefined : handleBarcodeScanned}
         />
       </View>
-    ):(
+    ): !isConnected ? (
       <View style={[styles.networkBox, themeStyles.card]}>
         <Text style={[styles.scanText, themeStyles.text]}>No internet connection</Text>
       </View>
-    )}
+    ): (null)}
 
     {message && (
       <View style={styles.infoBox}>

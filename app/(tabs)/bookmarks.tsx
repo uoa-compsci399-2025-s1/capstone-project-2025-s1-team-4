@@ -321,9 +321,11 @@ export default function BookmarksScreen() {
                               AsyncStorage.setItem('tagsById', JSON.stringify(updated));
                               const tagStillUsed = Object.values(updated).some(tags => tags.includes(tag));
                               if (!tagStillUsed) {
+                                removeTagGlobally(tag);
                                 const updatedGlobal = globalTags.filter(t => t !== tag);
                                 setGlobalTags(updatedGlobal);
                                 AsyncStorage.setItem('globalTags', JSON.stringify(updatedGlobal));
+                                setFilteredTags(prev => prev.filter(t => t !== tag));
                               }
                               return updated;
                             });
