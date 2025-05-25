@@ -62,6 +62,7 @@ export const API_BASE_URL = "http://IPADDRESS:PORT";
    npm install @react-native-async-storage/async-storage
    npm install @react-navigation/native
    npm install @react-native-assets/slider
+   npx expo install expo-haptics
    ```
 
 3. Run the backend API server 

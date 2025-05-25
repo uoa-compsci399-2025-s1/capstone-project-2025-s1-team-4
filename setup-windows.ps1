@@ -52,6 +52,7 @@ npx expo install expo-status-bar
 npm install @react-native-assets/slider
 npm install @react-navigation/native
 npm install @react-native-async-storage/async-storage
+npx expo install expo-haptics
 
 # Run the Expo app
 Write-Host "Starting Expo app..."

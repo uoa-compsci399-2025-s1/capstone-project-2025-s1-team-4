@@ -2,6 +2,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 import { CameraType, CameraView, useCameraPermissions } from 'expo-camera';
+import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
 import { useCallback, useState } from 'react';
 import { Alert, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -39,12 +40,13 @@ export default function Index() {
     }, [])
   );
 
-  function handleBarcodeScanned({ data }: { data: string }) {
+  async function handleBarcodeScanned({ data }: { data: string }) {
     if (scanning) return;
-  
+    
     setScanning(true);
     setScannedData(data);
-  
+    await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    
     fetch(`${API_BASE_URL}/medicine?barcode=${encodeURIComponent(data)}`)
       .then((response) => {
         if (!response.ok) {
@@ -82,6 +84,7 @@ export default function Index() {
 
   return (
   <View style={[styles.container, themeStyles.container]}>
+
     {/* Logo Icon Header */}
     <Image
       source={
