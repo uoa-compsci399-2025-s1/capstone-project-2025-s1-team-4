@@ -121,12 +121,12 @@ const PrivacyPolicyScreen = () => {
             3. Use of Consumer Medicine Information (CMI)
           </Text>
 
-          <Text style={[styles.bodyText, themeStyles.bodyText, { fontSize: textSize }]}>
-            Not all medicines listed in MediDex have an official CMI (Consumer Medicine Information) sheet available from Medsafe. In such cases,
-            we may provide a CMI sheet from a similar medicine containing the same active ingredient(s). These substitute CMIs are intended as
-            general guidance only and may not reflect specific differences in formulation, brand, or patient advice. Users are strongly encouraged
-            to consult a healthcare professional for clarification and personalised information.
-          </Text>
+        <Text style={[styles.bodyText, themeStyles.bodyText, { fontSize: textSize }]}>
+          Not all medicines listed in MediDex have an official CMI (Consumer Medicine Information) sheet available from Medsafe. In such cases, 
+          we may provide a CMI sheet from a similar medicine containing the same active ingredient(s) and dosage(s). These substitute CMIs are intended as 
+          general guidance only and may not reflect specific differences in formulation, brand, or patient advice. Users are strongly encouraged 
+          to consult a healthcare professional for clarification and personalised information.
+        </Text>
 
           <Text style={[styles.headerText, themeStyles.text, { fontSize: textSize }]}>
             4. Medical Disclaimer
