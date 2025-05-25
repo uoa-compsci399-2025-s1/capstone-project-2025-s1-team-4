@@ -55,10 +55,9 @@ useEffect(() => {
   fetch(`${API_BASE_URL}/recalls`)
     .then(res => res.json())
     .then(data => {
-      // Parse "DD/MM/YYYY" to Date object
       const parseDate = (str: string): Date => {
         const [day, month, year] = str.split('/');
-        return new Date(Number(year), Number(month) - 1, Number(day)); // month is 0-indexed
+        return new Date(Number(year), Number(month) - 1, Number(day)); 
       };
 
       const sorted = data.sort((a: Recall, b: Recall) =>
