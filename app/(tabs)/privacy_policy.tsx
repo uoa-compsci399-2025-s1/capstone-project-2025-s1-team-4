@@ -1,15 +1,13 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, StatusBar, Platform } from 'react-native';
-import { useTheme } from '../../context/theme_context';
 import { useRouter } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
+import React from 'react';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useTheme } from '../../context/theme_context';
 
 const PrivacyPolicyScreen = () => {
   const { themeStyles, textSize, themeColors } = useTheme();
   const router = useRouter();
 
   return (
-    
     <View style={[styles.container, themeStyles.container]}>
       <View style={styles.pageTitleWrapper}>
         <Text style={[styles.pageTitleText, themeStyles.text]}>
@@ -88,8 +86,6 @@ const PrivacyPolicyScreen = () => {
           policy. Continued use of the App after changes indicates your acceptance of the updated policy.
         </Text>
       </View>
-
-
 
       <View style={[styles.infoCard, themeStyles.card]}>
 

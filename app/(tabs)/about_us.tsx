@@ -13,7 +13,7 @@ const AboutUsScreen = () => {
 
       {/* Page Title */}
       <View style={styles.pageTitleWrapper}>
-        <Text style={[styles.pageTitleText, themeStyles.text, { fontSize: textSize + 4}]}>
+        <Text style={[styles.pageTitleText, themeStyles.text]}>
           About Us
         </Text>
       </View>
