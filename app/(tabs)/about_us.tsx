@@ -33,10 +33,10 @@ const AboutUsScreen = () => {
             Want to know everything about a medicine but don't know where to start?
 
             {"\n"} {"\n"}
-            That’s why we designed and developed MediDex to streamline access to medical information on both prescription and over-the-counter medicines in Aotearoa New Zealand.
+            That’s why we designed and developed MediDex to streamline access to medical information on over-the-counter medicines in Aotearoa New Zealand.
             {"\n"} {"\n"}
 
-          We aim to deliver you accurate, independent, and comprehensive medicine information right at your fingertips.
+            We aim to provide accurate, independent, and comprehensive medicine information right at your fingertips.
           {"\n"} {"\n"}
         </Text>
 
