@@ -1,102 +1,143 @@
 import { Feather } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
-import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useState } from 'react';
+import { Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useBookmarks } from '../../context/bookmarks_context';
 import { useTheme } from '../../context/theme_context';
 
 export default function SettingsScreen() {
   const router = useRouter();
   const { setBookmarks } = useBookmarks();
-  const { themeStyles, textSize, themeColors } = useTheme();
+  const { themeStyles, textSize, themeColors, theme } = useTheme();
+  const [confirmVisible, setConfirmVisible] = useState(false);
+
+  const handleClearBookmarks = async () => {
+    await AsyncStorage.removeItem('bookmarks');
+    setBookmarks([]);
+    setConfirmVisible(false);
+  };
 
   return (
-    <ScrollView style={[styles.container, themeStyles.container]}>
-      <View style={styles.pageTitleWrapper}>
-        <Text style={[styles.pageTitleText, themeStyles.text]}>Settings</Text>
-      </View>
-      {/* App Settings */}
-      <Text style={[styles.sectionHeader, themeStyles.text, { fontSize: textSize + 4 }]}>App Settings</Text>
-      <View style={[styles.settingCard, themeStyles.card]}>
-        {[
-          { label: 'Appearance', route: '/appearance' },
+    <View style={{ flex: 1 }}>
+      <ScrollView style={[styles.container, themeStyles.container]}>
+        <View style={styles.pageTitleWrapper}>
+          <Text style={[styles.pageTitleText, themeStyles.text]}>Settings</Text>
+        </View>
 
-          { label: 'Permissions', route: '/permissions' },
-          { label: 'Medicine Recalls', route: '/recall_history' },
-          {
-            label: 'Clear Bookmarks',
-            onPress: () =>
-              Alert.alert(
-                'Clear Bookmarks',
-                'Are you sure you want to remove all bookmarks?',
-                [
-                  { text: 'Cancel', style: 'cancel' },
-                  {
-                    text: 'Clear All',
-                    style: 'destructive',
-                    onPress: async () => {
-                      await AsyncStorage.removeItem('bookmarks');
-                      setBookmarks([]);
-                    },
-                  },
-                ]
-              ),
-          }
-        ].map((item, index, arr) => {
-          const isLast = index === arr.length - 1;
-          const isPressable = item.route || item.onPress;
+        {/* App Settings */}
+        <Text style={[styles.sectionHeader, themeStyles.text, { fontSize: textSize + 4 }]}>App Settings</Text>
+        <View style={[styles.settingCard, themeStyles.card]}>
+          {[
+            { label: 'Appearance', route: '/appearance' },
+            { label: 'Permissions', route: '/permissions' },
+            { label: 'Medicine Recalls', route: '/recall_history' },
+            {
+              label: 'Clear Bookmarks',
+              onPress: () => setConfirmVisible(true),
+            },
+          ].map((item, index, arr) => {
+            const isLast = index === arr.length - 1;
+            const isPressable = item.route || item.onPress;
 
-          return (
-            <TouchableOpacity
-              key={item.label}
-              onPress={() => {
-                if (item.route) router.push(item.route as any);
-                else if (item.onPress) item.onPress();
-              }}
-              activeOpacity={isPressable ? 0.6 : 1}
-              style={[
-                styles.settingRow,
-                isLast && { borderBottomWidth: 0 },
-              ]}
-            >
-              <Text style={[styles.settingText, themeStyles.text, { fontSize: textSize }]}>{item.label}</Text>
-              <Feather name="chevron-right" size={20} color={themeColors.iconColor} />
-            </TouchableOpacity>
-          );
-        })}
-      </View>
+            return (
+              <TouchableOpacity
+                key={item.label}
+                onPress={() => {
+                  if (item.route) router.push(item.route as any);
+                  else if (item.onPress) item.onPress();
+                }}
+                activeOpacity={isPressable ? 0.6 : 1}
+                style={[
+                  styles.settingRow,
+                  isLast && { borderBottomWidth: 0 },
+                ]}
+              >
+                <Text style={[styles.settingText, themeStyles.text, { fontSize: textSize }]}>{item.label}</Text>
+                <Feather name="chevron-right" size={20} color={themeColors.iconColor} />
+              </TouchableOpacity>
+            );
+          })}
+        </View>
 
-      {/* About Section */}
-      <Text style={[styles.sectionHeader, themeStyles.text, { fontSize: textSize + 4 }]}>About</Text>
-      <View style={[styles.settingCard, themeStyles.card]}>
-        {[
-          { label: 'About Us', route: '/about_us' },
-          { label: 'Privacy & Legal Information', route: '/privacy_policy' },
-          { label: 'App Version', right: <Text style={[styles.settingValue, themeStyles.text, { fontSize: textSize }]}>v1.0.0</Text> },
-        ].map((item, index, arr) => {
-          const isLast = index === arr.length - 1;
-          const isPressable = !!item.route;
+        {/* About Section */}
+        <Text style={[styles.sectionHeader, themeStyles.text, { fontSize: textSize + 4 }]}>About</Text>
+        <View style={[styles.settingCard, themeStyles.card]}>
+          {[
+            { label: 'About Us', route: '/about_us' },
+            { label: 'Privacy & Legal Information', route: '/privacy_policy' },
+            {
+              label: 'App Version',
+              right: <Text style={[styles.settingValue, themeStyles.text, { fontSize: textSize }]}>v1.0.0</Text>,
+            },
+          ].map((item, index, arr) => {
+            const isLast = index === arr.length - 1;
+            const isPressable = !!item.route;
 
-          return (
-            <TouchableOpacity
-              key={item.label}
-              onPress={item.route ? () => router.push(item.route as any) : undefined}
-              activeOpacity={isPressable ? 0.6 : 1}
-              disabled={!isPressable}
-              style={[
-                styles.settingRow,
-                isLast && { borderBottomWidth: 0 },
-              ]}
-            >
-              <Text style={[styles.settingText, themeStyles.text, { fontSize: textSize }]}>{item.label}</Text>
-              {item.right ?? (
-                isPressable && <Feather name="chevron-right" size={20} color={themeColors.iconColor} />
-              )}
-            </TouchableOpacity>
-          );
-        })}
-      </View>
-    </ScrollView>
+            return (
+              <TouchableOpacity
+                key={item.label}
+                onPress={item.route ? () => router.push(item.route as any) : undefined}
+                activeOpacity={isPressable ? 0.6 : 1}
+                disabled={!isPressable}
+                style={[
+                  styles.settingRow,
+                  isLast && { borderBottomWidth: 0 },
+                ]}
+              >
+                <Text style={[styles.settingText, themeStyles.text, { fontSize: textSize }]}>{item.label}</Text>
+                {item.right ?? (
+                  isPressable && <Feather name="chevron-right" size={20} color={themeColors.iconColor} />
+                )}
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+      </ScrollView>
+
+      {/* Custom Modal */}
+      <Modal transparent visible={confirmVisible}>
+        <View style={{
+          position: 'absolute',
+          top: 0, left: 0, right: 0, bottom: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          justifyContent: 'center',
+          alignItems: 'center',
+          zIndex: 100,
+        }}>
+          <View style={{
+            backgroundColor: theme === 'dark' ? '#000' : '#fff',
+            padding: 20,
+            borderRadius: 10,
+            width: '90%',
+            maxWidth: 400,
+          }}>
+            <Text style={{
+              color: theme === 'dark' ? '#fff' : '#000',
+              fontSize: 18,
+              marginBottom: 5,
+              fontWeight: 'bold'
+            }}>
+              Clear Bookmarks
+            </Text>
+            <Text style={{
+              color: theme === 'dark' ? '#ccc' : '#333',
+              marginBottom: 20
+            }}>
+              Are you sure you want to remove all bookmarks? This cannot be undone.
+            </Text>
+            <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+              <TouchableOpacity onPress={() => setConfirmVisible(false)} style={{ marginRight: 20 }}>
+                <Text style={{ color: '#007AFF' }}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={handleClearBookmarks}>
+                <Text style={{ color: 'red' }}>Clear All</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+    </View>
   );
 }
 
