@@ -248,7 +248,7 @@ export default function DetailsScreen() {
         </TouchableOpacity>
       )}
     />):(
-        <View style={styles.networkBox}>
+        <View style={[styles.networkBox, themeStyles.card]}>
           <Text style={[styles.scanText, themeStyles.text]}>No internet connection</Text>
         </View>)}
   </View>

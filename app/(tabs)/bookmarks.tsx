@@ -408,7 +408,7 @@ export default function BookmarksScreen() {
         )}
       />
 ):(
-  <View style={styles.networkBox}>
+  <View style={[styles.networkBox, themeStyles.card]}>
     <Text style={[styles.scanText, themeStyles.text]}>No internet connection</Text>
   </View>
 )}

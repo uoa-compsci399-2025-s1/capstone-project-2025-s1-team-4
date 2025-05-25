@@ -1,9 +1,9 @@
+import * as Network from 'expo-network';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { FlatList, Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { API_BASE_URL } from '../../config';
 import { useTheme } from '../../context/theme_context';
-import * as Network from 'expo-network';
 
 type Recall = {
   brand_name: string;
@@ -92,7 +92,7 @@ const NotificationsScreen = () => {
         contentContainerStyle={styles.listContent}
       />
         ):(
-        <View style={styles.networkBox}>
+        <View style={[styles.networkBox, themeStyles.card]}>
           <Text style={[styles.scanText, themeStyles.text]}>No internet connection</Text>
         </View>
         )}
