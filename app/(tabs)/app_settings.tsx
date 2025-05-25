@@ -1,10 +1,9 @@
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import { Feather} from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
+import { Feather } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useRouter } from 'expo-router';
+import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useBookmarks } from '../../context/bookmarks_context';
-import { Alert } from 'react-native';
-import { useTheme } from '../../context/theme_context'
+import { useTheme } from '../../context/theme_context';
 
 export default function SettingsScreen() {
   const router = useRouter();
@@ -21,8 +20,9 @@ export default function SettingsScreen() {
       <View style={[styles.settingCard, themeStyles.card]}>
         {[
           { label: 'Appearance', route: '/appearance' },
-          { label: 'Recall History', route: '/recall_history' },
+          
           { label: 'Permissions', route: '/permissions' },
+          { label: 'Medicine Recalls', route: '/recall_history' },
           {
             label: 'Clear Bookmarks',
             onPress: () =>
@@ -71,7 +71,7 @@ export default function SettingsScreen() {
       <View style={[styles.settingCard, themeStyles.card]}>
         {[
           { label: 'About Us', route: '/about_us' },
-          { label: 'Privacy Policy', route: '/privacy_policy' },
+          { label: 'Privacy & Legal Information', route: '/privacy_policy' },
           { label: 'App Version', right: <Text style={[styles.settingValue, themeStyles.text, { fontSize: textSize }]}>v1.0.0</Text> },
         ].map((item, index, arr) => {
           const isLast = index === arr.length - 1;
