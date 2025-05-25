@@ -11,17 +11,49 @@ Write some cool stuff about what this project is about
 ### 🖥️ Frontend
 - **Framework:** React Native (JavaScript) `v0.79.2`
 - **React Version:** React `v19.0.0`
-- **Development Environment:** Expo `v^53.0.9`
+- **Development Framework:** Expo `v53.0.9`
+
+#### React Native Libraries
+- React Navigation `v7.1.9`
+- React Native Async Storage `v2.1.2`
+- React Native Assets Slider `v11.0.8`
+
+#### Expo Libraries
+- Expo Module Scripts `v4.1.7`
+- Expo Status Bar `v2.2.3`
+- Expo Haptics `v14.1.4`
 
 ### 🖧 Backend
-- **Server Development:** Python (Flask) `v3.12.4 `
-- **Database:** PostgreSQL `v17.5` (hosted on Neon) `https://neon.tech/`
+- **Language:** Python `v3.12.2`
+- **Web Framework:** Flask `v3.1.1`
 - **Database Access:** Python (using SQL veries via psycopg2)
-- **Containerization:** Docker `v28.0.4`
-- **Server Deployment:** Render `https://render.com/`
+
+#### Python libraries:
+- Flask `3.1.1`
+- flask-restx `1.3.0`
+- SQLAlchemy `2.0.41`
+- pytest `8.3.5`
+- flask-cors `6.0.0`
+- Selenium `4.33.0`
+- gunicorn `23.0.0`
+- psycopg2-binary `2.9.10`
+- python-dotenv `1.1.0`
+
+### 🛠️ Tools & Infrastructure
+
+- **Database:** PostgreSQL `v16.1` (hosted on Neon)
+- **Containerization:** Docker `v25.0.3`
+- **Server Deployment:** Render
+
 
 ## To get the application side (Expo) to run:
-### Quick configuration before starting the app
+
+### On Android
+To quickly download the app and run it, here is an APK file which is only available on android systems:
+
+INSERT LINK HERE
+
+### On other platforms (also compatible with Android)
 
 1. Install node.js (LTS version):
    
@@ -40,7 +72,7 @@ Write some cool stuff about what this project is about
     npx expo start
    ```
 
-4. Install Expo Go on Android, then (making sure your PC and phone are both using the same network) scan the QR code in Expo Go and scan some stuff!
+4. Install Expo Go on Android, then (making sure your PC and phone are both using the same network) scan the QR code in Expo Go and scan some stuff! Ensure that the supported SDK version in the settings is 53.
 
 In the output, you'll find options to open the app in a
 
