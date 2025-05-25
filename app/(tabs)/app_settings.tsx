@@ -12,15 +12,15 @@ export default function SettingsScreen() {
 
   return (
     <ScrollView style={[styles.container, themeStyles.container]}>
-        <View style={styles.pageTitleWrapper}>
-      <Text style={[styles.pageTitleText, themeStyles.text]}>Settings</Text> 
+      <View style={styles.pageTitleWrapper}>
+        <Text style={[styles.pageTitleText, themeStyles.text]}>Settings</Text>
       </View>
       {/* App Settings */}
-      <Text style={[styles.sectionHeader, themeStyles.text, { fontSize: textSize + 4}]}>App Settings</Text>
+      <Text style={[styles.sectionHeader, themeStyles.text, { fontSize: textSize + 4 }]}>App Settings</Text>
       <View style={[styles.settingCard, themeStyles.card]}>
         {[
           { label: 'Appearance', route: '/appearance' },
-          
+
           { label: 'Permissions', route: '/permissions' },
           { label: 'Medicine Recalls', route: '/recall_history' },
           {
@@ -50,7 +50,7 @@ export default function SettingsScreen() {
             <TouchableOpacity
               key={item.label}
               onPress={() => {
-                if (item.route) router.push(item.route as any); 
+                if (item.route) router.push(item.route as any);
                 else if (item.onPress) item.onPress();
               }}
               activeOpacity={isPressable ? 0.6 : 1}
@@ -67,7 +67,7 @@ export default function SettingsScreen() {
       </View>
 
       {/* About Section */}
-      <Text style={[styles.sectionHeader, themeStyles.text, { fontSize: textSize + 4}]}>About</Text>
+      <Text style={[styles.sectionHeader, themeStyles.text, { fontSize: textSize + 4 }]}>About</Text>
       <View style={[styles.settingCard, themeStyles.card]}>
         {[
           { label: 'About Us', route: '/about_us' },

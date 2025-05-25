@@ -79,14 +79,14 @@ export const useTheme = () => {
   return context;
 };
 
-const lightTheme: 
+const lightTheme:
   ThemeStyles = StyleSheet.create({
-  container: { backgroundColor: '#f0f8ff' },
-  text: { color: '#336699' },
-  transparentText: {color: '#336699' },
-  card: { backgroundColor: '#ffffff' }, 
-  bodyText: { color: '#4a4a4a'},
-});
+    container: { backgroundColor: '#f0f8ff' },
+    text: { color: '#336699' },
+    transparentText: { color: '#336699' },
+    card: { backgroundColor: '#ffffff' },
+    bodyText: { color: '#4a4a4a' },
+  });
 
 const lightColors: ThemeColors = {
   textColor: '#336699',
@@ -99,10 +99,10 @@ const lightColors: ThemeColors = {
 };
 
 const darkTheme: ThemeStyles = StyleSheet.create({
-  container: { backgroundColor: '#1A2130' },       
-  text: { color: '#c5e1fa'},                      
+  container: { backgroundColor: '#1A2130' },
+  text: { color: '#c5e1fa' },
   transparentText: { color: '#ffffff' },
-  card: { backgroundColor: '#5B6174' },         
+  card: { backgroundColor: '#5B6174' },
   bodyText: { color: '#ffffff' },
 });
 
