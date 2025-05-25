@@ -1,4 +1,3 @@
-import { useRouter } from 'expo-router';
 import React from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useTheme } from '../../context/theme_context';
@@ -16,23 +15,18 @@ const AboutUsScreen = () => {
         {/* About Us Content Inside Card */}
 
       <View style={[styles.infoCard, themeStyles.card]}>
-      {/* Underlined Title Everything About Us */}
-        <Text style={[styles.subHeaderText, themeStyles.text, { fontSize: textSize + 4}]}>
-          Everything About Us {"\n"} 
-        </Text>
 
         <Text style={[styles.headerText, themeStyles.text, { fontSize: textSize }]}>
           1. Who Are We
         </Text>
 
         <Text style={[styles.bodyText, themeStyles.bodyText, { fontSize: textSize }]}>
-          We are a team of motivated, knowledgeable individuals with diverse backgrounds and experiences.{"\n"} {"\n"} 
-          We are united by a goal to make medical information more accessible to the public.
-          {"\n"} 
+          We are a team of motivated, knowledgeable individuals with diverse backgrounds and experiences, united by our goal to make medical information more accessible to the public.
+          {"\n"} {"\n"}
         </Text>
 
         <Text style={[styles.headerText, themeStyles.text, { fontSize: textSize }]}>
-          2. What Are Our Goals
+          2. Our Goals
         </Text>
 
         <Text style={[styles.bodyText, themeStyles.bodyText, { fontSize: textSize }]}>
@@ -43,7 +37,7 @@ const AboutUsScreen = () => {
           {"\n"} {"\n"} 
 
           We aim to deliver you accurate, independent, and comprehensive medicine information right at your fingertips.
-          {"\n"} 
+          {"\n"} {"\n"}
         </Text>
 
         <Text style={[styles.headerText, themeStyles.text, { fontSize: textSize }]}>
@@ -53,12 +47,12 @@ const AboutUsScreen = () => {
         <Text style={[styles.bodyText, themeStyles.bodyText, { fontSize: textSize }]}>
           We know your time is precious.{"\n"} {"\n"} 
 
-          Researching information about a medicine can often feel overwhelming. You oftem have to dig through pages full of dense, tightly packed text.
+          Researching information about a medicine can often feel overwhelming. You often have to dig through pages full of dense, tightly packed text.
           {"\n"} {"\n"} 
-          MediDex retrives medicine information right after you to scan/enter a medicine's name from the label.
+          MediDex retrieves medicine information right after you scan/enter a medicine's name from the label.
           {"\n"} {"\n"} 
           MediDex has categorised and formatted the content clearly and intuitively, so you won’t feel bombarded when looking for what matters most.
-          {"\n"} 
+          {"\n"} {"\n"}
         </Text>
 
         <Text style={[styles.headerText, themeStyles.text, { fontSize: textSize }]}>
@@ -66,7 +60,7 @@ const AboutUsScreen = () => {
         </Text>
 
         <Text style={[styles.bodyText, themeStyles.bodyText, { fontSize: textSize }]}>
-          We want to create a medium that is accessible, user-friendly and convenient to all Kiwis.{"\n"} {"\n"} 
+          We wanted to create a medium that is accessible, user-friendly and convenient to all Kiwis.{"\n"} {"\n"} 
           
           MediDex offers a range of features to make your medicine research journey smoother.
           Whether you want to save and revisit medicine information, customise the appearance of MediDex to suit your preferences, or receive timely alerts about medicine recalls, 
