@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { FlatList, Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { API_BASE_URL } from '../../config';
 import { useTheme } from '../../context/theme_context';
+import * as Network from 'expo-network';
 
 type Recall = {
   brand_name: string;
@@ -16,6 +17,21 @@ const NotificationsScreen = () => {
   const { themeStyles, textSize, themeColors } = useTheme();
   const router = useRouter();
   const [recalls, setRecalls] = useState<Recall[]>([]);
+  const [isConnected, setIsConnected] = useState<boolean | null>(null);
+      
+        useEffect(() => {
+        const checkConnection = async () => {
+          try {
+            const networkState = await Network.getNetworkStateAsync();
+            setIsConnected(networkState.isConnected === true && networkState.isInternetReachable === true);
+          } catch (error) {
+            console.error('Failed to check network status:', error);
+            setIsConnected(false);
+          }
+        };
+      
+        checkConnection();
+      }, []);
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/recalls`) 
@@ -42,17 +58,19 @@ const NotificationsScreen = () => {
   );
 
   return (
+    
   <View style={[styles.container, themeStyles.container]}>
     {/* Page Title */}
     <View style={styles.pageTitleWrapper}>
       <Text style={[styles.pageTitleText, themeStyles.text]}>
-        Recall History
+        Medicine Recalls
       </Text>
     </View>
-
+    
     {!recalls || recalls.length === 0 ? (
       <View style={styles.loadingWrapper}>
-        <Text
+        {isConnected ? (
+          <Text
           style={[
             styles.brandName,
             themeStyles.text,
@@ -61,14 +79,25 @@ const NotificationsScreen = () => {
         >
           Loading recalls...
         </Text>
+        ):(null)}
+        
       </View>
     ) : (
-      <FlatList
+      <View style={[styles.listContent]}>
+        {isConnected ? (
+          <FlatList
         data={recalls}
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderRecall}
         contentContainerStyle={styles.listContent}
       />
+        ):(
+        <View style={styles.networkBox}>
+          <Text style={[styles.scanText, themeStyles.text]}>No internet connection</Text>
+        </View>
+        )}
+      
+      </View>
     )}
   </View>
 );
@@ -137,6 +166,23 @@ loadingWrapper: {
   alignItems: 'center',
   paddingHorizontal: 20,
 },
+  networkBox: {
+    backgroundColor: '#e6f0ff',
+    marginTop: 191,
+    padding: 16,
+    borderRadius: 10,
+    width: '90%',
+    alignItems: 'center',
+    alignSelf: 'center',
+  },
+  scanText: {
+    marginTop: 0,
+    fontSize: 20,
+    color: '#336699',
+    fontWeight: '400',
+    textAlign: 'center',
+    paddingHorizontal: 0, 
+  },
 });
 
 export default NotificationsScreen;

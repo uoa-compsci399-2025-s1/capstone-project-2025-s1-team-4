@@ -6,6 +6,7 @@ import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'r
 import { API_BASE_URL } from '../../config';
 import { useBookmarks } from '../../context/bookmarks_context';
 import { useTheme } from '../../context/theme_context';
+import * as Network from 'expo-network';
 
 export default function DetailsScreen() {
   const [medicines, setMedicines] = useState<any[]>([]);
@@ -19,6 +20,21 @@ export default function DetailsScreen() {
   const [sortBy, setSortBy] = useState<'name' | 'company'>('name');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   const {textSize, themeStyles, themeColors } = useTheme();
+  const [isConnected, setIsConnected] = useState<boolean | null>(null);
+  
+    useEffect(() => {
+    const checkConnection = async () => {
+      try {
+        const networkState = await Network.getNetworkStateAsync();
+        setIsConnected(networkState.isConnected === true && networkState.isInternetReachable === true);
+      } catch (error) {
+        console.error('Failed to check network status:', error);
+        setIsConnected(false);
+      }
+    };
+  
+    checkConnection();
+  }, []);
 
 
   useEffect(() => {
@@ -158,7 +174,7 @@ export default function DetailsScreen() {
     </View>
 
     {/* Medicine List or Loading */}
-    <FlatList
+    {isConnected ? (<FlatList
       data={sortedMedicines}
       keyExtractor={(item) => item.id.toString()}
       ListEmptyComponent={() => (
@@ -231,7 +247,10 @@ export default function DetailsScreen() {
           </View>
         </TouchableOpacity>
       )}
-    />
+    />):(
+        <View style={styles.networkBox}>
+          <Text style={[styles.scanText, themeStyles.text]}>No internet connection</Text>
+        </View>)}
   </View>
 );
 }
@@ -258,7 +277,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginVertical: 6,
     marginHorizontal: 5,
-    elevation: 3
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
   },
   cardContent: {
     flexDirection: 'row',
@@ -330,5 +353,22 @@ const styles = StyleSheet.create({
     flex: 1, 
     justifyContent: 'center', 
     alignItems: 'center'
+  },
+  networkBox: {
+    backgroundColor: '#e6f0ff',
+    marginTop: 150,
+    padding: 16,
+    borderRadius: 10,
+    width: '90%',
+    alignItems: 'center',
+    alignSelf: 'center',
+  },
+  scanText: {
+    marginTop: 0,
+    fontSize: 20,
+    color: '#336699',
+    fontWeight: '400',
+    textAlign: 'center',
+    paddingHorizontal: 0, 
   },
 });

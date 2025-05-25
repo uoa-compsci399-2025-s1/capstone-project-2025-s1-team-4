@@ -4,10 +4,11 @@ import { useFocusEffect } from '@react-navigation/native';
 import { CameraType, CameraView, useCameraPermissions } from 'expo-camera';
 import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import { Alert, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { API_BASE_URL } from '../../config';
 import { useTheme } from '../../context/theme_context';
+import * as Network from 'expo-network';
 
 
 type Medicine = {
@@ -28,6 +29,21 @@ export default function Index() {
   const [message, setMessage] = useState<string | null>(null);
   const [cameraAllowed, setCameraAllowed] = useState(false);
   const { theme, setTheme, textSize, setTextSize, themeStyles, themeColors } = useTheme();
+  const [isConnected, setIsConnected] = useState<boolean | null>(null);
+
+  useEffect(() => {
+  const checkConnection = async () => {
+    try {
+      const networkState = await Network.getNetworkStateAsync();
+      setIsConnected(networkState.isConnected === true && networkState.isInternetReachable === true);
+    } catch (error) {
+      console.error('Failed to check network status:', error);
+      setIsConnected(false);
+    }
+  };
+
+  checkConnection();
+}, []);
 
   useFocusEffect(
     useCallback(() => {
@@ -114,7 +130,7 @@ export default function Index() {
     </TouchableOpacity>
 
     {/* Barcode Scanner Icon */}
-    {!cameraVisible && (
+    {!cameraVisible && isConnected ? (
   <TouchableOpacity
     onPress={async () => {
       const allowed = await AsyncStorage.getItem('cameraEnabled');
@@ -130,9 +146,9 @@ export default function Index() {
     <View style={{ marginTop: 20, marginBottom: 20, paddingTop: 10, paddingBottom: 10, width: 250 }}>
       <MaterialCommunityIcons
         name="barcode-scan"
-        size={230} // Controls the icon size
+        size={230}
         color={themeColors.iconColor}
-        style={{ alignSelf: 'center' }} // Optional: center icon within the View
+        style={{ alignSelf: 'center' }}
       />
     </View>
 
@@ -140,7 +156,10 @@ export default function Index() {
       Tap the scanner icon to scan a barcode, or use the search box above to search by name.
     </Text>
   </TouchableOpacity>
-)}
+) : (<View style={styles.networkBox}>
+        <Text style={[styles.scanText, themeStyles.text]}>No internet connection</Text>
+        </View>)}
+    
 
     {cameraVisible && permission?.granted && (
       <View style={styles.cameraContainer}>
@@ -208,6 +227,14 @@ const styles = StyleSheet.create({
   infoBox: {
     backgroundColor: '#e6f0ff',
     marginTop: 10,
+    padding: 16,
+    borderRadius: 10,
+    width: '90%',
+    alignItems: 'center',
+  },
+  networkBox: {
+    backgroundColor: '#e6f0ff',
+    marginTop: 150,
     padding: 16,
     borderRadius: 10,
     width: '90%',

@@ -1,5 +1,6 @@
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Network from 'expo-network';
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
@@ -21,6 +22,21 @@ export default function BookmarksScreen() {
   const [filteredTags, setFilteredTags] = useState<string[]>([]);
   const { textSize, themeStyles, themeColors, theme } = useTheme();
   const router = useRouter();
+  const [isConnected, setIsConnected] = useState<boolean | null>(null);
+    
+      useEffect(() => {
+      const checkConnection = async () => {
+        try {
+          const networkState = await Network.getNetworkStateAsync();
+          setIsConnected(networkState.isConnected === true && networkState.isInternetReachable === true);
+        } catch (error) {
+          console.error('Failed to check network status:', error);
+          setIsConnected(false);
+        }
+      };
+    
+      checkConnection();
+    }, []);
 
   useEffect(() => {
     const fetchBookmarkedMedicines = async () => {
@@ -257,18 +273,19 @@ export default function BookmarksScreen() {
   </View>
 )}
       </View>
-
       
 {sortedBookmarks.length === 0 && (
   <View style={{ marginTop: 2, paddingHorizontal: 20, alignItems: 'center' }}>
-    <Text style={[styles.emptyBookmarksText, themeStyles.text, { fontSize: textSize + 2, textAlign: 'center' }]}>
+    {isConnected ? (
+      <Text style={[styles.emptyBookmarksText, themeStyles.text, { fontSize: textSize + 2, textAlign: 'center' }]}>
       Add a bookmark by selecting the bookmark icon on the right of each medicine card.
-    </Text>
+    </Text>):
+    (null)}
   </View>
 )}
 
-
-<FlatList
+{isConnected ? (
+  <FlatList
         data={sortedBookmarks}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
@@ -389,6 +406,12 @@ export default function BookmarksScreen() {
           </View>
         )}
       />
+):(
+  <View style={styles.networkBox}>
+    <Text style={[styles.scanText, themeStyles.text]}>No internet connection</Text>
+  </View>
+)}
+
     </View>
   );
 }
@@ -423,7 +446,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginVertical: 6,
     marginHorizontal: 5,
-    elevation: 3
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
   },
   cardContent: {
     flexDirection: 'row',
@@ -607,5 +634,22 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     paddingHorizontal: 0, 
-  }
+  },
+    networkBox: {
+    backgroundColor: '#e6f0ff',
+    marginTop: 148,
+    padding: 16,
+    borderRadius: 10,
+    width: '90%',
+    alignItems: 'center',
+    alignSelf: 'center',
+  },
+  scanText: {
+    marginTop: 0,
+    fontSize: 20,
+    color: '#336699',
+    fontWeight: '400',
+    textAlign: 'center',
+    paddingHorizontal: 0, 
+  },
 });
