@@ -32,7 +32,7 @@ const AboutUsScreen = () => {
         </Text>
 
         <Text style={[styles.headerText, themeStyles.text, { fontSize: textSize }]}>
-          2. What are Our Goals
+          2. What Are Our Goals
         </Text>
 
         <Text style={[styles.bodyText, themeStyles.bodyText, { fontSize: textSize }]}>
