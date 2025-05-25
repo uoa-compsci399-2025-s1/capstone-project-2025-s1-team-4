@@ -1,5 +1,5 @@
 # MediDex
-Write some cool stuff about what this project is about
+MediDex is multiplatform application that aims to streamline the medical information of over-the-counter medicines in Aotearoa New Zealand, by presenting information from Medsafe, a reliable and regulated source, in an accessible, user-friendly and convenient way to all Kiwis.
 
 ## Project Management Tool
 https://github.com/orgs/uoa-compsci399-2025-s1/projects/39
