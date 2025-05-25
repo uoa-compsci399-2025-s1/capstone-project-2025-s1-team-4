@@ -3,13 +3,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 import { CameraType, CameraView, useCameraPermissions } from 'expo-camera';
 import * as Haptics from 'expo-haptics';
+import * as Network from 'expo-network';
 import { useRouter } from 'expo-router';
-import { useCallback, useState, useEffect } from 'react';
-import { Alert, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useCallback, useEffect, useState } from 'react';
+import { Image, Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { API_BASE_URL } from '../../config';
 import { useTheme } from '../../context/theme_context';
-import * as Network from 'expo-network';
-
 
 type Medicine = {
   id: number;
@@ -31,6 +30,7 @@ export default function Index() {
   const { theme, setTheme, textSize, setTextSize, themeStyles, themeColors } = useTheme();
   const [isConnected, setIsConnected] = useState<boolean | null>(null);
   const [showOfflineCard, setShowOfflineCard] = useState(false);
+  const [showCameraAlert, setShowCameraAlert] = useState(false);
 
   useEffect(() => {
     const checkConnection = async () => {
@@ -93,10 +93,7 @@ export default function Index() {
         return response.json();
       })
       .then((json) => {
-        // Show cmi page
-
         if (json.found) {
-          console.log(json.medicine)
           setMedicineInfo(json.medicine);
           setMessage(null);
           router.push(`/medicine_info?barcode=${encodeURIComponent(data)}` as const);
@@ -115,11 +112,8 @@ export default function Index() {
       });
   }
 
-
   return (
     <View style={[styles.container, themeStyles.container]}>
-
-      {/* Logo Icon Header */}
       <Image
         source={
           theme === 'dark'
@@ -138,7 +132,6 @@ export default function Index() {
         }}
       />
 
-      {/* Search Box */}
       <TouchableOpacity
         style={[styles.searchInput, themeStyles.card]}
         onPress={() => router.push({ pathname: '/medicine', params: { focusSearch: 'true' } })}
@@ -147,13 +140,12 @@ export default function Index() {
         <Text style={[styles.searchPlaceholder, themeStyles.transparentText, { fontSize: textSize }]}>Search Medicines</Text>
       </TouchableOpacity>
 
-      {/* Barcode Scanner Icon */}
       {!cameraVisible && (
         <TouchableOpacity
           onPress={async () => {
             const allowed = await AsyncStorage.getItem('cameraEnabled');
             if (allowed !== 'true') {
-              Alert.alert('Camera Disabled', 'Enable camera usage in Settings > Permissions.');
+              setShowCameraAlert(true);
               return;
             }
 
@@ -176,7 +168,6 @@ export default function Index() {
         </TouchableOpacity>
       )}
 
-
       {cameraVisible && permission?.granted && isConnected ? (
         <View style={styles.cameraContainer}>
           <CameraView
@@ -190,13 +181,53 @@ export default function Index() {
         <View style={[styles.networkBox, themeStyles.card]}>
           <Text style={[styles.scanText, themeStyles.text]}>No internet connection</Text>
         </View>
-      ) : (null)}
+      ) : null}
 
       {message && (
         <View style={styles.infoBox}>
           <Text style={styles.scanText}>{message}</Text>
         </View>
       )}
+
+      {/* Camera Disabled Modal */}
+      <Modal transparent visible={showCameraAlert}>
+        <View style={{
+          position: 'absolute',
+          top: 0, left: 0, right: 0, bottom: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          justifyContent: 'center',
+          alignItems: 'center',
+          zIndex: 100,
+        }}>
+          <View style={{
+            backgroundColor: theme === 'dark' ? '#000' : '#fff',
+            padding: 20,
+            borderRadius: 10,
+            width: '90%',
+            maxWidth: 400,
+          }}>
+            <Text style={{
+              color: theme === 'dark' ? '#fff' : '#000',
+              fontSize: 18,
+              marginBottom: 5,
+              fontWeight: 'bold'
+            }}>
+              Camera Disabled
+            </Text>
+            <Text style={{
+              color: theme === 'dark' ? '#ccc' : '#333',
+              marginBottom: 20
+            }}>
+              Enable camera usage in Settings {'>'} Permissions.
+            </Text>
+            <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+              <TouchableOpacity onPress={() => setShowCameraAlert(false)}>
+                <Text style={{ color: '#007AFF' }}>OK</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -264,5 +295,4 @@ const styles = StyleSheet.create({
     color: '#888',
     fontSize: 16,
   },
-
 });
