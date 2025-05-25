@@ -1,10 +1,8 @@
 # MediDex
+Write some cool stuff about what this project is about
 
 ## Project Management Tool
 https://github.com/orgs/uoa-compsci399-2025-s1/projects/39
-
-## Short description of what the project is about
-Write some cool stuff about what this project is about
 
 ## 📱 Technologies Used
 
