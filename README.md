@@ -20,6 +20,7 @@ https://github.com/orgs/uoa-compsci399-2025-s1/projects/39
 - Expo Module Scripts `v4.1.7`
 - Expo Status Bar `v2.2.3`
 - Expo Haptics `v14.1.4`
+- Expo Network `v5.0.6`
 
 ### 🖧 Backend
 - **Language:** Python `v3.12.2`
