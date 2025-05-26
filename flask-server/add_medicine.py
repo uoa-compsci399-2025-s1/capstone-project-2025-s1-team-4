@@ -16,11 +16,3 @@ def add_medicine(name, company, dosage, cmi, barcode):
     with sqlite3.connect(db_path) as con:
         cur = con.cursor()
         cur.execute("INSERT INTO medicine VALUES(?, ?, ?, ?, ?, ?)", data)
-
-
-print(os.path.abspath("medicine.db"))
-
-
-#check_tables()
-
-add_medicine('Histaclear', 'AFT Pharmaceuticals', '10 mg', 4, '9421033250285')
