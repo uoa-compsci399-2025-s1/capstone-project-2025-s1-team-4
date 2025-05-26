@@ -113,62 +113,63 @@ export default function Index() {
   }
 
   return (
-    <View style={[styles.container, themeStyles.container]}>
-      <Image
-        source={
-          theme === 'dark'
-            ? require('../../assets/icons/mediDex-dark.png')
-            : require('../../assets/icons/mediDex-light.png')
-        }
-        style={{
-          width: '95%',
-          height: '15%',
-          minHeight: 150,
-          maxHeight: 150,
-          marginBottom: 10,
-          marginTop: 0,
-          borderRadius: 10,
-          resizeMode: 'contain'
-        }}
-      />
+  <View style={[styles.container, themeStyles.container]}>
+    <Image
+      source={
+        theme === 'dark'
+          ? require('../../assets/icons/mediDex-dark.png')
+          : require('../../assets/icons/mediDex-light.png')
+      }
+      style={{
+        width: '95%',
+        height: '15%',
+        minHeight: 150,
+        maxHeight: 150,
+        marginBottom: 10,
+        marginTop: 0,
+        borderRadius: 10,
+        resizeMode: 'contain',
+      }}
+    />
 
+    <TouchableOpacity
+      style={[styles.searchInput, themeStyles.card]}
+      onPress={() => router.push({ pathname: '/medicine', params: { focusSearch: 'true' } })}
+      activeOpacity={0.8}
+    >
+      <Text style={[styles.searchPlaceholder, themeStyles.transparentText, { fontSize: textSize }]}>
+        Search Medicines
+      </Text>
+    </TouchableOpacity>
+
+    {!cameraVisible && (
       <TouchableOpacity
-        style={[styles.searchInput, themeStyles.card]}
-        onPress={() => router.push({ pathname: '/medicine', params: { focusSearch: 'true' } })}
-        activeOpacity={0.8}
+        onPress={async () => {
+          const allowed = await AsyncStorage.getItem('cameraEnabled');
+          if (allowed !== 'true') {
+            setShowCameraAlert(true);
+            return;
+          }
+          setCameraVisible(true);
+        }}
+        style={styles.barcodeWrapper}
       >
-        <Text style={[styles.searchPlaceholder, themeStyles.transparentText, { fontSize: textSize }]}>Search Medicines</Text>
+        <View style={{ marginTop: 20, marginBottom: 20, paddingTop: 10, paddingBottom: 10, width: 250 }}>
+          <MaterialCommunityIcons
+            name="barcode-scan"
+            size={230}
+            color={themeColors.iconColor}
+            style={{ alignSelf: 'center' }}
+          />
+        </View>
+        <Text style={[styles.scanText, themeStyles.text]}>
+          Tap the scanner icon to scan a barcode, or use the search box above to search by name.
+        </Text>
       </TouchableOpacity>
+    )}
 
-      {!cameraVisible && (
-        <TouchableOpacity
-          onPress={async () => {
-            const allowed = await AsyncStorage.getItem('cameraEnabled');
-            if (allowed !== 'true') {
-              setShowCameraAlert(true);
-              return;
-            }
-
-            setCameraVisible(true);
-          }}
-          style={styles.barcodeWrapper}
-        >
-          <View style={{ marginTop: 20, marginBottom: 20, paddingTop: 10, paddingBottom: 10, width: 250 }}>
-            <MaterialCommunityIcons
-              name="barcode-scan"
-              size={230}
-              color={themeColors.iconColor}
-              style={{ alignSelf: 'center' }}
-            />
-          </View>
-
-          <Text style={[styles.scanText, themeStyles.text]}>
-            Tap the scanner icon to scan a barcode, or use the search box above to search by name.
-          </Text>
-        </TouchableOpacity>
-      )}
-
-      {cameraVisible && permission?.granted && isConnected ? (
+    {cameraVisible && permission?.granted && isConnected ? (
+      <>
         <View style={styles.cameraContainer}>
           <CameraView
             style={styles.camera}
@@ -177,59 +178,86 @@ export default function Index() {
             onBarcodeScanned={scannedData || scanning ? undefined : handleBarcodeScanned}
           />
         </View>
-      ) : cameraVisible && showOfflineCard ? (
-        <View style={[styles.networkBox, themeStyles.card]}>
-          <Text style={[styles.scanText, themeStyles.text]}>No internet connection</Text>
-        </View>
-      ) : null}
 
-      {message && (
-        <View style={styles.infoBox}>
-          <Text style={styles.scanText}>{message}</Text>
-        </View>
-      )}
+        <TouchableOpacity
+          style={[styles.searchInput, themeStyles.card, { marginTop: 16, width: '90%', alignSelf: 'center' }]}
+          onPress={() => setCameraVisible(false)}
+        >
+          <Text
+            style={[
+              styles.searchPlaceholder,
+              themeStyles.transparentText,
+              { fontSize: textSize, textAlign: 'center' },
+            ]}
+          >
+            Close Camera
+          </Text>
+        </TouchableOpacity>
+      </>
+    ) : cameraVisible && showOfflineCard ? (
+      <View style={[styles.networkBox, themeStyles.card]}>
+        <Text style={[styles.scanText, themeStyles.text]}>No internet connection</Text>
+      </View>
+    ) : null}
 
-      {/* Camera Disabled Modal */}
-      <Modal transparent visible={showCameraAlert}>
-        <View style={{
+    {message && (
+      <View style={styles.infoBox}>
+        <Text style={styles.scanText}>{message}</Text>
+      </View>
+    )}
+
+    {/* Camera Disabled Modal */}
+    <Modal transparent visible={showCameraAlert}>
+      <View
+        style={{
           position: 'absolute',
-          top: 0, left: 0, right: 0, bottom: 0,
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
           backgroundColor: 'rgba(0, 0, 0, 0.5)',
           justifyContent: 'center',
           alignItems: 'center',
           zIndex: 100,
-        }}>
-          <View style={{
+        }}
+      >
+        <View
+          style={{
             backgroundColor: theme === 'dark' ? '#000' : '#fff',
             padding: 20,
             borderRadius: 10,
             width: '90%',
             maxWidth: 400,
-          }}>
-            <Text style={{
+          }}
+        >
+          <Text
+            style={{
               color: theme === 'dark' ? '#fff' : '#000',
               fontSize: 18,
               marginBottom: 5,
-              fontWeight: 'bold'
-            }}>
-              Camera Disabled
-            </Text>
-            <Text style={{
+              fontWeight: 'bold',
+            }}
+          >
+            Camera Disabled
+          </Text>
+          <Text
+            style={{
               color: theme === 'dark' ? '#ccc' : '#333',
-              marginBottom: 20
-            }}>
-              Enable camera usage in Settings {'>'} Permissions.
-            </Text>
-            <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
-              <TouchableOpacity onPress={() => setShowCameraAlert(false)}>
-                <Text style={{ color: '#007AFF' }}>OK</Text>
-              </TouchableOpacity>
-            </View>
+              marginBottom: 20,
+            }}
+          >
+            Enable camera usage in Settings {'>'} Permissions.
+          </Text>
+          <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+            <TouchableOpacity onPress={() => setShowCameraAlert(false)}>
+              <Text style={{ color: '#007AFF' }}>OK</Text>
+            </TouchableOpacity>
           </View>
         </View>
-      </Modal>
-    </View>
-  );
+      </View>
+    </Modal>
+  </View>
+);
 }
 
 const styles = StyleSheet.create({
