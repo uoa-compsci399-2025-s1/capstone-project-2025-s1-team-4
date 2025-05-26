@@ -1,6 +1,6 @@
 import * as Network from 'expo-network';
 import React, { useEffect, useState } from 'react';
-import { FlatList, Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, Linking, StyleSheet, Text, TouchableOpacity, View, ScrollView } from 'react-native';
 import { API_BASE_URL } from '../../config';
 import { useTheme } from '../../context/theme_context';
 
@@ -79,45 +79,48 @@ useEffect(() => {
     </TouchableOpacity>
   );
 
-  return (
-    <View style={[styles.container, themeStyles.container]}>
-      <View style={styles.pageTitleWrapper}>
-        <Text style={[styles.pageTitleText, themeStyles.text]}>
-          Medicine Recalls
-        </Text>
-      </View>
-      {!recalls || recalls.length === 0 ? (
-        <View style={styles.loadingWrapper}>
-          {isConnected ? (
-            <Text
-              style={[
-                styles.brandName,
-                themeStyles.text,
-                { fontStyle: 'italic' }
-              ]}
-            >
-              Loading recalls...
-            </Text>
-          ) : (null)}
-        </View>
-      ) : (
-        <View style={[styles.listContent]}>
-          {isConnected ? (
-            <FlatList
-              data={recalls}
-              keyExtractor={(item) => item.id.toString()}
-              renderItem={renderRecall} contentContainerStyle={styles.listContent}
-            />
-          ) : showOfflineCard ? (
-            <View style={[styles.networkBox, themeStyles.card]}>
-              <Text style={[styles.scanText, themeStyles.text]}>No internet connection</Text>
-            </View>
-          ) : null}
-
-        </View>
-      )}
+return (
+  <View style={[styles.container, themeStyles.container, { flex: 1 }]}>
+    <View style={styles.pageTitleWrapper}>
+      <Text style={[styles.pageTitleText, themeStyles.text]}>
+        Medicine Recalls
+      </Text>
     </View>
-  );
+
+    {!recalls || recalls.length === 0 ? (
+      <View style={styles.loadingWrapper}>
+        {isConnected ? (
+          <Text
+            style={[
+              styles.brandName,
+              themeStyles.text,
+              { fontStyle: 'italic' }
+            ]}
+          >
+            Loading recalls...
+          </Text>
+        ) : null}
+      </View>
+    ) : (
+      <View style={{ flex: 1 }}>
+        {isConnected ? (
+          <FlatList
+            data={recalls}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={renderRecall}
+            contentContainerStyle={styles.infoCard}
+          />
+        ) : showOfflineCard ? (
+          <View style={[styles.networkBox, themeStyles.card]}>
+            <Text style={[styles.scanText, themeStyles.text]}>
+              No internet connection
+            </Text>
+          </View>
+        ) : null}
+      </View>
+    )}
+  </View>
+);
 }
 
 const styles = StyleSheet.create({
@@ -127,14 +130,15 @@ const styles = StyleSheet.create({
   pageTitleWrapper: {
     alignItems: 'center',
     marginTop: 79,
-    marginBottom: -3},
+    marginBottom: 18},
   pageTitleText: {
     fontSize: 40,
     color: '#336699'},
   listContent: {
     paddingBottom: 10,
     paddingTop: 10,
-    paddingHorizontal: 10},
+    paddingHorizontal: 10
+  },
   card: {
     borderRadius: 10,
     padding: 12,
@@ -173,4 +177,11 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     textAlign: 'center',
     paddingHorizontal: 0,
+  },
+  infoCard: {
+    borderRadius: 10,
+    padding: 14,
+    elevation: 3,
+    marginBottom: 25,
+    marginHorizontal: 4
   }});

@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
     flex: 1,},
   pageTitleWrapper: {
     alignItems: 'center',
-    marginTop: 60,
+    marginTop: 21,
     marginBottom: 18},
   pageTitleText: {
     fontSize: 40,
@@ -219,4 +219,5 @@ const styles = StyleSheet.create({
     elevation: 3,
     marginBottom: 25,
     marginHorizontal: 4
-  }});
+  }
+});
