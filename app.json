@@ -3,7 +3,7 @@
     "name": "MediDex",
     "slug": "MediDex",
     "version": "1.0.0",
-    "icon": "./assets/images/splashIconLight.png",
+    "icon": "./assets/images/lightAdaptiveIcon.png",
     "orientation": "portrait",
     "scheme": "MediDex",
     "userInterfaceStyle": "automatic",
