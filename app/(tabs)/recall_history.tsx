@@ -1,5 +1,4 @@
 import * as Network from 'expo-network';
-import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { FlatList, Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { API_BASE_URL } from '../../config';
@@ -13,9 +12,8 @@ type Recall = {
   recall_url: string;
 };
 
-const NotificationsScreen = () => {
-  const { themeStyles, textSize, themeColors } = useTheme();
-  const router = useRouter();
+export default function NotificationsScreen() {
+  const { themeStyles, textSize } = useTheme();
   const [recalls, setRecalls] = useState<Recall[]>([]);
   const [isConnected, setIsConnected] = useState<boolean | null>(null);
   const [showOfflineCard, setShowOfflineCard] = useState(false);
@@ -26,7 +24,6 @@ const NotificationsScreen = () => {
         const networkState = await Network.getNetworkStateAsync();
         setIsConnected(networkState.isConnected === true && networkState.isInternetReachable === true);
       } catch (error) {
-        console.error('Failed to check network status:', error);
         setIsConnected(false);
       }
     };
@@ -36,7 +33,6 @@ const NotificationsScreen = () => {
 
   useEffect(() => {
     let timeout: ReturnType<typeof setTimeout> | undefined;
-
     if (!isConnected) {
       timeout = setTimeout(() => {
         setShowOfflineCard(true);
@@ -45,7 +41,6 @@ const NotificationsScreen = () => {
       setShowOfflineCard(false);
       if (timeout) clearTimeout(timeout);
     }
-
     return () => {
       if (timeout) clearTimeout(timeout);
     };
@@ -57,18 +52,15 @@ useEffect(() => {
     .then(data => {
       const parseDate = (str: string): Date => {
         const [day, month, year] = str.split('/');
-        return new Date(Number(year), Number(month) - 1, Number(day)); 
+        return new Date(Number(year), Number(month) - 1, Number(day));
       };
-
       const sorted = data.sort((a: Recall, b: Recall) =>
         parseDate(b.date).getTime() - parseDate(a.date).getTime()
       );
-
       setRecalls(sorted);
     })
     .catch(err => console.error('Error fetching recalls:', err));
-}, []);
-
+  }, []);
 
   const renderRecall = ({ item }: { item: Recall }) => (
     <TouchableOpacity
@@ -88,15 +80,12 @@ useEffect(() => {
   );
 
   return (
-
     <View style={[styles.container, themeStyles.container]}>
-      {/* Page Title */}
       <View style={styles.pageTitleWrapper}>
         <Text style={[styles.pageTitleText, themeStyles.text]}>
           Medicine Recalls
         </Text>
       </View>
-
       {!recalls || recalls.length === 0 ? (
         <View style={styles.loadingWrapper}>
           {isConnected ? (
@@ -110,7 +99,6 @@ useEffect(() => {
               Loading recalls...
             </Text>
           ) : (null)}
-
         </View>
       ) : (
         <View style={[styles.listContent]}>
@@ -118,8 +106,7 @@ useEffect(() => {
             <FlatList
               data={recalls}
               keyExtractor={(item) => item.id.toString()}
-              renderItem={renderRecall}
-              contentContainerStyle={styles.listContent}
+              renderItem={renderRecall} contentContainerStyle={styles.listContent}
             />
           ) : showOfflineCard ? (
             <View style={[styles.networkBox, themeStyles.card]}>
@@ -136,66 +123,41 @@ useEffect(() => {
 const styles = StyleSheet.create({
   container: {
     padding: 0,
-    flex: 1,
-  },
-  backButton: {
-    position: 'absolute',
-    top: 35,
-    left: 16,
-    zIndex: 1,
-  },
+    flex: 1},
   pageTitleWrapper: {
     alignItems: 'center',
     marginTop: 79,
-    marginBottom: -3,
-  },
+    marginBottom: -3},
   pageTitleText: {
     fontSize: 40,
-    color: '#336699',
-  },
+    color: '#336699'},
   listContent: {
     paddingBottom: 10,
     paddingTop: 10,
-    paddingHorizontal: 10,
-  },
+    paddingHorizontal: 10},
   card: {
     borderRadius: 10,
     padding: 12,
     marginVertical: 6,
     backgroundColor: '#fff',
     elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    overflow: 'visible',
-  },
+    overflow: 'visible'},
   brandName: {
     fontWeight: 'bold',
     fontSize: 20,
     marginBottom: 2,
-    alignContent: 'center'
-  },
+    alignContent: 'center'},
   date: {
     marginBottom: 2,
-    fontStyle: 'italic',
-  },
+    fontStyle: 'italic'},
   tap: {
     textDecorationLine: 'underline',
-    marginBottom: 0,
-  },
-  loadingRecalls: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-  },
+    marginBottom: 0},
   loadingWrapper: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 20,
-  },
+    paddingHorizontal: 20},
   networkBox: {
     backgroundColor: '#e6f0ff',
     marginTop: 191,
@@ -203,8 +165,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: '90%',
     alignItems: 'center',
-    alignSelf: 'center',
-  },
+    alignSelf: 'center'},
   scanText: {
     marginTop: 0,
     fontSize: 20,
@@ -212,7 +173,4 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     textAlign: 'center',
     paddingHorizontal: 0,
-  },
-});
-
-export default NotificationsScreen;
+  }});

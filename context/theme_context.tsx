@@ -24,6 +24,7 @@ interface ThemeColors {
 
 interface ThemeContextProps {
   theme: ThemeType;
+  resolvedTheme: 'light' | 'dark';
   setTheme: (mode: ThemeType) => void;
   textSize: number;
   setTextSize: (size: number) => void;
@@ -36,7 +37,7 @@ const ThemeContext = createContext<ThemeContextProps | undefined>(undefined);
 export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   const [theme, setThemeState] = useState<ThemeType>('light');
   const [textSize, setTextSize] = useState<number>(16);
-  const systemColorScheme = useColorScheme(); // 'light' or 'dark'
+  const systemColorScheme = useColorScheme(); 
 
   useEffect(() => {
     const loadPrefs = async () => {
@@ -67,7 +68,7 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   const themeColors = resolvedTheme === 'dark' ? darkColors : lightColors;
 
   return (
-    <ThemeContext.Provider value={{ theme, setTheme, textSize, setTextSize: handleSetTextSize, themeStyles, themeColors }}>
+    <ThemeContext.Provider value={{ theme, resolvedTheme, setTheme, textSize, setTextSize: handleSetTextSize, themeStyles, themeColors }}>
       {children}
     </ThemeContext.Provider>
   );
@@ -115,4 +116,3 @@ const darkColors: ThemeColors = {
   light: '#c5e1fa',
   transparentTextColor: '#ffffff',
 };
-

@@ -1,11 +1,9 @@
-import { useRouter } from 'expo-router';
 import React from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useTheme } from '../../context/theme_context';
 
-const PrivacyPolicyScreen = () => {
-  const { themeStyles, textSize, themeColors } = useTheme();
-  const router = useRouter();
+export default function PrivacyPolicyScreen() {
+  const { themeStyles, textSize } = useTheme();
 
   return (
     <View style={[styles.container, themeStyles.container]}>
@@ -15,8 +13,6 @@ const PrivacyPolicyScreen = () => {
         </Text>
       </View>
       <ScrollView style={{ paddingTop: 10 }}>
-        {/* PRIVACY */}
-
         <View style={[styles.infoCard, themeStyles.card]}>
           <Text style={[styles.subHeaderText, themeStyles.text, { fontSize: textSize + 4 }]}>
             Privacy Policy
@@ -122,9 +118,9 @@ const PrivacyPolicyScreen = () => {
           </Text>
 
         <Text style={[styles.bodyText, themeStyles.bodyText, { fontSize: textSize }]}>
-          Not all medicines listed in MediDex have an official CMI (Consumer Medicine Information) sheet available from Medsafe. In such cases, 
-          we may provide a CMI sheet from a similar medicine containing the same active ingredient(s) and dosage(s). These substitute CMIs are intended as 
-          general guidance only and may not reflect specific differences in formulation, brand, or patient advice. Users are strongly encouraged 
+          Not all medicines listed in MediDex have an official CMI (Consumer Medicine Information) sheet available from Medsafe. In such cases,
+          we may provide a CMI sheet from a similar medicine containing the same active ingredient(s) and dosage(s). These substitute CMIs are intended as
+          general guidance only and may not reflect specific differences in formulation, brand, or patient advice. Users are strongly encouraged
           to consult a healthcare professional for clarification and personalised information.
         </Text>
 
@@ -192,42 +188,30 @@ const styles = StyleSheet.create({
   container: {
     padding: 16,
     backgroundColor: '#f0f8ff',
-    flex: 1,
-  },
-  backButton: {
-    position: 'absolute',
-    top: 35,
-    left: 16,
-    zIndex: 1,
-  },
+    flex: 1,},
   pageTitleWrapper: {
     alignItems: 'center',
     marginTop: 60,
-    marginBottom: 18
-  },
+    marginBottom: 18},
   pageTitleText: {
     fontSize: 40,
     color: '#336699',
-    textAlign: 'center'
-  },
+    textAlign: 'center'},
   headerText: {
     textAlign: 'left',
     marginTop: 10,
     marginBottom: 4,
-    fontWeight: "bold",
-  },
+    fontWeight: "bold"},
   subHeaderText: {
     textAlign: 'center',
     marginTop: 10,
     marginBottom: 4,
     fontWeight: "bold",
-    textDecorationLine: 'underline',
-  },
+    textDecorationLine: 'underline'},
   bodyText: {
     textAlign: 'left',
     marginBottom: 5,
-    fontWeight: 'normal'
-  },
+    fontWeight: 'normal'},
   infoCard: {
     backgroundColor: '#fff',
     borderRadius: 10,
@@ -235,7 +219,4 @@ const styles = StyleSheet.create({
     elevation: 3,
     marginBottom: 25,
     marginHorizontal: 4
-  },
-});
-
-export default PrivacyPolicyScreen;
+  }});
