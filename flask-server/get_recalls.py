@@ -75,7 +75,3 @@ def format_recalls(HTML_data):
         formatted_output.append([parse_href[i], f"https://www.medsafe.govt.nz/hot/Recalls/{parse_href[i+1]}", parse_href[i+2], parse_href[i+3]])
         
     return formatted_output
-
-# recalls = get_recalls()
-# DB_format = format_recalls(recalls)
-# print(DB_format)
