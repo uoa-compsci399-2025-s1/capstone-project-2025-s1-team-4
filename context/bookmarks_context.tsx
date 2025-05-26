@@ -7,13 +7,15 @@ export const BookmarkContext = createContext<{
   setBookmarks: React.Dispatch<React.SetStateAction<number[]>>;
 } | null>(null);
 
-export default function BookmarkProvider({ children }: { children: React.ReactNode }) {
+export const BookmarkProvider = ({ children }: { children: React.ReactNode }) => {
   const [bookmarks, setBookmarks] = useState<number[]>([]);
 
   useEffect(() => {
-    AsyncStorage.getItem('bookmarks').then((stored) => {
+    const loadBookmarks = async () => {
+      const stored = await AsyncStorage.getItem('bookmarks');
       if (stored) setBookmarks(JSON.parse(stored));
-    });
+    };
+    loadBookmarks();
   }, []);
 
   useEffect(() => {
@@ -31,7 +33,7 @@ export default function BookmarkProvider({ children }: { children: React.ReactNo
       {children}
     </BookmarkContext.Provider>
   );
-}
+};
 
 export const useBookmarks = () => {
   const context = useContext(BookmarkContext);
