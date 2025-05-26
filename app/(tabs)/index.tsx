@@ -183,8 +183,10 @@ return (
     ) : null}
 
     {message && (
-      <View style={styles.infoBox}>
-        <Text style={styles.scanText}>{message}</Text>
+      <View style={[styles.infoBox, themeStyles.card]}>
+        <Text style={[styles.scanText, themeStyles.text]}>
+          {message}
+        </Text>
       </View>
     )}
 
@@ -281,7 +283,8 @@ const styles = StyleSheet.create({
   infoBox: {
     backgroundColor: '#e6f0ff',
     marginTop: 10,
-    padding: 16,
+    paddingVertical: 10,       
+    paddingHorizontal: 16,
     borderRadius: 10,
     width: '93%',
     alignItems: 'center'},
