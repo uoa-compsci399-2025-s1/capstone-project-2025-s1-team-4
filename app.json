@@ -12,15 +12,15 @@
     "ios": {
       "supportsTablet": true,
       "icon": {
-        "light": "./assets/icons/ios-logo-light.png",
-        "dark": "./assets/icons/ios-logo-dark.png",
-        "tinted": "./assets/icons/ios-logo-tinted.png"
+        "light": "./assets/images/splashIconLight.png",
+        "dark": "./assets/images/splashIconDark.png",
+        "tinted": "./assets/images/splashIconDark.png"
       }
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/icons/adaptive-icon.png",
-        "monochromeImage": "./assets/icons/adaptive-icon.png",
+        "foregroundImage": "./assets/icons/darkAdaptiveIcon.png",
+        "monochromeImage": "./assets/icons/darkMonoAdaptiveIcon.png",
         "backgroundColor": "#ffffff"
       },
       "permissions": [
