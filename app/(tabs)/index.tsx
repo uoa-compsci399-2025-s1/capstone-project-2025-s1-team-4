@@ -10,24 +10,16 @@ import { Image, Modal, StyleSheet, Text, TouchableOpacity, View } from "react-na
 import { API_BASE_URL } from '../../config';
 import { useTheme } from '../../context/theme_context';
 
-type Medicine = {
-  id: number;
-  name: string;
-  company: string;
-  dosage: string;
-};
-
 export default function Index() {
   const router = useRouter();
   const [cameraVisible, setCameraVisible] = useState(false);
   const [facing] = useState<CameraType>('back');
-  const [permission, requestPermission] = useCameraPermissions();
+  const [permission] = useCameraPermissions();
   const [scannedData, setScannedData] = useState<string | null>(null);
   const [medicineInfo, setMedicineInfo] = useState<any>(null);
   const [scanning, setScanning] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
-  const [cameraAllowed, setCameraAllowed] = useState(false);
-  const { resolvedTheme, setTheme, textSize, setTextSize, themeStyles, themeColors } = useTheme();
+  const { resolvedTheme, textSize, themeStyles, themeColors } = useTheme();
   const [isConnected, setIsConnected] = useState<boolean | null>(null);
   const [showOfflineCard, setShowOfflineCard] = useState(false);
   const [showCameraAlert, setShowCameraAlert] = useState(false);
@@ -47,72 +39,66 @@ export default function Index() {
   }, []);
 
   useEffect(() => {
-    let timeout: ReturnType<typeof setTimeout> | undefined;
+  let timeout: ReturnType<typeof setTimeout> | undefined;
 
-    if (!isConnected) {
-      timeout = setTimeout(() => {
-        setShowOfflineCard(true);
-      }, 1000);
-    } else {
-      setShowOfflineCard(false);
-      if (timeout) clearTimeout(timeout);
-    }
-
-    return () => {
-      if (timeout) clearTimeout(timeout);
-    };
-  }, [isConnected]);
-
-  useFocusEffect(
-    useCallback(() => {
-      return () => {
-        setCameraVisible(false);
-        setScannedData(null);
-        setMedicineInfo(null);
-        setMessage(null);
-      };
-    }, [])
-  );
-
-  async function handleBarcodeScanned({ data }: { data: string }) {
-    if (scanning) return;
-
-    setScanning(true);
-    setScannedData(data);
-    await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-
-    fetch(`${API_BASE_URL}/medicine?barcode=${encodeURIComponent(data)}`)
-      .then((response) => {
-        if (!response.ok) {
-          if (response.status === 404) {
-            setMedicineInfo(null);
-            setScannedData(null);
-          }
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((json) => {
-        if (json.found) {
-          setMedicineInfo(json.medicine);
-          setMessage(null);
-          router.push(`/medicine_info?barcode=${encodeURIComponent(data)}` as const);
-        } else {
-          setMedicineInfo(null);
-          setMessage('Medicine not found');
-          setScannedData(null);
-          setTimeout(() => setMessage(null), 2000);
-        }
-      })
-      .catch((error) => {
-        console.error('Fetch error:', error);
-      })
-      .finally(() => {
-        setScanning(false);
-      });
+  if (!isConnected) {
+    timeout = setTimeout(() => setShowOfflineCard(true), 1000);
+  } else {
+    setShowOfflineCard(false);
+    if (timeout) clearTimeout(timeout);
   }
 
-  return (
+  return () => {
+    if (timeout) clearTimeout(timeout);
+  };
+}, [isConnected]);
+
+useFocusEffect(
+  useCallback(() => {
+    return () => {
+      setCameraVisible(false);
+      setScannedData(null);
+      setMedicineInfo(null);
+      setMessage(null);
+    };
+  }, [])
+);
+
+async function handleBarcodeScanned({ data }: { data: string }) {
+  if (scanning) return;
+
+  setScanning(true);
+  setScannedData(data);
+  await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+
+  fetch(`${API_BASE_URL}/medicine?barcode=${encodeURIComponent(data)}`)
+    .then((response) => {
+      if (!response.ok) {
+        if (response.status === 404) {
+          setMedicineInfo(null);
+          setScannedData(null);
+        }
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((json) => {
+      if (json.found) {
+        setMedicineInfo(json.medicine);
+        setMessage(null);
+        router.push(`/medicine_info?barcode=${encodeURIComponent(data)}` as const);
+      } else {
+        setMedicineInfo(null);
+        setMessage('Medicine not found');
+        setScannedData(null);
+        setTimeout(() => setMessage(null), 2000);
+      }
+    })
+    .catch(() => {})
+    .finally(() => setScanning(false));
+}
+
+return (
   <View style={[styles.container, themeStyles.container]}>
     <Image
       source={
@@ -123,11 +109,9 @@ export default function Index() {
       style={{
         width: '70%',
         height: '15%',
-        minHeight: 0,
         maxHeight: 100,
         marginBottom: 15,
         marginTop: 45,
-        borderRadius: 0,
         resizeMode: 'contain',
       }}
     />
@@ -144,6 +128,7 @@ export default function Index() {
 
     {!cameraVisible && (
       <TouchableOpacity
+        style={styles.barcodeWrapper}
         onPress={async () => {
           const allowed = await AsyncStorage.getItem('cameraEnabled');
           if (allowed !== 'true') {
@@ -152,9 +137,8 @@ export default function Index() {
           }
           setCameraVisible(true);
         }}
-        style={styles.barcodeWrapper}
       >
-        <View style={{ marginTop: 20, marginBottom: 20, paddingTop: 10, paddingBottom: 10, width: 250 }}>
+        <View style={{ marginVertical: 20, paddingVertical: 10, width: 250 }}>
           <MaterialCommunityIcons
             name="barcode-scan"
             size={230}
@@ -162,12 +146,11 @@ export default function Index() {
             style={{ alignSelf: 'center' }}
           />
         </View>
-        <View style={{ marginTop: -10 }}>
+        <View style={{ marginTop: -20, marginHorizontal: 6 }}>
           <Text style={[styles.scanText, themeStyles.text]}>
             Tap the scanner icon to scan a barcode, or use the search box above to search by name.
           </Text>
         </View>
-        
       </TouchableOpacity>
     )}
 
@@ -183,15 +166,11 @@ export default function Index() {
         </View>
 
         <TouchableOpacity
-          style={[styles.searchInput, themeStyles.card, { marginTop: 16, width: '90%', alignSelf: 'center' }]}
+          style={[styles.searchInput, themeStyles.card, { marginTop: 16, width: '93%', alignSelf: 'center' }]}
           onPress={() => setCameraVisible(false)}
         >
           <Text
-            style={[
-              styles.searchPlaceholder,
-              themeStyles.transparentText,
-              { fontSize: textSize, textAlign: 'center' },
-            ]}
+            style={[styles.searchPlaceholder, themeStyles.transparentText, { fontSize: textSize, textAlign: 'center' }]}
           >
             Close Camera
           </Text>
@@ -209,7 +188,6 @@ export default function Index() {
       </View>
     )}
 
-    {/* Camera Disabled Modal */}
     <Modal transparent visible={showCameraAlert}>
       <View
         style={{
@@ -269,8 +247,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f0f8ff',
     padding: 11,
     paddingTop: 50,
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   searchInput: {
     backgroundColor: 'white',
     paddingVertical: 13,
@@ -282,48 +259,39 @@ const styles = StyleSheet.create({
     marginBottom: 0,
     marginTop: 10,
     width: '95%',
-    alignSelf: 'center',
-  },
+    alignSelf: 'center'},
   barcodeWrapper: {
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   scanText: {
     marginTop: 0,
     fontSize: 20,
     color: '#336699',
     fontWeight: '400',
     textAlign: 'center',
-    paddingHorizontal: 0,
-  },
+    paddingHorizontal: 0},
   cameraContainer: {
-    width: '90%',
+    width: '93%',
     height: 300,
     marginTop: 20,
     borderRadius: 16,
     overflow: 'hidden',
-    backgroundColor: '#000',
-  },
+    backgroundColor: '#000'},
   camera: {
-    flex: 1,
-  },
+    flex: 1},
   infoBox: {
     backgroundColor: '#e6f0ff',
     marginTop: 10,
     padding: 16,
     borderRadius: 10,
-    width: '90%',
-    alignItems: 'center',
-  },
+    width: '93%',
+    alignItems: 'center'},
   networkBox: {
     backgroundColor: '#e6f0ff',
     marginTop: 150,
     padding: 16,
     borderRadius: 10,
-    width: '90%',
-    alignItems: 'center',
-  },
+    width: '100%',
+    alignItems: 'center'},
   searchPlaceholder: {
     color: '#888',
-    fontSize: 16,
-  },
-});
+    fontSize: 16}});
