@@ -404,7 +404,11 @@ export default function BookmarksScreen() {
                               setExpandedCardId(null);
                             }
                           }}>
-                            <MaterialCommunityIcons name="close" size={14} color="#336699" />
+                            <MaterialCommunityIcons
+                              name="close"
+                              size={14}
+                              color={themeColors.iconColor}
+                            />
                           </TouchableOpacity>
                         </View>
                       ))}
