@@ -9,20 +9,6 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     
-    "ios": {
-      "supportsTablet": true,
-      "icon": {
-        "light": "./assets/icons/ios-logo-light.png",
-        "dark": "./assets/icons/ios-logo-dark.png",
-        "tinted": "./assets/icons/ios-logo-tinted.png"
-      }
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/icons/adaptive-icon.png",
-        "monochromeImage": "./assets/icons/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      },
       "permissions": [
         "android.permission.CAMERA",
         "android.permission.RECORD_AUDIO",
