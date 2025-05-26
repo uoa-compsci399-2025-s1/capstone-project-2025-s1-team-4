@@ -4,7 +4,7 @@ from db_con import get_repo
 
 blueprint = Blueprint('routes_bp', __name__, url_prefix='/')
 
-# Home - Just for testing purposes will be removed once front end is done.
+# Landing page indicates whether server is running or not
 @blueprint.route("/")
 def home():
     return make_response("<h3>Server is running.</h3>", 200)
@@ -79,8 +79,6 @@ def search_medicine():
     if not results:
         return jsonify({"found": False, "medicines": [], "message": "No medicines found with that name."}), 200
     
-    #format_results = [{'id': row[0], 'name': row[1], 'company': row[2], 
-                  #'cmi_sheet': row[3], 'barcode': row[4]} for row in results]
     return jsonify(results)
 
 
