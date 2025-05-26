@@ -54,17 +54,14 @@ export default function DetailsScreen() {
     };
   }, [isConnected]);
 
-
   useEffect(() => {
     setLoading(true);
     fetch(`${API_BASE_URL}/all_medicines`)
       .then((res) => {
-        console.log("Fetch status:", res.status);
         return res.json();
       })
       .then((data) => {
         setLoading(false);
-        console.log("Fetched data:", data);
         setMedicines(data);
       })
       .catch((err) => {
@@ -76,14 +73,12 @@ export default function DetailsScreen() {
   useFocusEffect(
     useCallback(() => {
       let timeout: number;
-
       if (focusSearch === 'true') {
         timeout = setTimeout(() => {
           searchRef.current?.focus();
           router.replace('/medicine');
         }, 250);
       }
-
       return () => {
         if (timeout) clearTimeout(timeout);
       };
@@ -99,21 +94,17 @@ export default function DetailsScreen() {
       ((sortBy === 'name' ? a.product_name : a.company) ?? '').toString().trim().toLowerCase();
     const fieldB =
       ((sortBy === 'name' ? b.product_name : b.company) ?? '').toString().trim().toLowerCase();
-
     if (fieldA < fieldB) return sortDirection === 'asc' ? -1 : 1;
     if (fieldA > fieldB) return sortDirection === 'asc' ? 1 : -1;
     return 0;
   });
 
-
   return (
     <View style={[styles.container, themeStyles.container]}>
-      {/* Page Header */}
       <View style={styles.pageTitleWrapper}>
         <Text style={[styles.pageTitleText, themeStyles.text]}>All Medicines</Text>
       </View>
 
-      {/* Search Input */}
       <View>
         <View style={[styles.searchWrapper, themeStyles.card]}>
           <TextInput
@@ -128,8 +119,6 @@ export default function DetailsScreen() {
             <Ionicons name="chevron-expand-sharp" size={24} color={themeColors.iconColor} />
           </TouchableOpacity>
         </View>
-
-        {/* Dropdown for sorting */}
         {showDropdown && (
           <View style={[styles.dropdownPanel, themeStyles.card]}>
             {[{ label: 'Name', key: 'name' }, { label: 'Manufacturer', key: 'company' }].map(
@@ -190,8 +179,6 @@ export default function DetailsScreen() {
           </View>
         )}
       </View>
-
-      {/* Medicine List or Loading */}
       {isConnected ? (<FlatList
         data={sortedMedicines}
         keyExtractor={(item) => item.id.toString()}
@@ -278,55 +265,42 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 15,
     paddingTop: 40,
-    backgroundColor: '#f0f8ff',
-  },
+    backgroundColor: '#f0f8ff'},
   pageTitleWrapper: {
     alignItems: 'center',
     marginTop: 40,
-    marginBottom: 20,
-  },
+    marginBottom: 20},
   pageTitleText: {
     fontSize: 40,
-    color: '#336699',
-  },
+    color: '#336699'},
   medicineCard: {
     backgroundColor: '#fff',
     padding: 12,
     borderRadius: 10,
     marginVertical: 6,
     marginHorizontal: 5,
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-  },
+    elevation: 3},
   cardContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-  },
+    justifyContent: 'space-between'},
   medicineName: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#336699',
-  },
+    color: '#336699'},
   medicineCompany: {
     fontSize: 15,
     fontStyle: 'italic',
     color: '#336699',
-    marginTop: 2,
-  },
+    marginTop: 2},
   starButton: {
     paddingHorizontal: 8,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   medicineDosage: {
     fontSize: 12,
     color: '#555',
-    marginTop: 2,
-  },
+    marginTop: 2},
   searchWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -336,14 +310,12 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     paddingHorizontal: 12,
     marginBottom: 6,
-    marginHorizontal: 4,
-  },
+    marginHorizontal: 4},
   searchInput: {
     flex: 1,
     fontSize: 16,
     paddingVertical: 12,
-    color: '#333',
-  },
+    color: '#333'},
   dropdownPanel: {
     backgroundColor: 'white',
     borderRadius: 10,
@@ -353,25 +325,21 @@ const styles = StyleSheet.create({
     elevation: 3,
     marginTop: 6,
     marginBottom: 6,
-    marginHorizontal: 5
-  },
+    marginHorizontal: 5},
   dropdownItemRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingVertical: 12,
     paddingHorizontal: 16,
-    borderBottomColor: '#eee',
-  },
+    borderBottomColor: '#eee'},
   dropdownItemText: {
     fontSize: 16,
-    color: '#336699',
-  },
+    color: '#336699'},
   loadingMedicines: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
-  },
+    alignItems: 'center'},
   networkBox: {
     backgroundColor: '#e6f0ff',
     marginTop: 150,
@@ -379,8 +347,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: '90%',
     alignItems: 'center',
-    alignSelf: 'center',
-  },
+    alignSelf: 'center'},
   scanText: {
     marginTop: 0,
     fontSize: 20,
@@ -388,5 +355,4 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     textAlign: 'center',
     paddingHorizontal: 0,
-  },
-});
+  }});

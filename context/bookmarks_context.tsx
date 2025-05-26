@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 
 export const BookmarkContext = createContext<{
   bookmarks: number[];
@@ -7,15 +7,13 @@ export const BookmarkContext = createContext<{
   setBookmarks: React.Dispatch<React.SetStateAction<number[]>>;
 } | null>(null);
 
-export const BookmarkProvider = ({ children }: { children: React.ReactNode }) => {
+export default function BookmarkProvider({ children }: { children: React.ReactNode }) {
   const [bookmarks, setBookmarks] = useState<number[]>([]);
 
   useEffect(() => {
-    const loadBookmarks = async () => {
-      const stored = await AsyncStorage.getItem('bookmarks');
+    AsyncStorage.getItem('bookmarks').then((stored) => {
       if (stored) setBookmarks(JSON.parse(stored));
-    };
-    loadBookmarks();
+    });
   }, []);
 
   useEffect(() => {
@@ -33,7 +31,7 @@ export const BookmarkProvider = ({ children }: { children: React.ReactNode }) =>
       {children}
     </BookmarkContext.Provider>
   );
-};
+}
 
 export const useBookmarks = () => {
   const context = useContext(BookmarkContext);

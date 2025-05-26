@@ -36,7 +36,7 @@ const ThemeContext = createContext<ThemeContextProps | undefined>(undefined);
 export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   const [theme, setThemeState] = useState<ThemeType>('light');
   const [textSize, setTextSize] = useState<number>(16);
-  const systemColorScheme = useColorScheme(); // 'light' or 'dark'
+  const systemColorScheme = useColorScheme(); 
 
   useEffect(() => {
     const loadPrefs = async () => {

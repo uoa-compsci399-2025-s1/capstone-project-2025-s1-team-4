@@ -1,8 +1,8 @@
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { useState, useEffect } from 'react';
-import { ThemeProvider, useTheme } from '../context/theme_context';
+import { useEffect, useState } from 'react';
 import SplashScreen from '../app/(tabs)/splash_page';
+import { ThemeProvider, useTheme } from '../context/theme_context';
 
 function InnerLayout() {
   const { theme } = useTheme();
@@ -34,5 +34,4 @@ export default function RootLayout() {
     <ThemeProvider>
       {isReady ? <InnerLayout /> : <SplashScreen />}
     </ThemeProvider>
-  );
-}
+  )}

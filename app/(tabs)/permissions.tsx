@@ -1,43 +1,32 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Haptics from 'expo-haptics';
-import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { Platform, StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
 import { useTheme } from '../../context/theme_context';
 
-const PermissionsScreen = () => {
+export default function PermissionsScreen() {
   const { themeStyles, textSize, theme } = useTheme();
-  const router = useRouter();
   const [cameraEnabled, setCameraEnabled] = useState(false);
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
 
   useEffect(() => {
     const loadPermissions = async () => {
-      const savedCamera = await AsyncStorage.getItem('cameraEnabled');
-      const savedNotifications = await AsyncStorage.getItem('notificationsEnabled');
-
-      if (savedCamera === null) {
-        setCameraEnabled(true);
-        await AsyncStorage.setItem('cameraEnabled', 'true');
-      } else {
-        setCameraEnabled(savedCamera === 'true');
-      }
-
-      if (savedNotifications === null) {
-        setNotificationsEnabled(true);
-        await AsyncStorage.setItem('notificationsEnabled', 'true');
-      } else {
-        setNotificationsEnabled(savedNotifications === 'true');
-      }
+      const load = async (key: string, setter: (val: boolean) => void) => {
+        const stored = await AsyncStorage.getItem(key);
+        const value = stored === null ? true : stored === 'true';
+        setter(value);
+        if (stored === null) await AsyncStorage.setItem(key, 'true');
+      };
+      await load('cameraEnabled', setCameraEnabled);
+      await load('notificationsEnabled', setNotificationsEnabled);
     };
     loadPermissions();
-  }, []);
+    }, []);
 
   const handleToggle = async (type: 'camera' | 'notifications', value: boolean) => {
     if (Platform.OS !== 'web') {
       Haptics.selectionAsync();
     }
-
     if (type === 'camera') {
       setCameraEnabled(value);
       await AsyncStorage.setItem('cameraEnabled', value ? 'true' : 'false');
@@ -106,28 +95,18 @@ const styles = StyleSheet.create({
   container: {
     padding: 20,
     backgroundColor: '#f0f8ff',
-    flexGrow: 1,
-  },
-  backButton: {
-    position: 'absolute',
-    top: 35,
-    left: 16,
-    zIndex: 1,
-  },
+    flexGrow: 1},
   pageTitleWrapper: {
     alignItems: 'center',
     marginTop: 60,
-    marginBottom: 13,
-  },
+    marginBottom: 13},
   pageTitleText: {
     fontSize: 40,
-    color: '#336699',
-  },
+    color: '#336699'},
   bodyText: {
     textAlign: 'center',
     marginTop: 10,
-    marginBottom: 20,
-  },
+    marginBottom: 20},
   permissionCard: {
     backgroundColor: '#fff',
     paddingVertical: 10,
@@ -137,12 +116,7 @@ const styles = StyleSheet.create({
     elevation: 3,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-  },
+    alignItems: 'center'},
   permissionLabel: {
     fontSize: 16,
-    color: '#336699',
-  },
-});
-
-export default PermissionsScreen;
+    color: '#336699'}});

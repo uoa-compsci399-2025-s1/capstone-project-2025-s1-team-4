@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { View, Animated, StyleSheet } from 'react-native';
+import { Animated, StyleSheet, View } from 'react-native';
 import { useTheme } from '../../context/theme_context';
 
 export default function SplashScreen({ onFadeComplete }: { onFadeComplete?: () => void }) {
@@ -40,10 +40,8 @@ const styles = StyleSheet.create({
         ...StyleSheet.absoluteFillObject,
         justifyContent: 'center',
         alignItems: 'center',
-        zIndex: 10,
-    },
+        zIndex: 10},
     logo: {
         width: '90%',
         marginBottom: 20,
-    },
-});
+    }});

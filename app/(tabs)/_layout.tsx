@@ -3,9 +3,9 @@ import { Tabs } from 'expo-router';
 import { BookmarkProvider } from '../../context/bookmarks_context';
 import { useTheme } from '../../context/theme_context';
 
-
 export default function TabLayout() {
   const { themeColors } = useTheme();
+
   return (
     <BookmarkProvider>
       <Tabs
@@ -30,7 +30,7 @@ export default function TabLayout() {
                 color={color}
                 size={29}
               />
-            )
+            ),
           }}
         />
         <Tabs.Screen
@@ -58,7 +58,7 @@ export default function TabLayout() {
                 color={color}
                 size={27}
               />
-            )
+            ),
           }}
         />
         <Tabs.Screen
@@ -72,59 +72,16 @@ export default function TabLayout() {
                 color={color}
                 size={27}
               />
-            )
+            ),
           }}
         />
-        <Tabs.Screen
-          name="about_us"
-          options={({
-            href: null,
-            headerShown: false,
-          })}
-        />
-        <Tabs.Screen
-          name="appearance"
-          options={({
-            href: null,
-            headerShown: false,
-          })}
-        />
-        <Tabs.Screen
-          name="permissions"
-          options={({
-            href: null,
-            headerShown: false,
-          })}
-        />
-        <Tabs.Screen
-          name="recall_history"
-          options={({
-            href: null,
-            headerShown: false,
-          })}
-        />
-        <Tabs.Screen
-          name="privacy_policy"
-          options={({
-            href: null,
-            headerShown: false,
-          })}
-        />
-        <Tabs.Screen
-          name="medicine_info"
-          options={({
-            href: null,
-            headerShown: false,
-          })}
-        />
-        <Tabs.Screen
-          name="splash_page"
-          options={({
-            href: null,
-            headerShown: false,
-          })}
-        />
+        <Tabs.Screen name="about_us" options={{ href: null, headerShown: false }} />
+        <Tabs.Screen name="appearance" options={{ href: null, headerShown: false }} />
+        <Tabs.Screen name="permissions" options={{ href: null, headerShown: false }} />
+        <Tabs.Screen name="recall_history" options={{ href: null, headerShown: false }} />
+        <Tabs.Screen name="privacy_policy" options={{ href: null, headerShown: false }} />
+        <Tabs.Screen name="medicine_info" options={{ href: null, headerShown: false }} />
+        <Tabs.Screen name="splash_page" options={{ href: null, headerShown: false }} />
       </Tabs>
     </BookmarkProvider>
-  );
-}
+  )}

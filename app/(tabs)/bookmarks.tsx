@@ -30,9 +30,7 @@ export default function BookmarksScreen() {
       try {
         const networkState = await Network.getNetworkStateAsync();
         setIsConnected(networkState.isConnected === true && networkState.isInternetReachable === true);
-      } catch (error) {
-        console.error('Failed to check network status:', error);
-        setIsConnected(false);
+      } catch (error) {setIsConnected(false);
       }
     };
 
@@ -72,9 +70,7 @@ export default function BookmarksScreen() {
           AsyncStorage.removeItem('globalTags');
         }
 
-      } catch (err) {
-        console.error('Failed to load medicines:', err);
-      }
+      } catch (err) {}
     };
 
     const loadTagsFromStorage = async () => {
@@ -84,9 +80,7 @@ export default function BookmarksScreen() {
 
         if (storedTags) setTagsById(JSON.parse(storedTags));
         if (storedGlobal) setGlobalTags(JSON.parse(storedGlobal));
-      } catch (err) {
-        console.error('Failed to load saved tags:', err);
-      }
+      } catch (err) {}
     };
 
     fetchBookmarkedMedicines();
@@ -110,8 +104,7 @@ export default function BookmarksScreen() {
 
     const updatedTagsById = {
       ...tagsById,
-      [id]: [...(tagsById[id] || []), tag],
-    };
+      [id]: [...(tagsById[id] || []), tag]};
     setTagsById(updatedTagsById);
     AsyncStorage.setItem('tagsById', JSON.stringify(updatedTagsById));
 
@@ -135,8 +128,7 @@ export default function BookmarksScreen() {
     const updated = Object.fromEntries(
       Object.entries(tagsById).map(([id, tags]) => [
         Number(id),
-        tags.filter(t => t !== tagToRemove),
-      ])
+        tags.filter(t => t !== tagToRemove)])
     );
     setTagsById(updated);
     AsyncStorage.setItem('tagsById', JSON.stringify(updated));
@@ -145,7 +137,6 @@ export default function BookmarksScreen() {
     setGlobalTags(updatedGlobal);
     AsyncStorage.setItem('globalTags', JSON.stringify(updatedGlobal));
   };
-
 
   const sortedBookmarks = [...filteredBookmarks].sort((a, b) => {
     if (sortBy === 'name') {
@@ -194,11 +185,9 @@ export default function BookmarksScreen() {
     <View style={[styles.container, themeStyles.container]}>
       <View>
 
-        {/* Pill Icon Header */}
         <View style={styles.pageTitleWrapper}>
           <Text style={[styles.pageTitleText, themeStyles.text]}>Bookmarks</Text>
         </View>
-
 
         <View style={[styles.searchWrapper, themeStyles.card]}>
           <TextInput
@@ -235,7 +224,6 @@ export default function BookmarksScreen() {
               { label: 'Tags', key: 'tags' }
             ].map(({ label, key }, index, arr) => {
               const isLast = index === arr.length - 1;
-
               return (
                 <View
                   key={key}
@@ -301,7 +289,7 @@ export default function BookmarksScreen() {
             (null)}
         </View>
       )}
-
+      
       {isConnected ? (
         <FlatList
           data={sortedBookmarks}
@@ -334,8 +322,7 @@ export default function BookmarksScreen() {
                               setTagsById(prev => {
                                 const updated = {
                                   ...prev,
-                                  [item.id]: (prev[item.id] || []).filter(t => t !== tag),
-                                };
+                                  [item.id]: (prev[item.id] || []).filter(t => t !== tag)};
                                 AsyncStorage.setItem('tagsById', JSON.stringify(updated));
                                 const tagStillUsed = Object.values(updated).some(tags => tags.includes(tag));
                                 if (!tagStillUsed) {
@@ -368,12 +355,10 @@ export default function BookmarksScreen() {
                     delete updatedTags[item.id];
                     setTagsById(updatedTags);
                     AsyncStorage.setItem('tagsById', JSON.stringify(updatedTags));
-
                     const remainingTags = Object.values(updatedTags).flat();
                     const cleanedGlobalTags = globalTags.filter(tag => remainingTags.includes(tag));
                     setGlobalTags(cleanedGlobalTags);
                     AsyncStorage.setItem('globalTags', JSON.stringify(cleanedGlobalTags));
-
                   }} style={styles.starButton}>
                     <MaterialCommunityIcons
                       name={bookmarks.includes(item.id) ? 'bookmark' : 'bookmark-outline'}
@@ -383,7 +368,6 @@ export default function BookmarksScreen() {
                   </TouchableOpacity>
                 </View>
               </TouchableOpacity>
-
               {expandedCardId === item.id && (
                 <View style={[styles.tagDropdownCard, themeStyles.card]}>
                   <TextInput
@@ -404,8 +388,7 @@ export default function BookmarksScreen() {
                           <TouchableOpacity onPress={() => {
                             setTagsById(prev => ({
                               ...prev,
-                              [item.id]: [...(prev[item.id] || []), tag],
-                            }));
+                              [item.id]: [...(prev[item.id] || []), tag]}));
                             setExpandedCardId(null);
                           }}>
                             <Text style={[styles.tagPillText, themeStyles.text]}>{tag}</Text>
@@ -432,7 +415,6 @@ export default function BookmarksScreen() {
           <Text style={[styles.scanText, themeStyles.text]}>No internet connection</Text>
         </View>
       ) : null}
-
     </View>
   );
 }
@@ -442,8 +424,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 15,
     paddingTop: 40,
-    backgroundColor: '#f0f8ff',
-  },
+    backgroundColor: '#f0f8ff'},
   searchWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -453,66 +434,39 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     paddingHorizontal: 12,
     marginBottom: 6,
-    marginHorizontal: 4,
-  },
+    marginHorizontal: 4},
   searchInput: {
     flex: 1,
     fontSize: 16,
     paddingVertical: 12,
-    color: '#333',
-  },
+    color: '#333'},
   medicineCard: {
     backgroundColor: '#fff',
     padding: 12,
     borderRadius: 10,
     marginVertical: 6,
     marginHorizontal: 5,
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-  },
+    elevation: 3},
   cardContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-  },
+    justifyContent: 'space-between'},
   medicineName: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#336699',
-  },
+    color: '#336699'},
   medicineCompany: {
     fontSize: 15,
     fontStyle: 'italic',
     color: '#336699',
-    marginTop: 2,
-  },
+    marginTop: 2},
   medicineDosage: {
     fontSize: 12,
     color: '#555',
-    marginTop: 2,
-  },
+    marginTop: 2},
   addTagButton: {
     flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 0,
-  },
-  addTagText: {
-    marginLeft: 6,
-    fontSize: 14,
-    color: '#336699',
-    fontStyle: 'italic',
-  },
-  tagDropdown: {
-    marginTop: 8,
-    backgroundColor: '#f5faff',
-    padding: 10,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: '#cce0ff',
-  },
+    alignItems: 'center'},
   tagInput: {
     backgroundColor: 'white',
     paddingVertical: 8,
@@ -528,28 +482,7 @@ const styles = StyleSheet.create({
   starButton: {
     paddingHorizontal: 8,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
-  emptyState: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-  },
-  noBookmarks: {
-    fontSize: 30,
-    fontWeight: 'bold',
-    color: '#336699',
-    textAlign: 'center',
-  },
-  hintText: {
-    fontSize: 14,
-    fontStyle: 'italic',
-    fontFamily: 'sans-serif',
-    color: '#888',
-    textAlign: 'center',
-    marginTop: 6,
-  },
+    alignItems: 'center'},
   tagDropdownCard: {
     backgroundColor: '#fff',
     padding: 7,
@@ -561,47 +494,34 @@ const styles = StyleSheet.create({
   tagList: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 6,
-    marginTop: 0,
-  },
+    gap: 6},
   tagRow: {
     flexDirection: 'row',
     alignItems: 'center',
     flexWrap: 'wrap',
-    marginTop: 5,
-  },
+    marginTop: 5},
   tagPill: {
     flexDirection: 'row',
     alignItems: 'center',
     borderRadius: 10,
     paddingHorizontal: 10,
     paddingVertical: 4,
-    marginRight: 6,
-    marginTop: 0,
-  },
+    marginRight: 6},
   tagPillText: {
     fontSize: 12,
     color: '#336699',
-    marginRight: 6,
-  },
+    marginRight: 6},
   dropdownTagList: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginTop: 7,
-  },
+    marginTop: 7},
   dropdownTagPill: {
     flexDirection: 'row',
     alignItems: 'center',
     borderRadius: 10,
     paddingHorizontal: 10,
     paddingVertical: 4,
-    marginRight: 9,
-    marginTop: 0,
-  },
-  dropdownTagText: {
-    fontSize: 12,
-    marginRight: 6,
-  },
+    marginRight: 9},
   dropdownPanel: {
     backgroundColor: 'white',
     borderRadius: 10,
@@ -611,20 +531,17 @@ const styles = StyleSheet.create({
     elevation: 3,
     marginTop: 6,
     marginBottom: 6,
-    marginHorizontal: 5
-  },
+    marginHorizontal: 5},
   dropdownItemRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingVertical: 12,
     paddingHorizontal: 16,
-    borderBottomColor: '#eee',
-  },
+    borderBottomColor: '#eee'},
   dropdownItemText: {
     fontSize: 16,
-    color: '#336699',
-  },
+    color: '#336699'},
   filterTagPill: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -632,30 +549,21 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 4,
     marginRight: 6,
-    marginTop: 0,
     marginBottom: 4,
-    marginLeft: 5,
-  },
-  filterTagText: {
-    fontSize: 12,
-    marginRight: 6,
-  },
+    marginLeft: 5},
   pageTitleWrapper: {
     alignItems: 'center',
     marginTop: 40,
-    marginBottom: 20,
-  },
+    marginBottom: 20},
   pageTitleText: {
     fontSize: 40,
-    color: '#336699',
-  },
+    color: '#336699'},
   emptyBookmarksText: {
     fontSize: 20,
     color: '#336699',
     fontWeight: 'bold',
     textAlign: 'center',
-    paddingHorizontal: 0,
-  },
+    paddingHorizontal: 0},
   networkBox: {
     backgroundColor: '#e6f0ff',
     marginTop: 148,
@@ -663,14 +571,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: '90%',
     alignItems: 'center',
-    alignSelf: 'center',
-  },
+    alignSelf: 'center'},
   scanText: {
-    marginTop: 0,
     fontSize: 20,
     color: '#336699',
     fontWeight: '400',
     textAlign: 'center',
-    paddingHorizontal: 0,
-  },
-});
+    paddingHorizontal: 0}});
