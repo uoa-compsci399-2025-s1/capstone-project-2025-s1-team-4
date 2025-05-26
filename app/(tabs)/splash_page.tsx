@@ -3,7 +3,7 @@ import { Animated, StyleSheet, View } from 'react-native';
 import { useTheme } from '../../context/theme_context';
 
 export default function SplashScreen({ onFadeComplete }: { onFadeComplete?: () => void }) {
-    const { theme, themeStyles } = useTheme();
+    const { resolvedTheme, themeStyles } = useTheme();
     const fadeAnim = useRef(new Animated.Value(1)).current;
 
     useEffect(() => {
@@ -24,7 +24,7 @@ export default function SplashScreen({ onFadeComplete }: { onFadeComplete?: () =
         <View style={[styles.container, themeStyles.container]}>
             <Animated.Image
                 source={
-                    theme === 'dark'
+                    resolvedTheme === 'dark'
                         ? require('../../assets/images/splashIconDark.png')
                         : require('../../assets/images/splashIconLight.png')
                 }

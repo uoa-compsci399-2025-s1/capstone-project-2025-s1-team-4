@@ -27,7 +27,7 @@ export default function Index() {
   const [scanning, setScanning] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [cameraAllowed, setCameraAllowed] = useState(false);
-  const { theme, setTheme, textSize, setTextSize, themeStyles, themeColors } = useTheme();
+  const { resolvedTheme, setTheme, textSize, setTextSize, themeStyles, themeColors } = useTheme();
   const [isConnected, setIsConnected] = useState<boolean | null>(null);
   const [showOfflineCard, setShowOfflineCard] = useState(false);
   const [showCameraAlert, setShowCameraAlert] = useState(false);
@@ -116,7 +116,7 @@ export default function Index() {
   <View style={[styles.container, themeStyles.container]}>
     <Image
       source={
-        theme === 'dark'
+        resolvedTheme === 'dark'
           ? require('../../assets/icons/mediDex-dark.png')
           : require('../../assets/icons/mediDex-light.png')
       }
@@ -223,7 +223,7 @@ export default function Index() {
       >
         <View
           style={{
-            backgroundColor: theme === 'dark' ? '#000' : '#fff',
+            backgroundColor: resolvedTheme === 'dark' ? '#000' : '#fff',
             padding: 20,
             borderRadius: 10,
             width: '90%',
@@ -232,7 +232,7 @@ export default function Index() {
         >
           <Text
             style={{
-              color: theme === 'dark' ? '#fff' : '#000',
+              color: resolvedTheme === 'dark' ? '#fff' : '#000',
               fontSize: 18,
               marginBottom: 5,
               fontWeight: 'bold',
@@ -242,7 +242,7 @@ export default function Index() {
           </Text>
           <Text
             style={{
-              color: theme === 'dark' ? '#ccc' : '#333',
+              color: resolvedTheme === 'dark' ? '#ccc' : '#333',
               marginBottom: 20,
             }}
           >

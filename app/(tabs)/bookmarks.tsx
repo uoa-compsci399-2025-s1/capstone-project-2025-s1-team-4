@@ -20,7 +20,7 @@ export default function BookmarksScreen() {
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
   const [showDropdown, setShowDropdown] = useState(false);
   const [filteredTags, setFilteredTags] = useState<string[]>([]);
-  const { textSize, themeStyles, themeColors, theme } = useTheme();
+  const { textSize, themeStyles, themeColors, resolvedTheme } = useTheme();
   const router = useRouter();
   const [isConnected, setIsConnected] = useState<boolean | null>(null);
   const [showOfflineCard, setShowOfflineCard] = useState(false);
@@ -205,7 +205,7 @@ export default function BookmarksScreen() {
         {filteredTags.length > 0 && (
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 8, marginBottom: 6 }}>
             {([...filteredTags].sort()).map((tag, index) => (
-              <View key={index} style={[styles.filterTagPill, { backgroundColor: theme === 'dark' ? '#2e3b57' : '#d6eaff' }]}>
+              <View key={index} style={[styles.filterTagPill, { backgroundColor: resolvedTheme === 'dark' ? '#2e3b57' : '#d6eaff' }]}>
                 <Text style={[styles.tagPillText, themeStyles.text]}>{tag}</Text>
                 <TouchableOpacity onPress={() => setFilteredTags(prev => prev.filter(t => t !== tag))}>
                   <MaterialCommunityIcons name="close" size={14} color={themeColors.iconColor} />
@@ -310,7 +310,7 @@ export default function BookmarksScreen() {
                     <View style={styles.tagRow}>
                       <View style={styles.tagList}>
                         {[...(tagsById[item.id] || [])].sort().map((tag, index) => (
-                          <View key={index} style={[styles.tagPill, { backgroundColor: theme === 'dark' ? '#2e3b57' : '#d6eaff' }]}>
+                          <View key={index} style={[styles.tagPill, { backgroundColor: resolvedTheme === 'dark' ? '#2e3b57' : '#d6eaff' }]}>
                             <TouchableOpacity onPress={() => {
                               if (!filteredTags.includes(tag)) {
                                 setFilteredTags(prev => [...prev, tag]);
@@ -388,7 +388,7 @@ export default function BookmarksScreen() {
                       .filter(tag => !(tagsById[item.id] || []).includes(tag))
                       .sort()
                       .map((tag, index) => (
-                        <View key={index} style={[styles.dropdownTagPill, { backgroundColor: theme === 'dark' ? '#2e3b57' : '#d6eaff' }]}>
+                        <View key={index} style={[styles.dropdownTagPill, { backgroundColor: resolvedTheme === 'dark' ? '#2e3b57' : '#d6eaff' }]}>
                           <TouchableOpacity onPress={() => {
                             setTagsById(prev => ({
                               ...prev,

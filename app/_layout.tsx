@@ -5,7 +5,7 @@ import SplashScreen from '../app/(tabs)/splash_page';
 import { ThemeProvider, useTheme } from '../context/theme_context';
 
 function InnerLayout() {
-  const { theme } = useTheme();
+  const { resolvedTheme } = useTheme();
 
   return (
     <>
@@ -17,7 +17,7 @@ function InnerLayout() {
       >
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       </Stack>
-      <StatusBar style={theme === 'dark' ? 'light' : 'dark'} />
+      <StatusBar style={resolvedTheme === 'dark' ? 'light' : 'dark'} />
     </>
   );
 }
