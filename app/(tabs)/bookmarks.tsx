@@ -350,6 +350,10 @@ export default function BookmarksScreen() {
                   </View>
                   <TouchableOpacity onPress={() => {
                     toggleBookmark(item.id);
+                    setTimeout(() => {
+                      const remaining = sortedBookmarks.filter(b => b.id !== item.id);
+                      if (remaining.length === 0) setFilteredTags([]);
+                    }, 0);
                     const updatedTags = { ...tagsById };
                     const removedTags = updatedTags[item.id] || [];
                     delete updatedTags[item.id];
