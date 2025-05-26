@@ -91,7 +91,7 @@ export default function BookmarksScreen() {
     filteredTags.length === 0
       ? bookmarkedMedicines
       : bookmarkedMedicines.filter((item) =>
-        (tagsById[item.id] || []).some(tag => filteredTags.includes(tag))
+        filteredTags.every(tag => (tagsById[item.id] || []).includes(tag))
       );
 
   const filteredBookmarks = tagFilteredBookmarks.filter(item =>
@@ -204,7 +204,7 @@ export default function BookmarksScreen() {
 
         {filteredTags.length > 0 && (
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 8, marginBottom: 6 }}>
-            {filteredTags.map((tag, index) => (
+            {([...filteredTags].sort()).map((tag, index) => (
               <View key={index} style={[styles.filterTagPill, { backgroundColor: theme === 'dark' ? '#2e3b57' : '#d6eaff' }]}>
                 <Text style={[styles.tagPillText, themeStyles.text]}>{tag}</Text>
                 <TouchableOpacity onPress={() => setFilteredTags(prev => prev.filter(t => t !== tag))}>
