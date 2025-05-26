@@ -46,20 +46,20 @@ export default function NotificationsScreen() {
     };
   }, [isConnected]);
 
-useEffect(() => {
-  fetch(`${API_BASE_URL}/recalls`)
-    .then(res => res.json())
-    .then(data => {
-      const parseDate = (str: string): Date => {
-        const [day, month, year] = str.split('/');
-        return new Date(Number(year), Number(month) - 1, Number(day));
-      };
-      const sorted = data.sort((a: Recall, b: Recall) =>
-        parseDate(b.date).getTime() - parseDate(a.date).getTime()
-      );
-      setRecalls(sorted);
-    })
-    .catch(err => console.error('Error fetching recalls:', err));
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/recalls`)
+      .then(res => res.json())
+      .then(data => {
+        const parseDate = (str: string): Date => {
+          const [day, month, year] = str.split('/');
+          return new Date(Number(year), Number(month) - 1, Number(day));
+        };
+        const sorted = data.sort((a: Recall, b: Recall) =>
+          parseDate(b.date).getTime() - parseDate(a.date).getTime()
+        );
+        setRecalls(sorted);
+      })
+      .catch(err => console.error('Error fetching recalls:', err));
   }, []);
 
   const renderRecall = ({ item }: { item: Recall }) => (
@@ -79,61 +79,64 @@ useEffect(() => {
     </TouchableOpacity>
   );
 
-return (
-  <View style={[styles.container, themeStyles.container, { flex: 1 }]}>
-    <View style={styles.pageTitleWrapper}>
-      <Text style={[styles.pageTitleText, themeStyles.text]}>
-        Medicine Recalls
-      </Text>
-    </View>
+  return (
+    <View style={[styles.container, themeStyles.container, { flex: 1 }]}>
+      <View style={styles.pageTitleWrapper}>
+        <Text style={[styles.pageTitleText, themeStyles.text]}>
+          Medicine Recalls
+        </Text>
+      </View>
 
-    {!recalls || recalls.length === 0 ? (
-      <View style={styles.loadingWrapper}>
-        {isConnected ? (
-          <Text
-            style={[
-              styles.brandName,
-              themeStyles.text,
-              { fontStyle: 'italic' }
-            ]}
-          >
-            Loading recalls...
-          </Text>
-        ) : null}
-      </View>
-    ) : (
-      <View style={{ flex: 1 }}>
-        {isConnected ? (
-          <FlatList
-            data={recalls}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={renderRecall}
-            contentContainerStyle={styles.infoCard}
-          />
-        ) : showOfflineCard ? (
-          <View style={[styles.networkBox, themeStyles.card]}>
-            <Text style={[styles.scanText, themeStyles.text]}>
-              No internet connection
+      {!recalls || recalls.length === 0 ? (
+        <View style={styles.loadingWrapper}>
+          {isConnected ? (
+            <Text
+              style={[
+                styles.brandName,
+                themeStyles.text,
+                { fontStyle: 'italic' }
+              ]}
+            >
+              Loading recalls...
             </Text>
-          </View>
-        ) : null}
-      </View>
-    )}
-  </View>
-);
+          ) : null}
+        </View>
+      ) : (
+        <View style={{ flex: 1 }}>
+          {isConnected ? (
+            <FlatList
+              data={recalls}
+              keyExtractor={(item) => item.id.toString()}
+              renderItem={renderRecall}
+              contentContainerStyle={styles.infoCard}
+            />
+          ) : showOfflineCard ? (
+            <View style={[styles.networkBox, themeStyles.card]}>
+              <Text style={[styles.scanText, themeStyles.text]}>
+                No internet connection
+              </Text>
+            </View>
+          ) : null}
+        </View>
+      )}
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     padding: 0,
-    flex: 1},
+    flex: 1
+  },
   pageTitleWrapper: {
     alignItems: 'center',
     marginTop: 79,
-    marginBottom: 18},
+    marginBottom: 18
+  },
   pageTitleText: {
     fontSize: 40,
-    color: '#336699'},
+    color: '#336699'
+  },
   listContent: {
     paddingBottom: 10,
     paddingTop: 10,
@@ -145,23 +148,28 @@ const styles = StyleSheet.create({
     marginVertical: 6,
     backgroundColor: '#fff',
     elevation: 3,
-    overflow: 'visible'},
+    overflow: 'visible'
+  },
   brandName: {
     fontWeight: 'bold',
     fontSize: 20,
     marginBottom: 2,
-    alignContent: 'center'},
+    alignContent: 'center'
+  },
   date: {
     marginBottom: 2,
-    fontStyle: 'italic'},
+    fontStyle: 'italic'
+  },
   tap: {
     textDecorationLine: 'underline',
-    marginBottom: 0},
+    marginBottom: 0
+  },
   loadingWrapper: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 20},
+    paddingHorizontal: 20
+  },
   networkBox: {
     backgroundColor: '#e6f0ff',
     marginTop: 191,
@@ -169,7 +177,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: '90%',
     alignItems: 'center',
-    alignSelf: 'center'},
+    alignSelf: 'center'
+  },
   scanText: {
     marginTop: 0,
     fontSize: 20,
@@ -184,4 +193,5 @@ const styles = StyleSheet.create({
     elevation: 3,
     marginBottom: 25,
     marginHorizontal: 4
-  }});
+  }
+});

@@ -117,12 +117,12 @@ export default function PrivacyPolicyScreen() {
             3. Use of Consumer Medicine Information (CMI)
           </Text>
 
-        <Text style={[styles.bodyText, themeStyles.bodyText, { fontSize: textSize }]}>
-          Not all medicines listed in MediDex have an official CMI (Consumer Medicine Information) sheet available from Medsafe. In such cases,
-          we may provide a CMI sheet from a similar medicine containing the same active ingredient(s) and dosage(s). These substitute CMIs are intended as
-          general guidance only and may not reflect specific differences in formulation, brand, or patient advice. Users are strongly encouraged
-          to consult a healthcare professional for clarification and personalised information.
-        </Text>
+          <Text style={[styles.bodyText, themeStyles.bodyText, { fontSize: textSize }]}>
+            Not all medicines listed in MediDex have an official CMI (Consumer Medicine Information) sheet available from Medsafe. In such cases,
+            we may provide a CMI sheet from a similar medicine containing the same active ingredient(s) and dosage(s). These substitute CMIs are intended as
+            general guidance only and may not reflect specific differences in formulation, brand, or patient advice. Users are strongly encouraged
+            to consult a healthcare professional for clarification and personalised information.
+          </Text>
 
           <Text style={[styles.headerText, themeStyles.text, { fontSize: textSize }]}>
             4. Medical Disclaimer
@@ -188,30 +188,36 @@ const styles = StyleSheet.create({
   container: {
     padding: 16,
     backgroundColor: '#f0f8ff',
-    flex: 1,},
+    flex: 1,
+  },
   pageTitleWrapper: {
     alignItems: 'center',
     marginTop: 21,
-    marginBottom: 18},
+    marginBottom: 18
+  },
   pageTitleText: {
     fontSize: 40,
     color: '#336699',
-    textAlign: 'center'},
+    textAlign: 'center'
+  },
   headerText: {
     textAlign: 'left',
     marginTop: 10,
     marginBottom: 4,
-    fontWeight: "bold"},
+    fontWeight: "bold"
+  },
   subHeaderText: {
     textAlign: 'center',
     marginTop: 10,
     marginBottom: 4,
     fontWeight: "bold",
-    textDecorationLine: 'underline'},
+    textDecorationLine: 'underline'
+  },
   bodyText: {
     textAlign: 'left',
     marginBottom: 5,
-    fontWeight: 'normal'},
+    fontWeight: 'normal'
+  },
   infoCard: {
     backgroundColor: '#fff',
     borderRadius: 10,
