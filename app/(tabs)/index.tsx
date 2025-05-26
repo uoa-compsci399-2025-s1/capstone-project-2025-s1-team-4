@@ -121,13 +121,13 @@ export default function Index() {
           : require('../../assets/icons/mediDex-light.png')
       }
       style={{
-        width: '95%',
+        width: '70%',
         height: '15%',
-        minHeight: 150,
-        maxHeight: 150,
-        marginBottom: 10,
-        marginTop: 0,
-        borderRadius: 10,
+        minHeight: 0,
+        maxHeight: 100,
+        marginBottom: 15,
+        marginTop: 45,
+        borderRadius: 0,
         resizeMode: 'contain',
       }}
     />
@@ -162,9 +162,12 @@ export default function Index() {
             style={{ alignSelf: 'center' }}
           />
         </View>
-        <Text style={[styles.scanText, themeStyles.text]}>
-          Tap the scanner icon to scan a barcode, or use the search box above to search by name.
-        </Text>
+        <View style={{ marginTop: -10 }}>
+          <Text style={[styles.scanText, themeStyles.text]}>
+            Tap the scanner icon to scan a barcode, or use the search box above to search by name.
+          </Text>
+        </View>
+        
       </TouchableOpacity>
     )}
 
