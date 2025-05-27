@@ -1,23 +1,34 @@
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
-import { View } from 'react-native';
+import { View, Pressable } from 'react-native';
 import { BookmarkProvider } from '../../context/bookmarks_context';
 import { useTheme } from '../../context/theme_context';
+import * as Haptics from 'expo-haptics';
 
 
 export default function TabLayout() {
   const { themeColors } = useTheme();
   return (
-    <BookmarkProvider>
+<BookmarkProvider>
       <Tabs
         screenOptions={{
           tabBarStyle: { flex: 0.1 },
-          tabBarLabelStyle: { fontSize: 12, marginTop: 3 , marginBottom: -10},
+          tabBarLabelStyle: { fontSize: 12, marginTop: 3, marginBottom: -10 },
           tabBarActiveTintColor: themeColors.light,
           tabBarInactiveTintColor: themeColors.dark,
           tabBarActiveBackgroundColor: themeColors.medLight,
           tabBarInactiveBackgroundColor: themeColors.medLight,
           tabBarLabelPosition: 'below-icon',
+
+          tabBarButton: (props) => (
+            <Pressable
+              android_ripple={{ color: 'transparent' }}
+              style={props.style}
+              onPress={props.onPress}
+            >
+              {props.children}
+            </Pressable>
+          ),
         }}
       >
         <Tabs.Screen
