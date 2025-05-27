@@ -1,6 +1,6 @@
 import * as Network from 'expo-network';
 import React, { useEffect, useState } from 'react';
-import { FlatList, Linking, StyleSheet, Text, TouchableOpacity, View, ScrollView } from 'react-native';
+import { FlatList, Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { API_BASE_URL } from '../../config';
 import { useTheme } from '../../context/theme_context';
 
@@ -190,7 +190,6 @@ const styles = StyleSheet.create({
   infoCard: {
     borderRadius: 10,
     padding: 14,
-    elevation: 3,
     marginBottom: 25,
     marginHorizontal: 4
   }

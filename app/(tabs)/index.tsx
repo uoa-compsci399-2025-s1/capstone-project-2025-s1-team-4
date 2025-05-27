@@ -14,7 +14,7 @@ export default function Index() {
   const router = useRouter();
   const [cameraVisible, setCameraVisible] = useState(false);
   const [facing] = useState<CameraType>('back');
-  const [permission] = useCameraPermissions();
+  const [permission, requestPermission] = useCameraPermissions();
   const [scannedData, setScannedData] = useState<string | null>(null);
   const [medicineInfo, setMedicineInfo] = useState<any>(null);
   const [scanning, setScanning] = useState(false);
@@ -130,6 +130,10 @@ return (
       <TouchableOpacity
         style={styles.barcodeWrapper}
         onPress={async () => {
+          if (!permission?.granted) {
+            const { granted } = await requestPermission();
+            if (!granted) return;
+          }
           const allowed = await AsyncStorage.getItem('cameraEnabled');
           if (allowed !== 'true') {
             setShowCameraAlert(true);

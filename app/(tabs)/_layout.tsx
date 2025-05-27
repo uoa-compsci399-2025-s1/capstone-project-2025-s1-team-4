@@ -74,7 +74,7 @@ export default function TabLayout() {
             title: 'Settings',
             headerShown: false,
             tabBarIcon: ({ color, focused }) => (
-              <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1, marginTop: 3}}>
+              <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1, marginTop: 2}}>
                 <Ionicons
                   name={focused ? 'settings-sharp' : 'settings-outline'}
                   color={color}
