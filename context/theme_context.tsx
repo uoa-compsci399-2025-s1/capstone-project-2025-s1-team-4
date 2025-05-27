@@ -83,10 +83,10 @@ export const useTheme = () => {
 const lightTheme:
   ThemeStyles = StyleSheet.create({
     container: { backgroundColor: '#f0f8ff' },
-    text: { color: '#336699' },
-    transparentText: { color: '#336699' },
+    text: { color: '#336699', fontFamily: 'Roboto_400Regular' },
+    transparentText: { color: '#336699', fontFamily: 'Roboto_400Regular' },
     card: { backgroundColor: '#ffffff' },
-    bodyText: { color: '#4a4a4a' },
+    bodyText: { color: '#4a4a4a', fontFamily: 'Roboto_400Regular' },
   });
 
 const lightColors: ThemeColors = {
@@ -101,10 +101,10 @@ const lightColors: ThemeColors = {
 
 const darkTheme: ThemeStyles = StyleSheet.create({
   container: { backgroundColor: '#1A2130' },
-  text: { color: '#c5e1fa' },
-  transparentText: { color: '#ffffff' },
+  text: { color: '#c5e1fa', fontFamily: 'Roboto_400Regular' },
+  transparentText: { color: '#ffffff', fontFamily: 'Roboto_400Regular' },
   card: { backgroundColor: '#5B6174' },
-  bodyText: { color: '#ffffff' },
+  bodyText: { color: '#ffffff', fontFamily: 'Roboto_400Regular' },
 });
 
 const darkColors: ThemeColors = {

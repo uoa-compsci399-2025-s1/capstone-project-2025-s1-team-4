@@ -186,14 +186,15 @@ export default function PrivacyPolicyScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
+    paddingTop: 40,
+    paddingHorizontal: 15,
     backgroundColor: '#f0f8ff',
     flex: 1,
   },
   pageTitleWrapper: {
     alignItems: 'center',
-    marginTop: 21,
-    marginBottom: 18
+    marginTop: 40,
+    marginBottom: 20
   },
   pageTitleText: {
     fontSize: 40,

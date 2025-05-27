@@ -6,7 +6,7 @@ import * as Haptics from 'expo-haptics';
 import * as Network from 'expo-network';
 import { useRouter } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
-import { Image, Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, Modal, StyleSheet, Text, TouchableOpacity, View, Dimensions } from "react-native";
 import { API_BASE_URL } from '../../config';
 import { useTheme } from '../../context/theme_context';
 
@@ -23,6 +23,11 @@ export default function Index() {
   const [isConnected, setIsConnected] = useState<boolean | null>(null);
   const [showOfflineCard, setShowOfflineCard] = useState(false);
   const [showCameraAlert, setShowCameraAlert] = useState(false);
+  const getSquareSize = () => {
+    const screenWidth = Dimensions.get('window').width;
+    return screenWidth * 0.90;
+  };
+  const squareSize = getSquareSize()
 
   useEffect(() => {
     const checkConnection = async () => {
@@ -117,7 +122,7 @@ return (
     />
 
     <TouchableOpacity
-      style={[styles.searchInput, themeStyles.card]}
+      style={[styles.searchInput, themeStyles.card, {width: squareSize}]}
       onPress={() => router.push({ pathname: '/medicine', params: { focusSearch: 'true' } })}
       activeOpacity={0.8}
     >
@@ -135,7 +140,7 @@ return (
             if (!granted) return;
           }
           const allowed = await AsyncStorage.getItem('cameraEnabled');
-          if (allowed !== 'true') {
+          if (allowed === 'false') {
             setShowCameraAlert(true);
             return;
           }
@@ -151,7 +156,7 @@ return (
           />
         </View>
         <View style={{ marginTop: -20, marginHorizontal: 6 }}>
-          <Text style={[styles.scanText, themeStyles.text]}>
+          <Text style={[styles.scanText, themeStyles.text, {fontFamily: 'Roboto_400Regular'}]}>
             Tap the scanner icon to scan a barcode, or use the search box above to search by name.
           </Text>
         </View>
@@ -160,7 +165,7 @@ return (
 
     {cameraVisible && permission?.granted && isConnected ? (
       <>
-        <View style={styles.cameraContainer}>
+        <View style={[styles.cameraContainer, { width: squareSize, height: squareSize }]}>
           <CameraView
             style={styles.camera}
             facing={facing}
@@ -177,7 +182,7 @@ return (
         </View>
 
         <TouchableOpacity
-          style={[styles.searchInput, themeStyles.card, { marginTop: 16, width: '93%', alignSelf: 'center' }]}
+          style={[styles.searchInput, themeStyles.card, { marginTop: 8, width: squareSize, alignSelf: 'center' }]}
           onPress={() => setCameraVisible(false)}
         >
           <Text
@@ -277,7 +282,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     paddingHorizontal: 0},
   cameraContainer: {
-    flex: 1,
     width: '93%',
     height: 300,
     marginTop: 20,
