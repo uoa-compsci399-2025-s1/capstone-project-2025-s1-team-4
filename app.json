@@ -51,7 +51,7 @@
             "image": "./assets/images/androidSplashDark.png",
             "backgroundColor": "#1a2130"
           },
-          "imageWidth": 480
+          "imageWidth": 200
         }
       ]
     ],
