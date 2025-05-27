@@ -29,17 +29,20 @@ export default function Index() {
   };
   const squareSize = getSquareSize()
 
-  useEffect(() => {
     const checkConnection = async () => {
-      try {
-        const networkState = await Network.getNetworkStateAsync();
-        setIsConnected(networkState.isConnected === true && networkState.isInternetReachable === true);
-      } catch (error) {
-        console.error('Failed to check network status:', error);
-        setIsConnected(false);
-      }
-    };
-
+    try {
+      const networkState = await Network.getNetworkStateAsync();
+      const connected = networkState.isConnected === true && networkState.isInternetReachable === true;
+      setIsConnected(connected);
+      return connected;
+    } catch (error) {
+      console.error('Failed to check network status:', error);
+      setIsConnected(false);
+      return false;
+    }
+  };
+  
+  useEffect(() => {
     checkConnection();
   }, []);
 
@@ -157,7 +160,7 @@ return (
         </View>
         <View style={{ marginTop: -20, marginHorizontal: 6 }}>
           <Text style={[styles.scanText, themeStyles.text, {fontFamily: 'Roboto_400Regular'}]}>
-            Tap the scanner icon to scan a barcode, or use the search box above to search by name.
+            Tap the scanner icon to scan a barcode on medicine packaging, or use the search bar above to search by name.
           </Text>
         </View>
       </TouchableOpacity>
@@ -193,7 +196,16 @@ return (
         </TouchableOpacity>
       </>
     ) : cameraVisible && showOfflineCard ? (
-      <View style={[styles.networkBox, themeStyles.card]}>
+      <View
+      style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
         <Text style={[styles.scanText, themeStyles.text]}>No internet connection</Text>
       </View>
     ) : null}
@@ -215,13 +227,12 @@ return (
         }}
       >
         <View
-          style={{
-            backgroundColor: resolvedTheme === 'dark' ? '#000' : '#fff',
+          style={[{
             padding: 20,
             borderRadius: 10,
             width: '90%',
             maxWidth: 400,
-          }}
+          }, themeStyles.container]}
         >
           <Text
             style={{
@@ -243,7 +254,7 @@ return (
           </Text>
           <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
             <TouchableOpacity onPress={() => setShowCameraAlert(false)}>
-              <Text style={{ color: '#007AFF' }}>OK</Text>
+              <Text style={{ color: resolvedTheme === 'dark' ? '#fff' : '#000' }}>OK</Text>
             </TouchableOpacity>
           </View>
         </View>

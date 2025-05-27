@@ -10,6 +10,7 @@ interface ThemeStyles {
   transparentText: any;
   card: any;
   bodyText: any;
+  monoText: any;
 }
 
 interface ThemeColors {
@@ -87,6 +88,7 @@ const lightTheme:
     transparentText: { color: '#336699', fontFamily: 'Roboto_400Regular' },
     card: { backgroundColor: '#ffffff' },
     bodyText: { color: '#4a4a4a', fontFamily: 'Roboto_400Regular' },
+    monoText: { color: '#336699', fontFamily: 'RobotoMono_400Regular' },
   });
 
 const lightColors: ThemeColors = {
@@ -105,6 +107,7 @@ const darkTheme: ThemeStyles = StyleSheet.create({
   transparentText: { color: '#ffffff', fontFamily: 'Roboto_400Regular' },
   card: { backgroundColor: '#5B6174' },
   bodyText: { color: '#ffffff', fontFamily: 'Roboto_400Regular' },
+  monoText: { color: '#c5e1fa', fontFamily: 'RobotoMono_400Regular' },
 });
 
 const darkColors: ThemeColors = {

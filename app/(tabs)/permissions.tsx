@@ -85,7 +85,7 @@ export default function PermissionsScreen() {
       </TouchableOpacity>
 
       <Text style={[styles.bodyText, themeStyles.text, { fontSize: textSize }]}>
-        MediDex will only notify you if there is a medicine recall. To revoke notification access, update your device settings.
+        MediDex will only notify you if there is a medicine recall. To revoke notification permissions from MediDex, update permissions in your device settings.
       </Text>
     </View>
   );

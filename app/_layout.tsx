@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import SplashScreen from '../app/(tabs)/splash_page';
 import { ThemeProvider, useTheme } from '../context/theme_context';
 import { useFonts, Roboto_400Regular } from '@expo-google-fonts/roboto';
+import { RobotoMono_400Regular } from '@expo-google-fonts/roboto-mono';
 
 function InnerLayout() {
   const { resolvedTheme } = useTheme();

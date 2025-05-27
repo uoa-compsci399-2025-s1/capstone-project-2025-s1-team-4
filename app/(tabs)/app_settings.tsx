@@ -88,7 +88,7 @@ export default function SettingsScreen() {
         <View style={styles.modalOverlay}>
           <View style={[
             styles.modalContent,
-            { backgroundColor: theme === 'dark' ? '#000' : '#fff' }
+            themeStyles.container
           ]}>
             <Text style={[
               styles.modalTitle,
@@ -104,7 +104,7 @@ export default function SettingsScreen() {
             </Text>
             <View style={styles.modalButtons}>
               <TouchableOpacity onPress={() => setConfirmVisible(false)} style={{ marginRight: 20 }}>
-                <Text style={{ color: '#007AFF' }}>Cancel</Text>
+                <Text style={{ color: theme === 'dark' ? '#fff' : '#000' }}>Cancel</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={handleClearBookmarks}>
                 <Text style={{ color: 'red' }}>Clear All</Text>
