@@ -9,7 +9,7 @@ import { useTheme } from '../../context/theme_context';
 export default function SettingsScreen() {
   const router = useRouter();
   const { setBookmarks } = useBookmarks();
-  const { themeStyles, textSize, themeColors, theme } = useTheme();
+  const { themeStyles, textSize, themeColors, theme, resolvedTheme } = useTheme();
   const [confirmVisible, setConfirmVisible] = useState(false);
 
   const handleClearBookmarks = async () => {
@@ -92,19 +92,19 @@ export default function SettingsScreen() {
           ]}>
             <Text style={[
               styles.modalTitle,
-              { color: theme === 'dark' ? '#fff' : '#000' }
+              { color: resolvedTheme === 'dark' ? '#fff' : '#000' }
             ]}>
               Clear Bookmarks
             </Text>
             <Text style={[
               styles.modalText,
-              { color: theme === 'dark' ? '#ccc' : '#333' }
+              { color: resolvedTheme === 'dark' ? '#ccc' : '#333' }
             ]}>
               Are you sure you want to remove all bookmarks? This cannot be undone.
             </Text>
             <View style={styles.modalButtons}>
               <TouchableOpacity onPress={() => setConfirmVisible(false)} style={{ marginRight: 20 }}>
-                <Text style={{ color: theme === 'dark' ? '#fff' : '#000' }}>Cancel</Text>
+                <Text style={{ color: resolvedTheme === 'dark' ? '#fff' : '#000' }}>Cancel</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={handleClearBookmarks}>
                 <Text style={{ color: 'red' }}>Clear All</Text>
