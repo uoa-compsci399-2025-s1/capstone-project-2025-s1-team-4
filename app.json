@@ -8,7 +8,6 @@
     "scheme": "MediDex",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
-    
     "ios": {
       "supportsTablet": true,
       "icon": {
@@ -42,10 +41,28 @@
         {
           "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera to scan barcodes"
         }
+      ],
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#f0f8ff",
+          "image": "./assets/images/androidSplashLight.png",
+          "dark": {
+            "image": "./assets/images/androidSplashDark.png",
+            "backgroundColor": "#1a2130"
+          },
+          "imageWidth": 480
+        }
       ]
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "2e825e30-6d65-4650-ab01-7fff5c8e68b1"
+      }
     }
   }
 }

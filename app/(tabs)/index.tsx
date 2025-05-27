@@ -167,6 +167,13 @@ return (
             barcodeScannerSettings={{ barcodeTypes: ['ean13'] }}
             onBarcodeScanned={scannedData || scanning ? undefined : handleBarcodeScanned}
           />
+          {message && (
+            <View style={[styles.infoBox, themeStyles.card]}>
+              <Text style={[styles.scanText, themeStyles.text]}>
+                {message}
+              </Text>
+            </View>
+          )}
         </View>
 
         <TouchableOpacity
@@ -186,13 +193,7 @@ return (
       </View>
     ) : null}
 
-    {message && (
-      <View style={[styles.infoBox, themeStyles.card]}>
-        <Text style={[styles.scanText, themeStyles.text]}>
-          {message}
-        </Text>
-      </View>
-    )}
+    
 
     <Modal transparent visible={showCameraAlert}>
       <View
@@ -276,6 +277,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     paddingHorizontal: 0},
   cameraContainer: {
+    flex: 1,
     width: '93%',
     height: 300,
     marginTop: 20,
@@ -286,12 +288,14 @@ const styles = StyleSheet.create({
     flex: 1},
   infoBox: {
     backgroundColor: '#e6f0ff',
-    marginTop: 10,
+    position: 'absolute',
+    top: 140,
     paddingVertical: 10,       
-    paddingHorizontal: 16,
+    paddingHorizontal: 10,
     borderRadius: 10,
-    width: '93%',
-    alignItems: 'center'},
+    width: '75%',
+    alignItems: 'center',
+    alignSelf: 'center'},
   networkBox: {
     backgroundColor: '#e6f0ff',
     marginTop: 150,
