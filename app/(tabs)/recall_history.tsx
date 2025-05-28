@@ -18,6 +18,7 @@ export default function NotificationsScreen() {
   const [recalls, setRecalls] = useState<Recall[]>([]);
   const [isConnected, setIsConnected] = useState<boolean | null>(null);
   const [showOfflineCard, setShowOfflineCard] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const checkConnection = async () => {
     try {
@@ -33,6 +34,7 @@ export default function NotificationsScreen() {
   };
 
   const fetchAllRecalls = () => {
+    setIsLoading(true);
     fetch(`${API_BASE_URL}/recalls`)
       .then(res => res.json())
       .then(data => {
@@ -45,17 +47,22 @@ export default function NotificationsScreen() {
         );
         setRecalls(sorted);
       })
-      .catch(err => console.error('Error fetching recalls:', err));
+      .catch(err => {
+        console.error('Error fetching recalls:', err);
+        setRecalls([]);
+      })
+      .finally(() => setIsLoading(false));
   };
 
   useEffect(() => {
     let timeout: ReturnType<typeof setTimeout> | undefined;
 
     if (!isConnected) {
+      setIsLoading(false);
       timeout = setTimeout(() => setShowOfflineCard(true), 1000);
     } else {
-      fetchAllRecalls();
       setShowOfflineCard(false);
+      fetchAllRecalls();
       if (timeout) clearTimeout(timeout);
     }
 
@@ -95,30 +102,9 @@ export default function NotificationsScreen() {
         </Text>
       </View>
 
-      {!recalls || recalls.length === 0 ? (
-        <View style={styles.loadingWrapper}>
-          {isConnected ? (
-            <Text
-              style={[
-                styles.brandName,
-                themeStyles.text,
-                { fontStyle: 'italic' }
-              ]}
-            >
-              Loading recalls...
-            </Text>
-          ) : null}
-        </View>
-      ) : (
-        <View style={{ flex: 1 }}>
-          {isConnected ? (
-            <FlatList
-              data={recalls}
-              keyExtractor={(item) => item.id.toString()}
-              renderItem={renderRecall}
-              contentContainerStyle={styles.infoCard}
-            />
-          ) : showOfflineCard ? (
+      <View style={{ flex: 1 }}>
+        {!isConnected ? (
+          showOfflineCard ? (
             <View
               style={{
                 position: 'absolute',
@@ -132,19 +118,50 @@ export default function NotificationsScreen() {
               <Text style={[styles.scanText, themeStyles.text]}>No internet connection</Text>
               <TouchableOpacity
                 onPress={checkConnection}
-                style={[{
-                  marginTop: 20,
-                  paddingVertical: 10,
-                  paddingHorizontal: 20,
-                  borderRadius: 10,
-                }, themeStyles.card]}
-              >
+                style={[
+                  {
+                    marginTop: 20,
+                    paddingVertical: 10,
+                    paddingHorizontal: 20,
+                    borderRadius: 10,
+                  },
+                  themeStyles.card,
+                ]}>
                 <Text style={[{ fontSize: textSize }, themeStyles.text]}>Retry</Text>
               </TouchableOpacity>
             </View>
-          ) : null}
-        </View>
-      )}
+          ) : null
+        ) : isLoading ? (
+          <View style={styles.loadingWrapper}>
+            <Text
+              style={[
+                styles.brandName,
+                themeStyles.text,
+                { fontStyle: 'italic' },
+              ]}>
+              Loading recalls...
+            </Text>
+          </View>
+        ) : recalls.length === 0 ? (
+          <View style={styles.loadingWrapper}>
+            <Text
+              style={[
+                styles.brandName,
+                themeStyles.text,
+                { fontStyle: 'italic' },
+              ]}>
+              No recalls found
+            </Text>
+          </View>
+          ) : (
+          <FlatList
+            data={recalls}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={renderRecall}
+            contentContainerStyle={styles.infoCard}
+          />
+        )}
+      </View>
     </View>
   );
 }
