@@ -2,7 +2,8 @@ import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Network from 'expo-network';
 import { useRouter } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { API_BASE_URL } from '../../config';
 import { useBookmarks } from '../../context/bookmarks_context';
@@ -25,17 +26,51 @@ export default function BookmarksScreen() {
   const [isConnected, setIsConnected] = useState<boolean | null>(null);
   const [showOfflineCard, setShowOfflineCard] = useState(false);
 
-  useEffect(() => {
-    const checkConnection = async () => {
-      try {
-        const networkState = await Network.getNetworkStateAsync();
-        setIsConnected(networkState.isConnected === true && networkState.isInternetReachable === true);
-      } catch (error) {setIsConnected(false);
-      }
-    };
+  const checkConnection = async () => {
+    try {
+      const networkState = await Network.getNetworkStateAsync();
+      const connected = networkState.isConnected === true && networkState.isInternetReachable === true;
+      setIsConnected(connected);
+      return connected;
+    } catch (error) {
+      console.error('Failed to check network status:', error);
+      setIsConnected(false);
+      return false;
+    }
+  };
 
-    checkConnection();
-  }, []);
+  const fetchBookmarkedMedicines = async () => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/all_medicines`);
+      const all = await res.json();
+      const filtered = all.filter((m: any) =>
+        bookmarks.some((b: any) => b === m.id || b.id === m.id)
+      );
+      setBookmarkedMedicines(filtered);
+      if (bookmarks.length === 0) {
+        setTagsById({});
+        setGlobalTags([]);
+        AsyncStorage.removeItem('tagsById');
+        AsyncStorage.removeItem('globalTags');
+      }
+
+    } catch (err) { }
+  };
+
+  const loadTagsFromStorage = async () => {
+    try {
+      const storedTags = await AsyncStorage.getItem('tagsById');
+      const storedGlobal = await AsyncStorage.getItem('globalTags');
+
+      if (storedTags) setTagsById(JSON.parse(storedTags));
+      if (storedGlobal) setGlobalTags(JSON.parse(storedGlobal));
+    } catch (err) { }
+  };
+
+  useEffect(() => {
+    fetchBookmarkedMedicines();
+    loadTagsFromStorage();
+  }, [bookmarks]);
 
   useEffect(() => {
     let timeout: ReturnType<typeof setTimeout> | undefined;
@@ -45,6 +80,8 @@ export default function BookmarksScreen() {
         setShowOfflineCard(true);
       }, 1000);
     } else {
+      fetchBookmarkedMedicines();
+      loadTagsFromStorage();
       setShowOfflineCard(false);
       if (timeout) clearTimeout(timeout);
     }
@@ -54,38 +91,11 @@ export default function BookmarksScreen() {
     };
   }, [isConnected]);
 
-  useEffect(() => {
-    const fetchBookmarkedMedicines = async () => {
-      try {
-        const res = await fetch(`${API_BASE_URL}/all_medicines`);
-        const all = await res.json();
-        const filtered = all.filter((m: any) =>
-          bookmarks.some((b: any) => b === m.id || b.id === m.id)
-        );
-        setBookmarkedMedicines(filtered);
-        if (bookmarks.length === 0) {
-          setTagsById({});
-          setGlobalTags([]);
-          AsyncStorage.removeItem('tagsById');
-          AsyncStorage.removeItem('globalTags');
-        }
-
-      } catch (err) {}
-    };
-
-    const loadTagsFromStorage = async () => {
-      try {
-        const storedTags = await AsyncStorage.getItem('tagsById');
-        const storedGlobal = await AsyncStorage.getItem('globalTags');
-
-        if (storedTags) setTagsById(JSON.parse(storedTags));
-        if (storedGlobal) setGlobalTags(JSON.parse(storedGlobal));
-      } catch (err) {}
-    };
-
-    fetchBookmarkedMedicines();
-    loadTagsFromStorage();
-  }, [bookmarks]);
+  useFocusEffect(
+    useCallback(() => {
+      checkConnection();
+    }, [])
+  );
 
   const tagFilteredBookmarks =
     filteredTags.length === 0
@@ -419,8 +429,28 @@ export default function BookmarksScreen() {
           )}
         />
       ) : showOfflineCard ? (
-        <View style={[styles.networkBox, themeStyles.card]}>
+        <View
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
           <Text style={[styles.scanText, themeStyles.text]}>No internet connection</Text>
+          <TouchableOpacity
+            onPress={checkConnection}
+            style={[{
+              marginTop: 20,
+              paddingVertical: 10,
+              paddingHorizontal: 20,
+              borderRadius: 10,
+            }, themeStyles.card]}
+          >
+            <Text style={[{ fontSize: textSize }, themeStyles.text]}>Retry</Text>
+          </TouchableOpacity>
         </View>
       ) : null}
     </View>

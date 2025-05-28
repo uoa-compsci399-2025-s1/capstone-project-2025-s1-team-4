@@ -29,7 +29,7 @@ export default function Index() {
   };
   const squareSize = getSquareSize()
 
-    const checkConnection = async () => {
+  const checkConnection = async () => {
     try {
       const networkState = await Network.getNetworkStateAsync();
       const connected = networkState.isConnected === true && networkState.isInternetReachable === true;
@@ -41,25 +41,21 @@ export default function Index() {
       return false;
     }
   };
-  
-  useEffect(() => {
-    checkConnection();
-  }, []);
 
   useEffect(() => {
-  let timeout: ReturnType<typeof setTimeout> | undefined;
+    let timeout: ReturnType<typeof setTimeout> | undefined;
 
-  if (!isConnected) {
-    timeout = setTimeout(() => setShowOfflineCard(true), 1000);
-  } else {
-    setShowOfflineCard(false);
-    if (timeout) clearTimeout(timeout);
-  }
+    if (!isConnected) {
+      timeout = setTimeout(() => setShowOfflineCard(true), 1000);
+    } else {
+      setShowOfflineCard(false);
+      if (timeout) clearTimeout(timeout);
+    }
 
-  return () => {
-    if (timeout) clearTimeout(timeout);
-  };
-}, [isConnected]);
+    return () => {
+      if (timeout) clearTimeout(timeout);
+    };
+  }, [isConnected]);
 
 useFocusEffect(
   useCallback(() => {
@@ -71,6 +67,12 @@ useFocusEffect(
     };
   }, [])
 );
+
+  useFocusEffect(
+    useCallback(() => {
+      checkConnection();
+    }, [])
+  );
 
 async function handleBarcodeScanned({ data }: { data: string }) {
   if (scanning) return;
@@ -138,6 +140,7 @@ return (
       <TouchableOpacity
         style={styles.barcodeWrapper}
         onPress={async () => {
+          checkConnection();
           if (!permission?.granted) {
             const { granted } = await requestPermission();
             if (!granted) return;
@@ -147,7 +150,12 @@ return (
             setShowCameraAlert(true);
             return;
           }
-          setCameraVisible(true);
+          if (isConnected) {
+            setCameraVisible(true);
+          } else {
+            setShowOfflineCard(true);
+            setCameraVisible(true);
+          }
         }}
       >
         <View style={{ marginVertical: 20, paddingVertical: 10, width: 250 }}>
@@ -207,6 +215,17 @@ return (
           alignItems: 'center',
         }}>
         <Text style={[styles.scanText, themeStyles.text]}>No internet connection</Text>
+        <TouchableOpacity
+            onPress={checkConnection}
+            style={[{
+              marginTop: 20,
+              paddingVertical: 10,
+              paddingHorizontal: 20,
+              borderRadius: 10,
+            }, themeStyles.card]}
+          >
+            <Text style={[{ fontSize: textSize }, themeStyles.text]}>Retry</Text>
+          </TouchableOpacity>
       </View>
     ) : null}
 
@@ -295,7 +314,8 @@ const styles = StyleSheet.create({
   cameraContainer: {
     width: '93%',
     height: 300,
-    marginTop: 20,
+    marginTop: 14,
+    marginBottom: 7,
     borderRadius: 16,
     overflow: 'hidden',
     backgroundColor: '#000'},

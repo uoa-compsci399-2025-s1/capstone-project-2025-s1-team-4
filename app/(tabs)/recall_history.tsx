@@ -1,5 +1,6 @@
+import { useFocusEffect } from '@react-navigation/native';
 import * as Network from 'expo-network';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { FlatList, Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { API_BASE_URL } from '../../config';
 import { useTheme } from '../../context/theme_context';
@@ -18,35 +19,20 @@ export default function NotificationsScreen() {
   const [isConnected, setIsConnected] = useState<boolean | null>(null);
   const [showOfflineCard, setShowOfflineCard] = useState(false);
 
-  useEffect(() => {
-    const checkConnection = async () => {
-      try {
-        const networkState = await Network.getNetworkStateAsync();
-        setIsConnected(networkState.isConnected === true && networkState.isInternetReachable === true);
-      } catch (error) {
-        setIsConnected(false);
-      }
-    };
-
-    checkConnection();
-  }, []);
-
-  useEffect(() => {
-    let timeout: ReturnType<typeof setTimeout> | undefined;
-    if (!isConnected) {
-      timeout = setTimeout(() => {
-        setShowOfflineCard(true);
-      }, 1000);
-    } else {
-      setShowOfflineCard(false);
-      if (timeout) clearTimeout(timeout);
+  const checkConnection = async () => {
+    try {
+      const networkState = await Network.getNetworkStateAsync();
+      const connected = networkState.isConnected === true && networkState.isInternetReachable === true;
+      setIsConnected(connected);
+      return connected;
+    } catch (error) {
+      console.error('Failed to check network status:', error);
+      setIsConnected(false);
+      return false;
     }
-    return () => {
-      if (timeout) clearTimeout(timeout);
-    };
-  }, [isConnected]);
+  };
 
-  useEffect(() => {
+  const fetchAllRecalls = () => {
     fetch(`${API_BASE_URL}/recalls`)
       .then(res => res.json())
       .then(data => {
@@ -60,7 +46,29 @@ export default function NotificationsScreen() {
         setRecalls(sorted);
       })
       .catch(err => console.error('Error fetching recalls:', err));
-  }, []);
+  };
+
+  useEffect(() => {
+    let timeout: ReturnType<typeof setTimeout> | undefined;
+
+    if (!isConnected) {
+      timeout = setTimeout(() => setShowOfflineCard(true), 1000);
+    } else {
+      fetchAllRecalls();
+      setShowOfflineCard(false);
+      if (timeout) clearTimeout(timeout);
+    }
+
+    return () => {
+      if (timeout) clearTimeout(timeout);
+    };
+  }, [isConnected]);
+
+    useFocusEffect(
+      useCallback(() => {
+        checkConnection();
+      }, [])
+    );
 
   const renderRecall = ({ item }: { item: Recall }) => (
     <TouchableOpacity
@@ -111,10 +119,28 @@ export default function NotificationsScreen() {
               contentContainerStyle={styles.infoCard}
             />
           ) : showOfflineCard ? (
-            <View style={[styles.networkBox, themeStyles.card]}>
-              <Text style={[styles.scanText, themeStyles.text]}>
-                No internet connection
-              </Text>
+            <View
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 150,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <Text style={[styles.scanText, themeStyles.text]}>No internet connection</Text>
+              <TouchableOpacity
+                onPress={checkConnection}
+                style={[{
+                  marginTop: 20,
+                  paddingVertical: 10,
+                  paddingHorizontal: 20,
+                  borderRadius: 10,
+                }, themeStyles.card]}
+              >
+                <Text style={[{ fontSize: textSize }, themeStyles.text]}>Retry</Text>
+              </TouchableOpacity>
             </View>
           ) : null}
         </View>

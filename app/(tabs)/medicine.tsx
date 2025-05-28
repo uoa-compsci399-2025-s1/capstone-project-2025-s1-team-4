@@ -23,38 +23,20 @@ export default function DetailsScreen() {
   const [isConnected, setIsConnected] = useState<boolean | null>(null);
   const [showOfflineCard, setShowOfflineCard] = useState(false);
 
-  useEffect(() => {
-    const checkConnection = async () => {
-      try {
-        const networkState = await Network.getNetworkStateAsync();
-        setIsConnected(networkState.isConnected === true && networkState.isInternetReachable === true);
-      } catch (error) {
-        console.error('Failed to check network status:', error);
-        setIsConnected(false);
-      }
-    };
-
-    checkConnection();
-  }, []);
-
-  useEffect(() => {
-    let timeout: ReturnType<typeof setTimeout> | undefined;
-
-    if (!isConnected) {
-      timeout = setTimeout(() => {
-        setShowOfflineCard(true);
-      }, 1000);
-    } else {
-      setShowOfflineCard(false);
-      if (timeout) clearTimeout(timeout);
+  const checkConnection = async () => {
+    try {
+      const networkState = await Network.getNetworkStateAsync();
+      const connected = networkState.isConnected === true && networkState.isInternetReachable === true;
+      setIsConnected(connected);
+      return connected;
+    } catch (error) {
+      console.error('Failed to check network status:', error);
+      setIsConnected(false);
+      return false;
     }
+  };
 
-    return () => {
-      if (timeout) clearTimeout(timeout);
-    };
-  }, [isConnected]);
-
-  useEffect(() => {
+  const fetchAllMedicines = () => {
     setLoading(true);
     fetch(`${API_BASE_URL}/all_medicines`)
       .then((res) => {
@@ -68,7 +50,23 @@ export default function DetailsScreen() {
         console.error('Failed to fetch medicines:', err);
         setLoading(false);
       });
-  }, []);
+  };
+
+  useEffect(() => {
+    let timeout: ReturnType<typeof setTimeout> | undefined;
+
+    if (!isConnected) {
+      timeout = setTimeout(() => setShowOfflineCard(true), 1000);
+    } else {
+      setShowOfflineCard(false);
+      fetchAllMedicines();
+      if (timeout) clearTimeout(timeout);
+    }
+
+    return () => {
+      if (timeout) clearTimeout(timeout);
+    };
+  }, [isConnected]);
 
   useFocusEffect(
     useCallback(() => {
@@ -83,6 +81,12 @@ export default function DetailsScreen() {
         if (timeout) clearTimeout(timeout);
       };
     }, [focusSearch])
+  );
+
+  useFocusEffect(
+    useCallback(() => {
+      checkConnection();
+    }, [])
   );
 
   const filteredMedicines = medicines.filter((med) =>
@@ -253,9 +257,30 @@ export default function DetailsScreen() {
           </TouchableOpacity>
         )}
       />) : showOfflineCard ? (
-        <View style={[styles.networkBox, themeStyles.card]}>
+        <View
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
           <Text style={[styles.scanText, themeStyles.text]}>No internet connection</Text>
-        </View>) : null}
+          <TouchableOpacity
+            onPress={checkConnection}
+            style={[{
+              marginTop: 20,
+              paddingVertical: 10,
+              paddingHorizontal: 20,
+              borderRadius: 10,
+            }, themeStyles.card]}
+          >
+            <Text style={[{ fontSize: textSize }, themeStyles.text]}>Retry</Text>
+          </TouchableOpacity>
+        </View>
+      ) : null}
     </View>
   );
 }
