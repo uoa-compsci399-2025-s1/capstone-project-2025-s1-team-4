@@ -47,12 +47,14 @@ https://github.com/orgs/uoa-compsci399-2025-s1/projects/39
 
 ## To get the application side (Expo) to run:
 
-### On Android
+### For Android
 To quickly download the app and run it, here is an APK file which is only available on android systems:
 
-INSERT LINK HERE
+[Download APK](https://expo.dev/artifacts/eas/7SXbidhbrfpkxPzPjk4x7.apk)
 
-### On other platforms (also compatible with Android)
+### For iOS (also compatible with Android)
+
+The following steps are to be done on a laptop or desktop computer.
 
 1. Install node.js (LTS version):
    
@@ -71,7 +73,7 @@ INSERT LINK HERE
     npx expo start
    ```
 
-4. Install Expo Go on Android, then (making sure your PC and phone are both using the same network) scan the QR code in Expo Go and scan some stuff! Ensure that the supported SDK version in the settings is 53.
+4. Install Expo Go from the App Store/Play Store, then (making sure your PC and phone are both using the same network) scan the QR code in Expo Go and scan some stuff! Ensure that the supported SDK version in the settings is 53.
 
 In the output, you'll find options to open the app in a
 
@@ -86,3 +88,19 @@ To learn more about developing your project with Expo, look at the following res
 
 - [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
 - [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+
+
+## Future Plan
+For future releases, we would like to be able to retrieve all the Consumer Medicine Information of over the counter medicines from [Medsafe](https://www.medsafe.govt.nz/index.asp), as well as get their in store barcodes. For this current version, only a small subset of medicines were used to demonstrate the app's functionality. An automated system would likely need to be created or a collaboration with Medsafe to ensure an accurate extraction of the Consumer Medicine Information sheets.
+
+Additionally, if MediDex was to continue as a native mobile app, we had ideas for implementing an offline mode. This would allow users to use the app without having to be connected to the internet. Alternatively, MediDex could also shift into becoming a full web app, removing the barrier of having to download the application, increasing its accessibility to all users.
+
+
+## Acknowledgements
+- https://flask.palletsprojects.com/en/stable/
+- https://reactnative.dev/docs/getting-started
+- https://docs.expo.dev/
+- https://render.com/
+- https://neon.com/
+- https://www.postgresql.org/docs/
+- https://docs.docker.com/
