@@ -45,6 +45,8 @@ export default function MedicineInfo() {
     React.useCallback(() => {
       return () => {
         setExpandedSections([]);
+        setMedicineData(null);
+        setCmiData(null);
       };
     }, [])
   );
