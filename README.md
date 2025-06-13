@@ -44,6 +44,8 @@ https://github.com/orgs/uoa-compsci399-2025-s1/projects/39
 - **Containerization:** Docker `v25.0.3`
 - **Server Deployment:** Render
 
+> ⚠️ **Note:**  
+> Since our server is hosted on Render’s free plan, it may take up to **1 minute to start** if it has been idle. During this time, you might notice pages in the app loading slowly until the server is fully active.
 
 ## To get the application side (Expo) to run:
 
@@ -54,18 +56,26 @@ To quickly download the app and run it, here is an APK file which is only availa
 
 ### For iOS (also compatible with Android)
 
-The following steps are to be done on a laptop or desktop computer.
+The following steps are to be done on a laptop or desktop computer after successfully cloning this repository.
 
-1. Install node.js (LTS version):
+1. Install Node.js (LTS version):
    
    https://nodejs.org/en
    
 
-2. Install dependencies (in powershell/VSCode terminal) while in project directory
+2. Install dependencies (in PowerShell/VSCode terminal) while in the project directory
 
    ```
    npm install
    ```
+
+
+> ⚠️ **Note:**  
+> If you encounter this error:  
+> `npm : File C:\Program Files\nodejs\npm.ps1 cannot be loaded because running scripts is disabled on this system.`  
+>  
+> Run the following command in your terminal to allow script execution for your user:  
+> `Set-ExecutionPolicy RemoteSigned -Scope CurrentUser`
 
 3. Start the frontend React Native app 
 
@@ -73,7 +83,13 @@ The following steps are to be done on a laptop or desktop computer.
     npx expo start
    ```
 
-4. Install Expo Go from the App Store/Play Store, then (making sure your PC and phone are both using the same network) scan the QR code in Expo Go and scan some stuff! Ensure that the supported SDK version in the settings is 53.
+
+4. Install Expo Go from the App Store/Play Store, then (making sure your PC and phone are both using the same network)
+
+Scan the QR code with the camera app(iOS) or in the Expo Go app(Android) and scan some stuff! Ensure that the supported SDK version in the settings is 53.
+
+> ⚠️ **Note:**  
+> You will need an account with Expo, and after scanning the QR code, it may ask you to log in via the terminal.
 
 In the output, you'll find options to open the app in a
 
@@ -91,9 +107,9 @@ To learn more about developing your project with Expo, look at the following res
 
 
 ## Future Plan
-For future releases, we would like to be able to retrieve all the Consumer Medicine Information of over the counter medicines from [Medsafe](https://www.medsafe.govt.nz/index.asp), as well as get their in store barcodes. For this current version, only a small subset of medicines were used to demonstrate the app's functionality. An automated system would likely need to be created or a collaboration with Medsafe to ensure an accurate extraction of the Consumer Medicine Information sheets.
+For future releases, we would like to be able to retrieve all the Consumer Medicine Information of over the counter medicines from [Medsafe](https://www.medsafe.govt.nz/index.asp), as well as get their in store barcodes. For this current version, only a small subset of medicines was used to demonstrate the app's functionality. An automated system would likely need to be created or a collaboration with Medsafe to ensure an accurate extraction of the Consumer Medicine Information sheets.
 
-Additionally, if MediDex was to continue as a native mobile app, we had ideas for implementing an offline mode. This would allow users to use the app without having to be connected to the internet. Alternatively, MediDex could also shift into becoming a full web app, removing the barrier of having to download the application, increasing its accessibility to all users.
+Additionally, if MediDex were to continue as a native mobile app, we had ideas for implementing an offline mode. This would allow users to use the app without having to be connected to the internet. Alternatively, MediDex could also shift into becoming a full web app, removing the barrier of having to download the application, increasing its accessibility to all users.
 
 
 ## Acknowledgements
