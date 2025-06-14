@@ -1,3 +1,8 @@
+/**
+ * Medicine information page: displays formatted CMI info
+ * retrieved from database in dropdown containers. Information
+ * is cleared on loss of page focus.
+ */
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import { useLocalSearchParams } from 'expo-router';
