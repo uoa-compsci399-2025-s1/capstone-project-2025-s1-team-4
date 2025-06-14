@@ -1,3 +1,12 @@
+/** 
+* Theme context: controls light/dark mode theming across app. 
+* new styles/colours must be added to both themes, and to the
+* ThemeStyles or ThemeColours interfaces, respectively.
+* Use "import { useTheme } from '../../context/theme_context';"
+* in new pages to reference theme_context, and call 'ThemeStyles.x'
+* or 'ThemeColours.x' to use a context style/colour.
+*/
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { StyleSheet, useColorScheme } from 'react-native';
