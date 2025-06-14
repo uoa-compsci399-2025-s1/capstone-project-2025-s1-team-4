@@ -1,3 +1,11 @@
+#
+# Automated scraper to pull last 6 months' recalls from Medsafe NZ.
+# Uses a headless chrome instance to avoid scraper checks, can be
+# altered to scrape more/less frequently by adjusting timedelta.
+# Rewriting using BeautifulSoup could make data formatting more
+# robust, but works well as-is.
+#
+
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
