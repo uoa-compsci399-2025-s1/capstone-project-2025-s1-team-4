@@ -1,3 +1,7 @@
+/**
+* Nested layout: implements tab bar, icons, tab page stack.
+*/
+
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
 import { View, Pressable } from 'react-native';
