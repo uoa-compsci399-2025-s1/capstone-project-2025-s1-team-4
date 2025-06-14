@@ -1,3 +1,8 @@
+/**
+ * Bookmarks tab: handles bookmarked medicines, tagging
+ * functionality, bookmark sorting. Also saves bookmarks
+ * to async storage to allow persistence across app launches.
+ */
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Network from 'expo-network';
