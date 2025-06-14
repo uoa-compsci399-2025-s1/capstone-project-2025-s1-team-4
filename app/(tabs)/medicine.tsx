@@ -1,7 +1,7 @@
 /**
- * Medicine information page: displays formatted CMI info
- * retrieved from database in dropdown containers. Information
- * is cleared on loss of page focus.
+ * Medicine search page: displays all medicines currently in
+ * our database. List is scrollable, searchable, and allows
+ * bookmarking/unbookmarking.
  */
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
