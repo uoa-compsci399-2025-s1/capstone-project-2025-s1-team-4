@@ -1,3 +1,8 @@
+/**
+ * Recall history: Lists medicine product recalls for the
+ * last 180 days, scraped directly from Medsafe NZ. New recalls
+ * will trigger a notification for users.
+ */
 import { useFocusEffect } from '@react-navigation/native';
 import * as Network from 'expo-network';
 import React, { useCallback, useEffect, useState } from 'react';
