@@ -1,3 +1,8 @@
+/**
+ * Manual splash screen for both Android and iOS. Time delay can be
+ * adjusted; currently set for 2 seconds to allow for slow server
+ * wakeup period/load on initial launch.
+ */
 import React, { useEffect, useRef } from 'react';
 import { Animated, StyleSheet, View } from 'react-native';
 import { useTheme } from '../../context/theme_context';
