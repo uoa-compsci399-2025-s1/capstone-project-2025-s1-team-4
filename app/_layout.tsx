@@ -1,3 +1,9 @@
+/**
+* Top-level layout file: propagates custom font across app, controls
+* header visibility (currently OFF), themes tab bar. Also controls
+* splash screen timing for Android.iOS. 
+*/
+
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
