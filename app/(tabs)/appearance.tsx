@@ -1,3 +1,8 @@
+/**
+ * Appearance settings: toggles light, dark, system themes. Also
+ * controls app-wide font resizing. Upper and lower bounds can
+ * be set for fonts by adjusting slider values.
+ */
 import { Ionicons } from '@expo/vector-icons';
 import Slider from '@react-native-assets/slider';
 import { useRouter } from 'expo-router';
