@@ -1,3 +1,9 @@
+/**
+* "Home" tab: main landing screen, handles barcode scanning and links to
+* 'Medicines" page via search bar. Retrieves medicine info from scanned
+* barcodes via API call to database.
+*/
+
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
@@ -28,7 +34,9 @@ export default function Index() {
     return screenWidth * 0.90;
   };
   const squareSize = getSquareSize()
-
+  /**
+  * checkConnection: helper function for ensuring network connectivity. Used across app.
+  */
   const checkConnection = async () => {
     try {
       const networkState = await Network.getNetworkStateAsync();
@@ -56,7 +64,10 @@ export default function Index() {
       if (timeout) clearTimeout(timeout);
     };
   }, [isConnected]);
-
+/**
+* useCallback() releases page data on loss of focus, hiding camera and
+* clearing scanned medicine in preparation for next scan.
+*/
 useFocusEffect(
   useCallback(() => {
     return () => {
