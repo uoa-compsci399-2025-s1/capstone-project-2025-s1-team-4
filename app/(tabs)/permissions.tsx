@@ -1,3 +1,8 @@
+/**
+ * Permissions screen: allows revoking camera permissions in-app,
+ * and disabling recall notifications (may need to be confirmed
+ * within Android/iOS system settings).
+ */
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Haptics from 'expo-haptics';
 import React, { useEffect, useState } from 'react';
