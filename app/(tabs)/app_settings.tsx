@@ -1,3 +1,6 @@
+/**
+ * Main settings page, also controls clearing all bookmarks via modal.
+ */
 import { Feather } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
