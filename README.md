@@ -89,7 +89,7 @@ The following steps are to be done on a laptop or desktop computer after success
 Scan the QR code with the camera app(iOS) or in the Expo Go app(Android) and scan some stuff! Ensure that the supported SDK version in the settings is 53.
 
 > ⚠️ **Note:**  
-> You will need an account with Expo, and after scanning the QR code, it may ask you to log in via the terminal.
+> You will need an account with Expo, and after scanning the QR code, it may ask you to log in via the terminal. You may use the credentials submitted along with this project or use your own.
 
 In the output, you'll find options to open the app in a
 
