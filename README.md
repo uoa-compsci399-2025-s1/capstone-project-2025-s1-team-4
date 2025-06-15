@@ -1,5 +1,5 @@
-# MediDex
-MediDex is multiplatform application that aims to streamline the medical information of over-the-counter medicines in Aotearoa New Zealand, by presenting information from Medsafe, a reliable and regulated source, in an accessible, user-friendly and convenient way to all Kiwis.
+# MediDex: Digitizing Medicines Information (Project 14)
+MediDex is a multiplatform application that aims to streamline the medical information of over-the-counter medicines in Aotearoa New Zealand, by presenting information from Medsafe, a reliable and regulated source, in an accessible, user-friendly, and convenient way to all Kiwis.
 More about our project can be read from this report: https://docs.google.com/document/d/1rObsJ8Wn3QS4xE2d2EY2Ezd8A4dXZFmpmiBmU1-s87Y/edit?tab=t.0
 
 ## Project Management Tool
@@ -51,7 +51,7 @@ https://github.com/orgs/uoa-compsci399-2025-s1/projects/39
 ## To get the application side (Expo) to run:
 
 ### For Android
-To quickly download the app and run it, here is an APK file which is only available on android systems:
+To quickly download the app and run it, here is an APK file which is only available on Android systems:
 
 [Download APK](https://expo.dev/artifacts/eas/7SXbidhbrfpkxPzPjk4x7.apk)
 
