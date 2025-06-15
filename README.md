@@ -56,6 +56,8 @@ To quickly download the app and run it, here is an APK file which is only availa
 [Download APK](https://expo.dev/artifacts/eas/7SXbidhbrfpkxPzPjk4x7.apk)
 
 ### For iOS (also compatible with Android)
+> ⚠️ **Note:**  
+> The iOS version which is run through Expo Go may contain some issues with camera usage. This appears to be an inconsistent issue that only occurs on some iOS devices.
 
 The following steps are to be done on a laptop or desktop computer after successfully cloning this repository.
 
