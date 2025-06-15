@@ -1,3 +1,10 @@
+/** 
+* Bookmarks Context: Stores bookmark state of medicine card throguhout pages. If bookmark icon
+* is pressed from anywhere in the app, it will reflect in all pages where the medicine card
+* is present. 
+* Import import { useBookmarks } from '../../context/bookmarks_context' to use;
+*/
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 

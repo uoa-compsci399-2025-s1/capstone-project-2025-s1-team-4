@@ -4,10 +4,9 @@
 
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
-import { View, Pressable } from 'react-native';
+import { Pressable, View } from 'react-native';
 import { BookmarkProvider } from '../../context/bookmarks_context';
 import { useTheme } from '../../context/theme_context';
-import * as Haptics from 'expo-haptics';
 
 
 export default function TabLayout() {
