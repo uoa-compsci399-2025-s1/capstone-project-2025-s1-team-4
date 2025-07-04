@@ -53,7 +53,7 @@ https://github.com/orgs/uoa-compsci399-2025-s1/projects/39
 ### For Android
 To quickly download the app and run it, here is an APK file which is only available on Android systems:
 
-[Download APK](https://expo.dev/artifacts/eas/7SXbidhbrfpkxPzPjk4x7.apk)
+[Download APK](https://expo.dev/artifacts/eas/sjnMomBWhifoRitMcQoKwF.apk)
 
 ### For iOS (also compatible with Android)
 > ⚠️ **Note:**  
